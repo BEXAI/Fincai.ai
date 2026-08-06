@@ -3,6 +3,8 @@
 **Product:** Fincai — AI trading platform with agentic brokerage connectivity
 **Live app:** https://fincai.ai · **Repository:** https://github.com/BEXAI/Fincai.ai
 **Status:** Shipped MVP · **Last updated:** August 6, 2026
+**Submission docs:** [README — short writeup & code tour](./README.md) · [.cursorrules — AI rules file](./.cursorrules)
+**How it was built:** vibe-coded with Cursor throughout, governed by the AI collaboration rules published in [`.cursorrules`](./.cursorrules)
 
 ---
 
@@ -110,10 +112,27 @@ Fincai is the cockpit for broker-authorized AI trading:
 - **Now:** MVP live at fincai.ai — agent terminal, AI analysis desk, strategy runner (paper default / live opt-in), options analytics, alerts, onboarding.
 - **Launch scope:** equities-only, matching the brokerage program's launch scope; options are analytics-only.
 - **Operational note:** the always-on runner requires an always-on deployment (reserved VM class) in production.
+- **Next (directional):** options and short-direction execution as the brokerage program's scope expands beyond long equities; per-template run history and exportable results; additional agentic-broker connections as more brokers expose MCP endpoints.
 
 ## 10. Tech overview
 
 TypeScript end-to-end: React + Vite client, Express server, Drizzle ORM on PostgreSQL, MCP SDK for the brokerage connection, streaming AI chat, Vitest for the test suite (including the compliance lint).
+
+## Appendix A — 2-minute demo script (no account required)
+
+1. **Agent terminal** — open https://fincai.ai. With no agent connected, it runs a clearly-labeled demo preview of the terminal surface.
+2. **AI desk** — at `/chat`, ask for an analysis of SPY: multi-agent output (technical / sentiment / fundamental agents plus a bull–bear debate) over live market data.
+3. **Autonomous runner (paper)** — at `/builder`, arm any template in the default paper mode and watch the run appear under active runs with its state machine and rules.
+4. **Guided pass** — `/promo` is a cinematic walkthrough of every feature.
+
+The live Robinhood connection requires enrollment in Robinhood's agentic program and a funded, dedicated agentic account; the README screenshots stand in for that surface.
+
+## Appendix B — The hard problems
+
+1. **A broker connection with no fixed schema.** Robinhood's MCP tools are discovered at runtime per session; the client handles OAuth 2.1 dynamic client registration, PKCE, encrypted token persistence, and lazy session restore across server restarts.
+2. **Unattended execution that fails safe.** Armed live runs trade without per-order review, so every guard is server-side: caps re-checked at entry against the live price, market-hours gating, atomic compare-and-set claims on order-placing transitions, and unknown-outcome orders that pause for a human instead of retrying.
+3. **Compliance as code.** Public copy (landing page, README, this PRD) is scanned by a CI lint against over-claims; all risk disclosures live in one importable module so product surfaces cannot drift.
+4. **Honest market data under rate limits.** A provider chain with tiered caching and a persistent per-decision audit log — and a hard rule that a provider outage yields "unavailable", never an invented number.
 
 ---
 
