@@ -165,14 +165,18 @@ export default function ImmersiveChat({
       />
       
       {/* Hamburger Menu Button - Top Left */}
+      {/* zIndex must stay inline: Button's hover-elevate utility forces z-index: 0
+          with higher specificity than Tailwind z-* classes, which dropped this button
+          behind the fullscreen chart (z-[1]) and made it unclickable. */}
       <Button
         variant="ghost"
         size="icon"
         onClick={() => setMenuOpen(true)}
-        className="fixed z-[30] glass-key rounded-full min-h-[44px] min-w-[44px]"
+        className="fixed glass-key rounded-full min-h-[44px] min-w-[44px]"
         style={{ 
           top: "calc(env(safe-area-inset-top, 12px) + 12px)",
-          left: "12px"
+          left: "12px",
+          zIndex: 30
         }}
         data-testid="button-menu-toggle"
         aria-label="Open menu"
