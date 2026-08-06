@@ -1,9 +1,9 @@
 # Fincai — Product Requirements Document
 
-**Product:** Fincai — AI trading platform with agentic brokerage connectivity
-**Live app:** https://fincai.ai · **Repository:** https://github.com/BEXAI/Fincai.ai
-**Status:** Shipped MVP · **Last updated:** August 6, 2026
-**Submission docs:** [README — short writeup & code tour](./README.md) · [.cursorrules — AI rules file](./.cursorrules)
+**Product:** Fincai — AI trading platform with agentic brokerage connectivity  
+**Live app:** https://fincai.ai · **Repository:** https://github.com/BEXAI/Fincai.ai  
+**Status:** Shipped MVP · **Last updated:** August 6, 2026  
+**Submission docs:** [README — short writeup & code tour](./README.md) · [.cursorrules — AI rules file](./.cursorrules)  
 **How it was built:** vibe-coded with Cursor throughout, governed by the AI collaboration rules published in [`.cursorrules`](./.cursorrules)
 
 ---
