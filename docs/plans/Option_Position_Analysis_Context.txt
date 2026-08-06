@@ -1,0 +1,27 @@
+I’ll search your past conversations about FincAI to understand the existing context and planning, then create a comprehensive JSON plan for option position analysis.​​​​​​​​​​​​​​​​
+
+I found your FincAI and OptionStratViz context, including your impressive October GOOGL options trading history (+$34k profit) and the existing 16-week implementation roadmap with Silent Compiler framework.
+
+Now I’ll create a comprehensive JSON plan for option position analysis that templates the exact data structure from your current GOOG $345 Call position and establishes an iterative analysis framework.​​​​​​​​​​​​​​​​
+
+[View your Option Position Analysis Template Plan](computer:///mnt/user-data/outputs/Option_Position_Analysis_Template_Plan.json)
+
+## What’s Inside
+
+The JSON plan templates your exact GOOG $345 Call position data structure and creates an iterative analysis framework with seven core sections.
+
+**Position Data Schema** establishes the canonical structure for representing any option position, matching your Robinhood data exactly: underlying price ($316.80), contract details ($345 strike, 1/2/26 expiration), position metrics (2 contracts @ $5.00 avg), and computed returns (-$476.00 / -47.60%).
+
+**Analytics Calculations** covers moneyness analysis (you’re 8.90% OTM, 10.48% to breakeven), time analysis (30 DTE in theta acceleration zone), Greeks estimation inputs/outputs, scenario matrices for price/time/volatility, and risk metrics including your current 47.6% loss relative to max loss.
+
+**Iteration Workflow** defines automatic triggers (price threshold breaches, time decay checkpoints at 30/21/14/7/3/1 DTE, loss thresholds at 50/75/90%) and manual analysis modes (quick snapshot, detailed analysis, exit strategy, comparison).
+
+**AI Function Tools** specifies six Claude function calling tools: `get_position_summary`, `analyze_breakeven_probability`, `generate_scenario_table`, `recommend_exit_strategy`, `calculate_roll_options`, and `compare_positions` — ready for integration with your OptionStratViz chat interface.
+
+**UI Components** defines five React components with glassmorphic Robinhood styling: PositionCard (compact/expanded/detail modes), BreakevenChart, ScenarioGrid heatmap, TimeDecayChart, and GreeksDisplay with gauges.
+
+**Silent Compiler Rules** integrates your established framework with the Options Position Analyst persona, eight negative constraints (no financial advice, no guaranteed outcomes), required disclosures, and output templates.
+
+**Implementation Phases** outlines a 16-20 day build across four phases: Data Layer → Analytics Engine → UI Components → AI Integration.
+
+The sample analysis output section shows exactly what the templated analysis produces for your current GOOG position, including exit considerations for close/roll/hold/average-down strategies.​​​​​​​​​​​​​​​​

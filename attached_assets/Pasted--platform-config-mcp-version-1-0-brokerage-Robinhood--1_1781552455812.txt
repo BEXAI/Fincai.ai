@@ -1,0 +1,127 @@
+{
+    "platform_config": {
+        "mcp_version": "1.0",
+        "brokerage": "Robinhood",
+        "default_currency": "USD"
+    },
+    "strategies": [
+        {
+            "id": "multi_agent_debate_v1",
+            "display_name": "Multi-Agent Debate & Reflection Loop",
+            "short_description": "A committee of specialized agents (Technical, Sentiment, Order Flow, Risk) that must reach consensus before executing a trade.",
+            "architecture_type": "Ensemble",
+            "risk_profile": "Moderate",
+            "recommended_for": "Volatile markets requiring strict risk mitigation and cross-verification.",
+            "agent_roles": [
+                {
+                    "role": "Technical Analyst",
+                    "function": "Identifies chart anomalies and price action breakouts.",
+                    "model_preference": "claude-3-5-sonnet-20241022"
+                },
+                {
+                    "role": "Sentiment Engine",
+                    "function": "Validates signals against real-time news and social volume.",
+                    "model_preference": "gemini-1.5-pro"
+                },
+                {
+                    "role": "Risk Manager",
+                    "function": "Evaluates positional sizing, portfolio drawdown, and vetoes unsafe trades.",
+                    "model_preference": "gpt-4o"
+                },
+                {
+                    "role": "Meta-Reflector",
+                    "function": "Reviews post-trade performance and updates system prompts dynamically.",
+                    "model_preference": "o1-preview"
+                }
+            ],
+            "configurable_parameters": {
+                "consensus_required": {
+                    "type": "float",
+                    "min": 0.5,
+                    "max": 1.0,
+                    "default": 1.0,
+                    "description": "Percentage of agents that must agree to execute."
+                },
+                "reflection_interval_hrs": {
+                    "type": "integer",
+                    "min": 1,
+                    "max": 24,
+                    "default": 24,
+                    "description": "How often the meta-agent reviews past trades."
+                }
+            }
+        },
+        {
+            "id": "graphrag_contagion_v1",
+            "display_name": "GraphRAG Contagion Arbitrage",
+            "short_description": "Maps multi-hop relationships between equities to trade secondary and tertiary market reactions before the retail market catches on.",
+            "architecture_type": "Knowledge Graph + NLP",
+            "risk_profile": "High",
+            "recommended_for": "Event-driven markets, supply chain disruptions, and macro shocks.",
+            "agent_roles": [
+                {
+                    "role": "Graph Constructor",
+                    "function": "Builds and updates relationship edges from SEC 10-K filings, supplier data, and news.",
+                    "model_preference": "gemini-1.5-pro"
+                },
+                {
+                    "role": "Contagion Hunter",
+                    "function": "Identifies N-th degree derivative impacts of breaking news events.",
+                    "model_preference": "claude-3-5-sonnet-20241022"
+                }
+            ],
+            "configurable_parameters": {
+                "max_graph_hops": {
+                    "type": "integer",
+                    "min": 1,
+                    "max": 4,
+                    "default": 2,
+                    "description": "Degree of separation to search for contagion trades."
+                },
+                "minimum_event_severity": {
+                    "type": "float",
+                    "min": 0.1,
+                    "max": 1.0,
+                    "default": 0.7,
+                    "description": "Sentiment threshold required to trigger a contagion scan."
+                }
+            }
+        },
+        {
+            "id": "tsfm_llm_hybrid_v1",
+            "display_name": "TSFM + LLM Qualitative Override",
+            "short_description": "Combines raw mathematical forecasting (Time-Series Foundation Models) with semantic context (LLMs) to catch fundamental shifts math misses.",
+            "architecture_type": "Hybrid TSFM/LLM",
+            "risk_profile": "Aggressive",
+            "recommended_for": "Earnings seasons and high-momentum quantitative trending environments.",
+            "agent_roles": [
+                {
+                    "role": "Quant Forecaster (TSFM)",
+                    "function": "Processes OHLCV data to generate a pure mathematical price vector.",
+                    "model_preference": "chronos-t5"
+                },
+                {
+                    "role": "Qualitative Override (LLM)",
+                    "function": "Ingests real-world events to validate or override the quant model.",
+                    "model_preference": "gemini-1.5-pro"
+                }
+            ],
+            "configurable_parameters": {
+                "forecast_window_hrs": {
+                    "type": "integer",
+                    "min": 1,
+                    "max": 72,
+                    "default": 24,
+                    "description": "Time horizon for the TSFM prediction vector."
+                },
+                "llm_override_threshold": {
+                    "type": "float",
+                    "min": 0.1,
+                    "max": 1.0,
+                    "default": 0.8,
+                    "description": "Confidence score required for the LLM to veto the TSFM."
+                }
+            }
+        }
+    ]
+}

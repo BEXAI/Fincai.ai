@@ -1,0 +1,42 @@
+# Fincai
+
+> Fincai is an agentic AI trading assistant for stocks and options. It analyzes markets in real time with a multi-agent AI system, runs autonomous trading strategies with built-in risk controls, and executes equity trades through a connected brokerage on the user's confirmation.
+
+Fincai (https://fincai.ai) is an AI-powered trading platform built around an autonomous ("agentic") AI trading agent. Unlike a chatbot that only answers questions, Fincai's agent can reason over live market data, form a plan, and take actions — placing and managing trades — while keeping the human in control.
+
+## What Fincai does
+
+- **Agentic AI trading agent**: Connects a live AI agent to a brokerage (Robinhood via its Trading MCP over OAuth 2.1) to place and manage real equity trades. Trade execution requires explicit user confirmation.
+- **Autonomous strategy runner**: A background engine that runs curated strategy templates automatically, applying entry triggers, stop-loss, profit-target, trailing-stop, and time-stop rules. Paper (simulated) trading is the default; live trading is an explicit per-strategy opt-in and is long-only in the current version.
+- **Multi-agent market analysis**: Specialized AI agents for technical, sentiment, and fundamental analysis, plus a bull/bear debate and market-regime detection, surfaced through the AI chat. Analysis can run on the built-in model or a user's own connected OpenAI or Google Gemini key.
+- **Conversational AI chat**: A ChatGPT-style interface to analyze stocks, get market analysis, and execute trades using natural language.
+- **Options pricing engine**: A pricing engine using Generalized Black-Scholes and the Bjerksund-Stensland (2002) approximation for American-style contracts, closed-form Greeks, a Newton-Raphson/Brent implied-volatility solver, a Treasury yield-curve service, a dividend service, and an SVI-smoothed volatility surface.
+- **Real-time market data**: Live quotes, historical bars, and options data with live charts.
+
+## Key pages
+
+- [Trading Agent (home)](https://fincai.ai/): Deploy and monitor the agentic AI trading agent.
+- [Agentic AI Trading Agent](https://fincai.ai/robinhood-ai-agent): How Fincai's AI agent connects to your Robinhood account via its official Trading API (OAuth, no password sharing), and how to use it.
+- [AI Options Trading Assistant](https://fincai.ai/ai-options-trading-assistant): Analyze options strategies in real time with a full Greeks calculator, break-evens, and payoff scenarios.
+- [AI Stock Analysis Bot](https://fincai.ai/ai-stock-analysis-bot): Real-time technical signals plus multi-agent analysis and a bull/bear debate for any ticker.
+- [Paper Trading AI Agent](https://fincai.ai/paper-trading-ai-agent): Simulate strategies on live market data with zero capital at risk; live trading is an explicit opt-in.
+- [AI Chat](https://fincai.ai/chat): Conversational stock and options analysis and trade execution.
+- [Strategy Templates](https://fincai.ai/strategy-templates): Curated, runnable trading strategies with risk rules.
+- [Strategy Builder](https://fincai.ai/builder): Configure and arm autonomous strategies.
+- [Market Analysis](https://fincai.ai/market-analysis): Live market overview and technical analysis tools.
+- [AI Providers](https://fincai.ai/ai-providers): Choose the AI model that powers analysis.
+
+## FAQ
+
+- **What is agentic AI trading?** An autonomous AI agent that can analyze markets and take trading actions (not just answer questions). Fincai reasons over live data, runs strategies, and executes trades on user confirmation.
+- **Can AI trade stocks for me?** Yes — Fincai connects an AI agent to a live brokerage to place and manage real equity trades, with confirmation-first execution and paper-trading defaults.
+- **Is Fincai free?** Fincai has a free demo mode (no account needed) with live data and AI analysis; live brokerage trading requires signing in.
+- **Does Fincai give financial advice?** No. Fincai is for informational purposes only and does not provide personalized financial advice. Trading involves risk.
+- **Is there an AI bot for Robinhood?** Yes. Fincai is an agentic AI trading assistant that connects to a Robinhood account through Robinhood's official Trading API using secure OAuth. It analyzes stocks and options and can place equity trades on the user's confirmation.
+- **Can I use AI to trade stocks on Robinhood?** Yes. After authorizing Fincai with Robinhood, its AI agent can place and manage real equity trades. Every trade requires explicit confirmation, and autonomous strategies default to paper (simulated) trading until opted into live.
+- **Does Fincai need my Robinhood password?** No. Users sign in on Robinhood's own OAuth page. Fincai uses OAuth 2.1 with PKCE and never sees or stores the Robinhood username or password. Users can disconnect at any time.
+- **Is Fincai affiliated with Robinhood?** No. Fincai is an independent product and is not affiliated with, endorsed by, or sponsored by Robinhood Markets, Inc. It connects only through Robinhood's official Trading API.
+
+## Compliance
+
+Fincai is a trading assistant and tool, not a registered investment adviser. Content is informational only and is not personalized financial or investment advice. Trading stocks and options involves risk, including the possible loss of principal.

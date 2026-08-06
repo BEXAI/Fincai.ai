@@ -1,0 +1,722 @@
+{
+  "spec_version": "1.0.0",
+  "spec_name": "Fincai.ai — Trust, Trademark & Legal Surface Remediation",
+  "generated_on": "2026-07-25",
+  "target_repo": "fincai.ai marketing site + app frontend",
+  "owner": "Nathaniel Rub",
+  "audience": "An implementing LLM coding agent (Claude) operating inside Replit with write access to the Fincai codebase",
+
+  "how_to_use_this_file": {
+    "read_order": [
+      "1. instructions_for_implementing_agent",
+      "2. hard_guardrails (READ FULLY — non-negotiable)",
+      "3. human_decisions_required (BLOCKING — do not guess these values)",
+      "4. shared_content (canonical strings — import, never retype)",
+      "5. tasks (execute in dependency order)",
+      "6. qa_checklist + definition_of_done"
+    ],
+    "execution_model": "Work task-by-task. After each task, run its verification_steps and report pass/fail before moving on. Do not batch all four tasks into one commit.",
+    "when_blocked": "If a required fact is not in human_decisions_required.resolved_values, STOP and emit a question. Never invent a factual claim to unblock yourself."
+  },
+
+  "instructions_for_implementing_agent": {
+    "role": "You are implementing a legal-and-trust remediation on a consumer fintech product that connects to real brokerage accounts. Accuracy outranks completeness. An honest gap is safe; a confident fabrication is a liability.",
+    "core_rules": [
+      "Every factual claim you publish must be traceable to either (a) code you have read in this repo, or (b) a value supplied in human_decisions_required.resolved_values.",
+      "If you cannot verify a security control by reading the code, do not claim it. Write the honest weaker version or leave a TODO comment and surface it in your report.",
+      "Do not write marketing adjectives into legal or security pages. Legal pages are specifications, not copy.",
+      "Preserve existing prerender/SSR behavior. The site currently serves a crawlable HTML shell — every new route must be included in that same prerender pipeline or the work is wasted.",
+      "All disclosure strings live in ONE module and are imported everywhere. Never hardcode a disclaimer inline in a component.",
+      "Do not change product behavior (order routing, execution, auth flows) as part of this task set except where explicitly listed under task FIN-003 engineering_controls, and even then behind feature flags."
+    ],
+    "output_expected_from_you": [
+      "A git branch per task, named as task.branch_name",
+      "A summary table of files created/modified per task",
+      "A list of every TODO you left and why",
+      "A list of every claim you declined to make and the missing fact that blocked it"
+    ]
+  },
+
+  "project_context": {
+    "product": "Fincai — agentic AI trading assistant for stocks and options",
+    "current_positioning_copy": "Analyzes stocks and options in real time with a multi-agent AI system, runs autonomous trading strategies with built-in risk controls, and executes equity trades through a connected brokerage on user confirmation.",
+    "brokerage_integration": "Robinhood, via Robinhood's official Trading API, OAuth 2.1, no password collection",
+    "observed_current_state": {
+      "disclaimer_present": "Yes — 'informational purposes only', 'does not provide personalized financial advice', 'trading involves risk' appear on the homepage",
+      "trademark_disclaimer_present": false,
+      "terms_page_crawlable": false,
+      "privacy_page_crawlable": false,
+      "security_page_crawlable": false,
+      "unsubstantiated_superlatives_present": ["institutional-grade options pricing engine"],
+      "meta_keywords_tag_present": true,
+      "trademark_heavy_keywords": ["Robinhood AI agent", "AI trading bot for stocks", "Robinhood AI"]
+    },
+    "risk_summary": "The product's own site is more disciplined than its social marketing, but three surfaces are exposed: (1) third-party trademark usage without a disclaimer, (2) unsubstantiated capability claims, (3) an absent legal/security surface on a product that holds brokerage OAuth tokens. A fourth issue — whether the 'informational only' framing survives contact with autonomous strategy execution — is a question for securities counsel, not for code, but the codebase can be made materially more defensible in the meantime."
+  },
+
+  "hard_guardrails": {
+    "never_fabricate": {
+      "description": "These are claims an implementing agent is statistically likely to generate by pattern-matching from other companies' legal pages. Every one of them is a material misrepresentation if untrue. NONE may be written unless explicitly supplied in human_decisions_required.resolved_values.",
+      "forbidden_unless_verified": [
+        "SOC 2 Type I or Type II compliance or audit",
+        "ISO 27001 / ISO 27701 certification",
+        "PCI DSS compliance",
+        "HIPAA compliance",
+        "GDPR 'certified' (no such certification exists — 'GDPR-aligned practices' is the honest phrasing if applicable)",
+        "CCPA/CPRA compliance status",
+        "Penetration testing performed / third-party security audit",
+        "Bug bounty program",
+        "SEC, FINRA, SIPC, or state registration of any kind",
+        "SIPC or FDIC insurance (Fincai is not a broker-dealer or bank; insurance flows from the brokerage, not from Fincai)",
+        "Cyber liability or E&O insurance coverage",
+        "Specific encryption implementations (AES-256, TLS 1.3, HSM, KMS) — only state what you can confirm in code or infra config",
+        "Uptime / SLA percentages",
+        "Number of users, assets connected, or trades processed",
+        "Data center locations or cloud region specifics",
+        "Employee background check or security training programs",
+        "Any named enterprise customer or partner"
+      ],
+      "banned_marketing_phrases": [
+        "bank-level security",
+        "military-grade encryption",
+        "institutional-grade (unaccompanied by a technical spec)",
+        "guaranteed returns / consistent profits / gains / gainz",
+        "risk-free",
+        "safe",
+        "beat the market",
+        "the only AI you can trust with your money",
+        "outperform",
+        "proven strategy",
+        "backed by / partnered with / powered by Robinhood",
+        "official Robinhood app or agent"
+      ]
+    },
+    "performance_claims_policy": {
+      "rule": "Fincai publishes no performance figures of any kind — not live, not paper, not backtested, not hypothetical, not illustrative, not in a screenshot, not in a demo, not in a testimonial.",
+      "implementation": "Add a lint rule / CI check that fails the build if any string in the marketing bundle matches the regex in ci_checks.performance_claim_regex.",
+      "if_performance_display_is_ever_added": "It becomes a separate legal project requiring counsel, prominent hypothetical-performance disclosure, and a documented calculation methodology. Do not scope it here."
+    },
+    "scope_boundary": "This spec covers marketing copy, legal pages, SEO metadata, footer/UI disclosure surfaces, and defensive engineering controls. It does NOT constitute legal advice and does NOT resolve the registration question in FIN-003. That requires a licensed securities attorney."
+  },
+
+  "human_decisions_required": {
+    "note": "BLOCKING INPUTS. The implementing agent must not proceed past the marked task until the corresponding value is supplied. Leave the placeholder token in place and emit a question if unresolved.",
+    "resolved_values": {},
+    "questions": [
+      {
+        "id": "HD-01",
+        "blocks_tasks": ["FIN-001", "FIN-004"],
+        "token": "{{LEGAL_ENTITY_NAME}}",
+        "question": "What is the exact legal entity that owns and operates Fincai (full corporate name, state of incorporation)?",
+        "why_it_matters": "Terms of Service and the trademark disclaimer must name the correct contracting party. Naming the wrong entity can pierce the liability shield the entity exists to provide."
+      },
+      {
+        "id": "HD-02",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{LEGAL_NOTICE_ADDRESS}}",
+        "question": "What mailing address should receive legal notice? A registered agent address is acceptable and preferable to a home address."
+      },
+      {
+        "id": "HD-03",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{GOVERNING_LAW_STATE}}",
+        "question": "Governing law and venue for the Terms of Service? (Typically state of incorporation or principal place of business.)"
+      },
+      {
+        "id": "HD-04",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{SUPPORT_EMAIL}}, {{PRIVACY_EMAIL}}, {{SECURITY_EMAIL}}",
+        "question": "Contact addresses for support, privacy requests, and security disclosure. security@ should be monitored or it should not be published."
+      },
+      {
+        "id": "HD-05",
+        "blocks_tasks": ["FIN-002"],
+        "token": "{{OPTIONS_ENGINE_SPEC}}",
+        "question": "What does the options pricing engine actually implement? Answer each row of tasks[FIN-002].options_engine_decision_matrix. Do not answer rows you are unsure of — an omitted row is fine, a wrong row is a false claim.",
+        "why_it_matters": "This replaces 'institutional-grade'. A specific true spec is both more credible and more defensible than an unsubstantiated superlative."
+      },
+      {
+        "id": "HD-06",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{SUBPROCESSORS}}",
+        "question": "List every third party that receives user data, including: LLM/inference providers (Anthropic? OpenAI? others?), market data vendors, hosting (Render? Replit? Vercel?), analytics, error monitoring, email. For each: what data category do they receive?",
+        "why_it_matters": "This is the single most common gap in fintech privacy policies. If user portfolio data or positions are included in prompts sent to a third-party model provider, that MUST be disclosed. Omitting it is the kind of thing that turns a privacy complaint into a deceptive-practices claim."
+      },
+      {
+        "id": "HD-07",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{DATA_RETENTION_PERIODS}}",
+        "question": "How long is each data class retained? (account data, chat/prompt history, order history, OAuth tokens after disconnect, logs.) If there is currently no retention policy, the honest answer is 'retained until account deletion' — say that rather than inventing a schedule."
+      },
+      {
+        "id": "HD-08",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{RH_OAUTH_SCOPES}}",
+        "question": "Enumerate the exact OAuth scopes Fincai requests from Robinhood. Read them from the authorization request in the codebase, do not recall them.",
+        "why_it_matters": "The security page's strongest claim is a negative one — what Fincai cannot do. That claim is only makeable from the actual scope list."
+      },
+      {
+        "id": "HD-09",
+        "blocks_tasks": ["FIN-004"],
+        "token": "{{TOKEN_STORAGE_METHOD}}",
+        "question": "Where and how are Robinhood OAuth tokens stored? (Database column? Encrypted at rest with what mechanism? Managed secret store? Environment?) Read the code."
+      },
+      {
+        "id": "HD-10",
+        "blocks_tasks": ["FIN-003"],
+        "token": "{{COUNSEL_ENGAGED}}",
+        "question": "Has a securities attorney reviewed the product? FIN-003's engineering controls reduce exposure but do not answer the registration question.",
+        "why_it_matters": "See tasks[FIN-003].legal_analysis_for_counsel — bring that section to the consultation so the hour is spent efficiently."
+      }
+    ]
+  },
+
+  "shared_content": {
+    "module_path": "src/content/disclosures.ts",
+    "implementation_note": "Create this module first. Every task imports from it. Export as named constants and a DISCLOSURES object. Add a unit test asserting no string is empty and no string contains a token matching /\\{\\{[A-Z_]+\\}\\}/ at build time for production.",
+    "strings": {
+      "TRADEMARK_ROBINHOOD": "Fincai is not affiliated with, endorsed by, or sponsored by Robinhood Markets, Inc. Robinhood and the Robinhood logo are trademarks of Robinhood Markets, Inc. Fincai connects to your Robinhood account through Robinhood's official Trading API, only with your explicit authorization, and only for as long as you keep that authorization active.",
+      "TRADEMARK_ROBINHOOD_SHORT": "Not affiliated with or endorsed by Robinhood Markets, Inc.",
+      "NOT_ADVICE": "Fincai is a software tool for market analysis and order entry. It is not an investment adviser, broker-dealer, or financial planner. Nothing Fincai produces is personalized investment advice, a recommendation to buy or sell any security, or an offer or solicitation of any kind. Fincai does not consider your financial situation, investment objectives, tax position, or risk tolerance.",
+      "RISK_GENERAL": "Trading involves substantial risk, including the possible loss of the entire amount invested. Options carry additional risk and are not suitable for every investor. Before trading options, review the Options Clearing Corporation's disclosure document, Characteristics and Risks of Standardized Options.",
+      "RISK_AUTONOMOUS": "Automated and agentic strategies can act faster than you can review them. Software fails, market data can be delayed or wrong, and connectivity can be interrupted. Risk controls reduce but do not eliminate the possibility of loss. You remain responsible for every position in your account.",
+      "AI_LIMITATIONS": "Fincai's analysis is generated by AI systems that can be incomplete, out of date, or simply wrong, including in ways that read as confident and specific. Treat every output as a starting point for your own research, not a conclusion. Verify before you act.",
+      "NO_PERFORMANCE": "Fincai does not publish, promise, project, or imply any level of trading performance. Any results shown in product demonstrations are illustrative software behavior, not trading results.",
+      "USER_RESPONSIBILITY": "You confirm every live order. You are solely responsible for the orders you place and the positions you hold.",
+      "NO_FUND_MOVEMENT": "Fincai cannot deposit, withdraw, or transfer funds or securities out of your brokerage account. Fincai's access is limited to the permissions you grant during authorization, and you can revoke it at any time from your Robinhood account settings.",
+      "PAPER_DEFAULT": "New accounts run in paper (simulated) mode by default. Live trading requires an explicit, separate opt-in.",
+      "DATA_TO_AI_PROVIDERS": "{{TODO_HD-06}} — Describe precisely what user data is transmitted to third-party AI model providers, if any. If portfolio positions, watchlists, or order history are included in prompts, say so plainly. Do not soften this."
+    },
+    "footer_composition": {
+      "line_1": "TRADEMARK_ROBINHOOD_SHORT",
+      "line_2": "NOT_ADVICE (truncated to first sentence, linked to /disclosures for full text)",
+      "line_3": "RISK_GENERAL (truncated, linked to /disclosures)",
+      "links": ["/terms", "/privacy", "/security", "/disclosures"],
+      "styling_constraint": "Minimum 12px, contrast ratio at least 4.5:1 against background. A disclaimer rendered in low-contrast 9px grey is treated by regulators as not disclosed. Do not use opacity below 0.7 on this block."
+    }
+  },
+
+  "tasks": [
+    {
+      "id": "FIN-001",
+      "title": "Robinhood trademark exposure — add disclaimer and de-brand the copy",
+      "priority": "P0",
+      "effort_estimate": "2-3 hours",
+      "branch_name": "fix/rh-trademark-disclosure",
+      "depends_on": ["shared_content module created", "HD-01"],
+      "problem_statement": "The site uses 'AI trading bot for Robinhood via its official Trading API' in body copy and stacks Robinhood-branded terms in its meta keywords, with no affiliation disclaimer anywhere on the site. Referential use of a third party's mark to describe genuine interoperability is generally permissible; constructions that read as a product name ('Robinhood AI Agent') and the absence of any disclaimer push toward implied endorsement.",
+      "legal_theory_plain_english": "The doctrine at issue is nominative fair use. It generally requires three things: the product can't be readily identified without using the mark, no more of the mark is used than necessary, and nothing suggests sponsorship or endorsement by the mark holder. Verb constructions ('connects to Robinhood') satisfy this. Noun-phrase constructions ('Robinhood AI Agent') read like a branded product and do not. This is a general framing, not legal advice.",
+      "additional_exposure": "Separate from trademark law, Robinhood's API terms of service and brand guidelines are a contractual layer that may impose stricter naming rules than trademark law does. Read them. A violation there can cost API access, which is a faster and more concrete risk than a trademark claim.",
+      "action_items": [
+        {
+          "step": 1,
+          "action": "Read Robinhood's Trading API terms of service and any brand/attribution guidelines. Extract any required attribution language verbatim into shared_content. If their required language conflicts with anything in this spec, their language wins.",
+          "blocking": true
+        },
+        {
+          "step": 2,
+          "action": "Add TRADEMARK_ROBINHOOD_SHORT to the global site footer on every route.",
+          "files": ["src/components/Footer.tsx", "src/components/Layout.tsx"]
+        },
+        {
+          "step": 3,
+          "action": "Add full TRADEMARK_ROBINHOOD to /disclosures and to any page or modal that mentions Robinhood by name, including the OAuth connection screen.",
+          "files": ["src/pages/Disclosures.tsx", "src/components/BrokerConnect.tsx"]
+        },
+        {
+          "step": 4,
+          "action": "Apply every entry in copy_replacements where category == 'trademark'."
+        },
+        {
+          "step": 5,
+          "action": "Audit all image assets for Robinhood logos, wordmarks, or the Robinhood green (#00C805 or near). Remove any that exist. Do not recreate them. Refer to the broker in plain text only."
+        },
+        {
+          "step": 6,
+          "action": "Delete the meta keywords tag entirely. Search engines have ignored it for over a decade; its only current function is to document trademark-heavy intent in a form that is trivially discoverable.",
+          "files": ["index.html", "src/seo/meta.ts"]
+        },
+        {
+          "step": 7,
+          "action": "Rewrite the title tag and meta description per the seo block below, removing Robinhood from the title tag. Keep one referential mention in the description."
+        }
+      ],
+      "acceptance_criteria": [
+        "TRADEMARK_ROBINHOOD_SHORT renders in the footer of every route including all prerendered routes",
+        "grep -ri 'robinhood' across the repo returns zero noun-phrase product constructions (e.g. 'Robinhood AI agent', 'Robinhood bot', 'Robinhood assistant')",
+        "Zero Robinhood brand assets in /public or /src/assets",
+        "No meta keywords tag in any served HTML",
+        "The word Robinhood does not appear in the <title> of any page",
+        "Curling the homepage and grepping for the disclaimer succeeds — i.e. it is in the prerendered HTML, not injected client-side"
+      ],
+      "verification_steps": [
+        "curl -s https://<preview-url>/ | grep -i 'not affiliated'",
+        "curl -s https://<preview-url>/ | grep -ci 'keywords'  # expect 0",
+        "grep -rin 'robinhood' src/ public/ --include='*.tsx' --include='*.ts' --include='*.html' | review each hit manually"
+      ]
+    },
+
+    {
+      "id": "FIN-002",
+      "title": "Replace 'institutional-grade' with a real technical specification",
+      "priority": "P1",
+      "effort_estimate": "2 hours (plus HD-05 resolution)",
+      "branch_name": "fix/options-engine-spec",
+      "depends_on": ["HD-05"],
+      "problem_statement": "'Institutional-grade options pricing engine and Greeks' is an unsubstantiated superlative. It is weak marketing (every competitor says it) and it is a claim a regulator or a plaintiff can ask you to substantiate. A specific, true technical description is more persuasive to the actual target user — who can evaluate it — and is defensible because it is verifiable.",
+      "principle": "Specificity is both better copy and better defense. 'Bjerksund-Stensland 2002 for American-style contracts' signals competence to someone who knows what that means, and is a factual statement rather than a boast.",
+      "options_engine_decision_matrix": {
+        "instruction": "For each row, the human answers which implementation is actually in the code. The agent then publishes ONLY the matching copy. Unanswered rows are omitted entirely — an omitted detail is never a liability, a wrong one always is.",
+        "rows": [
+          {
+            "dimension": "European-style pricing",
+            "options": {
+              "black_scholes_merton": "European-style contracts are priced with the Black–Scholes–Merton model.",
+              "other": "Describe honestly."
+            }
+          },
+          {
+            "dimension": "American-style pricing (early exercise)",
+            "options": {
+              "crr_binomial": "American-style contracts are priced on a Cox–Ross–Rubinstein binomial lattice at {{N}} steps, which accounts for the value of early exercise.",
+              "bjerksund_stensland_2002": "American-style contracts use the Bjerksund–Stensland (2002) closed-form approximation, which prices the early-exercise premium without a full lattice.",
+              "barone_adesi_whaley": "American-style contracts use the Barone-Adesi–Whaley quadratic approximation for the early-exercise premium.",
+              "trinomial": "American-style contracts are priced on a trinomial tree at {{N}} steps.",
+              "none_uses_european_for_american": "DO NOT PUBLISH A CLAIM. Flag this to the human: pricing American-style equity options with a European model is a real accuracy gap, particularly for in-the-money puts and dividend-paying underlyings. This is a product bug to fix, not a copy problem to write around."
+            }
+          },
+          {
+            "dimension": "Greeks computation",
+            "options": {
+              "analytic": "Delta, gamma, theta, vega, and rho are computed from closed-form partial derivatives rather than numerical approximation.",
+              "finite_difference": "Greeks are computed by finite-difference bump-and-reprice against the pricing model.",
+              "mixed": "First-order Greeks are closed-form; higher-order sensitivities are computed by finite difference."
+            }
+          },
+          {
+            "dimension": "Implied volatility solver",
+            "options": {
+              "newton_raphson": "Implied volatility is solved from mid-market quotes by Newton–Raphson to a tolerance of {{TOL}}.",
+              "brent": "Implied volatility is solved by Brent's method, which is bracketed and does not fail on the near-zero-vega wings the way a pure Newton solver does.",
+              "newton_with_brent_fallback": "Implied volatility is solved by Newton–Raphson with a bracketed Brent fallback for deep in- and out-of-the-money strikes where vega approaches zero."
+            }
+          },
+          {
+            "dimension": "Risk-free rate input",
+            "options": {
+              "flat_constant": "A single constant risk-free rate is used across tenors. NOTE: this is a real simplification. If you publish it, publish it plainly; do not dress it up.",
+              "interpolated_curve": "The risk-free rate is interpolated from the Treasury par yield curve at each contract's tenor.",
+              "sofr_ois": "Discounting uses the SOFR/OIS curve."
+            }
+          },
+          {
+            "dimension": "Dividend handling",
+            "options": {
+              "continuous_yield": "Dividends are modeled as a continuous yield q.",
+              "discrete_escrowed": "Known discrete dividends are handled with an escrowed-dividend adjustment to the forward.",
+              "none": "OMIT. Do not mention dividends if they are not modeled — but flag it, because unmodeled discrete dividends materially misprice American calls near ex-date."
+            }
+          },
+          {
+            "dimension": "Volatility surface",
+            "options": {
+              "per_strike_from_chain": "Each contract is priced against its own market-implied volatility rather than a single underlying-level volatility input.",
+              "fitted_svi": "A SVI-parameterized surface is fitted across strikes and expiries.",
+              "single_vol": "OMIT — this is the weakest configuration and should not be advertised."
+            }
+          },
+          {
+            "dimension": "Quote source and refresh",
+            "options": {
+              "template": "Chain quotes are sourced from {{VENDOR}} and repriced on {{INTERVAL_OR_TICK}}."
+            }
+          }
+        ],
+        "assembly_rule": "Select 2–4 of the resolved rows — the strongest true ones — and write them as consecutive sentences. Target 40–70 words. Place on the homepage feature block and expand to the full resolved set on a /technology or /methodology page.",
+        "worked_example_do_not_copy_verbatim": "American-style contracts are priced on a Cox–Ross–Rubinstein binomial lattice at 512 steps, which accounts for early exercise. Delta, gamma, theta, vega, and rho are computed from closed-form partial derivatives. Implied volatility is solved by Newton–Raphson with a bracketed Brent fallback for the wings, and each contract is priced against its own market-implied volatility rather than one underlying-level input. NOTE TO AGENT: every number and method in this example is fabricated for illustration. Replace all of it with resolved HD-05 values or do not ship it."
+      },
+      "action_items": [
+        "Apply every entry in copy_replacements where category == 'puffery'",
+        "Run a repo-wide grep for the banned_marketing_phrases list and remediate each hit",
+        "Add ci_checks.banned_phrase_lint to the build pipeline so these cannot silently return"
+      ],
+      "acceptance_criteria": [
+        "Zero occurrences of 'institutional-grade' in any shipped bundle",
+        "Every technical claim on the site maps to a resolved HD-05 row",
+        "CI fails the build if a banned phrase is reintroduced"
+      ]
+    },
+
+    {
+      "id": "FIN-003",
+      "title": "Regulatory posture — engineering controls and a counsel briefing package",
+      "priority": "P0",
+      "effort_estimate": "1 day engineering + 1 hour with counsel",
+      "branch_name": "feat/regulatory-controls",
+      "depends_on": ["HD-10"],
+      "problem_statement": "The homepage places 'informational purposes only, does not provide personalized financial advice' on the same page as 'runs autonomous trading strategies' and 'executes trades'. Regulators evaluate conduct, not footers. A disclaimer that contradicts the product's observable behavior does not cure the behavior — it can make it worse by evidencing awareness. This task cannot be closed by code. Code can only reduce exposure while the actual question is answered by a licensed securities attorney.",
+      "explicit_limitation": "The implementing agent must not attempt to resolve the registration question, must not write a legal conclusion into any page, and must not represent that Fincai is exempt from anything.",
+      "legal_analysis_for_counsel": {
+        "purpose": "Bring this to the consultation so the billable hour is spent on judgment rather than fact-gathering.",
+        "the_core_question": "Does Fincai meet the definition of an investment adviser under Section 202(a)(11) of the Investment Advisers Act of 1940, and if so, is it required to register with the SEC or with the State of Florida?",
+        "three_prong_test": [
+          "Prong 1 — Provides advice or issues reports about securities. Fincai analyzes specific named securities and surfaces specific trade setups. This prong is likely met.",
+          "Prong 2 — Does so as part of a regular business. This is the product. Likely met.",
+          "Prong 3 — For compensation. Met if Fincai charges anything, including subscription revenue. Compensation need not be tied to the advice specifically."
+        ],
+        "the_publishers_exclusion": "Section 202(a)(11)(D) excludes bona fide publications of general and regular circulation. Lowe v. SEC (1985) is the controlling case. The exclusion is generally understood to turn on the advice being impersonal and not tailored to an individual client's situation. Question for counsel: does an agent that reads a specific user's watchlist and account and generates setups for that user retain impersonality, or is that precisely the tailoring the exclusion excludes?",
+        "the_antifraud_point": "Section 206 antifraud provisions reach any person meeting the adviser definition, registered or not. Registration status does not gate antifraud liability. This is why the marketing copy issues in FIN-001 and FIN-002 are not merely brand hygiene.",
+        "the_marketing_rule": "Rule 206(4)-1 (the Marketing Rule) applies to SEC-registered advisers. Its substantive standards — substantiation of claims, treatment of testimonials and endorsements, prohibition on cherry-picked or unsubstantiated performance — are a reasonable design target regardless of registration status, because the underlying antifraud principle is not registration-dependent.",
+        "adjacent_questions_worth_asking": [
+          "Does routing orders to a brokerage on a user's behalf implicate broker-dealer registration under Exchange Act 15(a), or does the user-confirmation step and absence of transaction-based compensation keep it clear?",
+          "Does the CFA Institute Code and Standards apply to a candidate's own commercial venture, and which standards are implicated (misrepresentation, performance presentation, referral/endorsement disclosure)?",
+          "Florida state adviser registration thresholds and any de minimis exemption applicable pre-revenue.",
+          "Does founder-authored social media promoting the product constitute advertising subject to the same substantiation standards as the website?",
+          "If a user's positions are transmitted to a third-party model provider, what consent and disclosure regime applies?"
+        ],
+        "documents_to_bring": [
+          "This JSON spec",
+          "Current homepage copy and screenshots of recent social posts",
+          "The OAuth scope list (HD-08)",
+          "A description of what the autonomous strategy runner actually does without human input",
+          "Revenue model, current and planned"
+        ]
+      },
+      "engineering_controls": [
+        {
+          "control": "Server-enforced paper default",
+          "requirement": "Paper mode must be the default at the database level for new accounts, not a client-side flag. Write a test that creates a new account and asserts live_trading_enabled === false.",
+          "rationale": "A client-enforced default is not a control."
+        },
+        {
+          "control": "Explicit live-trading opt-in",
+          "requirement": "Enabling live trading requires a dedicated screen with a typed confirmation (not a checkbox), displaying NOT_ADVICE, RISK_GENERAL, RISK_AUTONOMOUS, and NO_FUND_MOVEMENT. Persist the acknowledgment with timestamp, user id, and the exact disclosure version string shown."
+        },
+        {
+          "control": "Per-order confirmation with contextual disclosure",
+          "requirement": "The order confirmation modal displays a short-form 'not a recommendation' line. Contextual disclosure at the point of decision is materially stronger than a footer.",
+          "anti_pattern": "Do not allow a 'don't show this again' option on the disclosure line."
+        },
+        {
+          "control": "Immutable decision audit log",
+          "requirement": "For every agent-generated setup or order suggestion, persist: user_id, UTC timestamp, model identifier and version, system prompt hash, the tool calls made and their raw responses, the generated output, whether the user acted, and the resulting order id. Append-only. Retention per HD-07.",
+          "rationale": "If the product's behavior is ever questioned, the difference between a defensible position and an indefensible one is whether you can reconstruct what the system actually told a specific user on a specific date."
+        },
+        {
+          "control": "No-autoexecute assertion",
+          "requirement": "A test that asserts no code path can submit a live order without a user confirmation event in the same session. If the autonomous strategy runner can place live orders without per-order confirmation, that is a distinct product posture and the marketing copy 'trades you always confirm' is inaccurate — flag it immediately, do not write around it."
+        },
+        {
+          "control": "Risk limits and kill switch",
+          "requirement": "Per-order notional cap, daily loss limit, max open positions, and a single global kill switch that halts all order submission. Surface all four in the UI with their current values."
+        },
+        {
+          "control": "Personalization feature flag",
+          "requirement": "Introduce PERSONALIZATION_LEVEL with values NONE | WATCHLIST | PORTFOLIO | PROFILE. Gate at PORTFOLIO by default. Do not ship anything at PROFILE — a suitability questionnaire, risk-tolerance intake, or goal-based intake — until counsel has weighed in. Intake of a user's financial circumstances is one of the clearest markers of personalized advice.",
+          "priority": "This is the single highest-leverage control in this list."
+        },
+        {
+          "control": "Scope minimization",
+          "requirement": "Request the narrowest Robinhood OAuth scopes that support the feature set. Document each requested scope and the feature that requires it. Remove any scope with no corresponding feature."
+        },
+        {
+          "control": "Disclosure version registry",
+          "requirement": "Every disclosure string carries a semver and effective date. Acknowledgments record which version was shown. This makes 'what did the user see when they agreed' answerable."
+        }
+      ],
+      "acceptance_criteria": [
+        "All eight controls implemented or explicitly deferred with a written reason",
+        "Test suite includes the paper-default and no-autoexecute assertions and both pass",
+        "PERSONALIZATION_LEVEL flag exists and is capped below PROFILE",
+        "Counsel briefing package assembled and the consultation scheduled",
+        "No page on the site asserts a legal conclusion about registration status"
+      ]
+    },
+
+    {
+      "id": "FIN-004",
+      "title": "Build and expose the legal and security surface",
+      "priority": "P0",
+      "effort_estimate": "1-2 days",
+      "branch_name": "feat/legal-security-pages",
+      "depends_on": ["HD-01", "HD-02", "HD-03", "HD-04", "HD-06", "HD-07", "HD-08", "HD-09"],
+      "problem_statement": "Nothing on security, terms, or privacy is crawlable. For a product that holds an OAuth token into a user's brokerage account, 'is this safe and what can it actually do to my account' is the first question a serious prospect asks and the last one the site answers. This is simultaneously the largest conversion leak and the largest legal gap.",
+      "strategic_note": "The strongest trust claim available is a negative one: Fincai cannot move money. Most competitors bury this. Lead with it.",
+      "pages": [
+        {
+          "route": "/security",
+          "title": "Security — Fincai",
+          "meta_description": "How Fincai connects to your brokerage account, what it can and cannot do, and how your data is handled.",
+          "priority": "Build this one first. It is the conversion page, not just a legal page.",
+          "sections": [
+            {
+              "heading": "What Fincai cannot do",
+              "content_spec": "Lead with the negative guarantees. Enumerate from HD-08 scopes: cannot withdraw funds, cannot transfer securities, cannot change bank links, cannot access your Robinhood password. State each as a flat sentence. Include NO_FUND_MOVEMENT verbatim.",
+              "note": "Only list a limitation you have verified against the actual granted scopes. If a scope grants something broader than you want to admit, the answer is to reduce the scope, not to soften the sentence."
+            },
+            {
+              "heading": "How the connection works",
+              "content_spec": "OAuth 2.1 authorization code flow. Fincai never sees or stores your Robinhood password. You authorize on Robinhood's own domain. Describe the scopes requested in plain language, one line each, with the feature that requires each one."
+            },
+            {
+              "heading": "How to revoke access",
+              "content_spec": "Step-by-step instructions for revoking from the Robinhood side, not just from Fincai. Publishing the exit is a trust signal, and users who know they can leave are more willing to connect."
+            },
+            {
+              "heading": "Token storage",
+              "content_spec": "From HD-09. State only what is true. If tokens are encrypted at rest, name the mechanism. If they are not, do not publish this section — fix it first."
+            },
+            {
+              "heading": "Where your data goes",
+              "content_spec": "From HD-06. Name the categories of third parties. Critically: state whether portfolio data, positions, or watchlists are included in prompts sent to third-party AI providers, and whether those providers train on the data. This is the disclosure most likely to be omitted and most damaging if discovered rather than disclosed."
+            },
+            {
+              "heading": "Paper trading by default",
+              "content_spec": "PAPER_DEFAULT plus a description of the live opt-in gate."
+            },
+            {
+              "heading": "Reporting a vulnerability",
+              "content_spec": "{{SECURITY_EMAIL}}, expected response window, and a good-faith safe-harbor statement. Only publish an address that is monitored."
+            },
+            {
+              "heading": "What we do not claim",
+              "content_spec": "An explicit statement that Fincai holds no third-party security certification at this time, if true. This is counterintuitive and it works: stating the absence is more credible than the vague implication competitors rely on, and it forecloses the accusation of implying one."
+            }
+          ]
+        },
+        {
+          "route": "/privacy",
+          "title": "Privacy Policy — Fincai",
+          "sections": [
+            "Entity and contact ({{LEGAL_ENTITY_NAME}}, {{PRIVACY_EMAIL}})",
+            "Categories of data collected: account/identity, brokerage data received via API, chat and prompt content, usage telemetry, device/log data",
+            "Purpose and legal basis for each category",
+            "Third-party recipients — the full HD-06 subprocessor table with data categories per recipient",
+            "AI provider disclosure — whether prompt content is retained or used for training by the provider",
+            "Retention per HD-07, by data class",
+            "User rights: access, correction, deletion, export, and the mechanism and timeline for each",
+            "Account deletion — what is deleted, what is retained and why, what happens to the OAuth token",
+            "Cookies and analytics",
+            "Children — service not directed to anyone under 18",
+            "International transfers, if applicable",
+            "Changes to this policy and notification method",
+            "Effective date and version"
+          ],
+          "warning": "Do not copy a SaaS privacy policy template. A template will assert rights frameworks, retention schedules, and transfer mechanisms that do not match this product. Every clause must correspond to something that is actually true of Fincai."
+        },
+        {
+          "route": "/terms",
+          "title": "Terms of Service — Fincai",
+          "sections": [
+            "Contracting entity ({{LEGAL_ENTITY_NAME}}) and acceptance",
+            "Eligibility — 18+, own brokerage account, own the account being connected",
+            "Description of service — must match actual product behavior, including the autonomous strategy runner",
+            "Not investment advice — full NOT_ADVICE text, as a numbered clause, not a footnote",
+            "No fiduciary relationship",
+            "User responsibilities — USER_RESPONSIBILITY, accuracy of account linkage, compliance with brokerage terms",
+            "Third-party services — brokerage and data vendor dependencies, TRADEMARK_ROBINHOOD, no liability for third-party outages",
+            "AI output limitations — AI_LIMITATIONS as a numbered clause",
+            "Risk acknowledgment — RISK_GENERAL and RISK_AUTONOMOUS",
+            "Fees and billing, if applicable",
+            "Acceptable use — no market manipulation, no scraping, no reselling outputs, no circumventing rate limits",
+            "Intellectual property",
+            "Disclaimer of warranties",
+            "Limitation of liability",
+            "Indemnification",
+            "Termination and suspension",
+            "Dispute resolution and governing law ({{GOVERNING_LAW_STATE}}) — flag arbitration and class-waiver clauses to counsel rather than drafting them unilaterally",
+            "Modifications and notice",
+            "Effective date and version"
+          ]
+        },
+        {
+          "route": "/disclosures",
+          "title": "Disclosures — Fincai",
+          "purpose": "A single canonical destination for every disclosure string, so footers can link rather than truncate.",
+          "sections": [
+            "Not investment advice — NOT_ADVICE in full",
+            "Trading and options risk — RISK_GENERAL, with a link to the OCC's Characteristics and Risks of Standardized Options",
+            "Automated strategy risk — RISK_AUTONOMOUS",
+            "AI limitations — AI_LIMITATIONS",
+            "No performance representations — NO_PERFORMANCE",
+            "Third-party trademarks — TRADEMARK_ROBINHOOD",
+            "Conflicts of interest — disclose any: affiliate/referral arrangements, order-flow relationships, positions held by the operator in securities the product surfaces. If none, state none."
+          ]
+        }
+      ],
+      "homepage_changes": [
+        {
+          "change": "Add a trust bar above the fold",
+          "content": "OAuth only — no password sharing · Fincai can't move or withdraw funds · Paper trading by default · You confirm every live order",
+          "placement": "Directly beneath the primary CTA",
+          "rationale": "This answers the first objection at the moment it forms, rather than three scrolls later."
+        },
+        {
+          "change": "Add the four legal links to the footer",
+          "content": "Terms · Privacy · Security · Disclosures"
+        },
+        {
+          "change": "Add the footer disclosure block per shared_content.footer_composition"
+        }
+      ],
+      "crawlability_requirements": {
+        "critical": "The site currently serves a prerendered HTML shell to crawlers. Every new route must be added to that same prerender pipeline. A legal page that only exists after client-side hydration is not crawlable, is not indexable, and is materially harder to evidence as having been published on a given date.",
+        "checklist": [
+          "Add /terms, /privacy, /security, /disclosures to the prerender route list",
+          "Verify each with: curl -s https://<url>/security | grep -i 'cannot withdraw'",
+          "Add all four to sitemap.xml with lastmod dates",
+          "Confirm robots.txt does not disallow them",
+          "Each page needs a unique title and meta description",
+          "Each page needs a visible 'Last updated' date rendered server-side",
+          "Version each legal page and archive prior versions at /terms/v1 etc. — being able to prove what your terms said on a given date is worth the trivial effort"
+        ]
+      },
+      "acceptance_criteria": [
+        "Four routes live, prerendered, and returning 200 with full content to curl",
+        "All four linked from the global footer",
+        "Trust bar visible above the fold on mobile viewport (test at 390px width)",
+        "sitemap.xml includes all four",
+        "Zero {{TOKEN}} placeholders remain in any shipped page",
+        "Zero claims from hard_guardrails.never_fabricate.forbidden_unless_verified appear anywhere",
+        "The AI-provider data flow is disclosed on both /security and /privacy"
+      ]
+    }
+  ],
+
+  "copy_replacements": [
+    {
+      "category": "trademark",
+      "find": "AI trading bot for Robinhood via its official Trading API (secure OAuth, no password sharing)",
+      "replace": "Connects to your Robinhood account through Robinhood's official Trading API — OAuth authorization, no password sharing",
+      "reason": "Converts a branded noun phrase into a verb construction describing interoperability."
+    },
+    {
+      "category": "trademark",
+      "find": "Robinhood AI agent",
+      "replace": "REMOVE — do not substitute. This construction reads as a product name.",
+      "reason": "Implied endorsement risk."
+    },
+    {
+      "category": "trademark",
+      "find": "AI trading bot for stocks",
+      "replace": "AI trading assistant for stocks and options",
+      "reason": "'Bot' implies unattended autonomous execution, which contradicts the confirmation-required product design and overstates autonomy."
+    },
+    {
+      "category": "puffery",
+      "find": "Institutional-grade options pricing engine and Greeks",
+      "replace": "{{RESOLVED_HD-05_SPEC}}",
+      "reason": "Unsubstantiated superlative replaced with verifiable technical specification. See FIN-002."
+    },
+    {
+      "category": "accuracy",
+      "find": "runs autonomous trading strategies",
+      "replace": "CONDITIONAL — if the strategy runner cannot place live orders without per-order confirmation, use 'runs strategies that surface trades for your confirmation'. If it CAN place live orders unattended, the existing 'trades you always confirm' copy elsewhere on the site is inaccurate and must be corrected instead.",
+      "reason": "The site currently makes two claims that may not be simultaneously true. Resolve against the actual code."
+    },
+    {
+      "category": "accuracy",
+      "find": "executes equity trades",
+      "replace": "Verify against actual capability. If options execution is not live, ensure no copy implies it is. If it is live, 'equity' understates the risk surface and should be corrected.",
+      "reason": "Both understatement and overstatement of capability are accuracy problems."
+    }
+  ],
+
+  "seo": {
+    "title_tag": "Fincai — AI Trading Assistant for Stocks & Options",
+    "title_note": "Robinhood removed from the title. Title tags are the most quoted surface in SERPs and social previews; keeping a third-party mark out of it materially reduces implied-affiliation risk.",
+    "meta_description": "An agentic AI assistant for stock and options analysis. Multi-agent research with bull/bear debate, a transparent reasoning trail, and orders you confirm. Connects to Robinhood via its official Trading API. Not affiliated with Robinhood Markets, Inc.",
+    "meta_keywords": "DELETE THE TAG ENTIRELY",
+    "structured_data": {
+      "type": "SoftwareApplication",
+      "include": ["name", "description", "applicationCategory: FinanceApplication", "operatingSystem", "url", "publisher"],
+      "explicitly_exclude": ["aggregateRating", "review", "offers with fabricated pricing"],
+      "reason_for_exclusion": "Fabricated ratings markup is both a search penalty risk and a misrepresentation."
+    },
+    "strategic_note": "Head terms like 'AI trading bot' are not winnable against incumbent spend and are the terms that attract the least qualified traffic. The defensible surface is the specific one: the multi-agent bull/bear debate, the visible reasoning and tool-call trail, and the confirmation-gated execution model. Those are also the claims that are true and substantiable, which is not a coincidence — differentiation and defensibility point the same direction here.",
+    "additional_pages_worth_building": [
+      "/methodology — the full resolved HD-05 engine spec. Ranks for long-tail technical queries and functions as substantiation for every technical claim on the homepage.",
+      "/how-it-works — the reasoning trail walkthrough. This is the product's actual differentiator against brokerage-native agentic offerings."
+    ]
+  },
+
+  "ci_checks": {
+    "banned_phrase_lint": {
+      "description": "Fail the production build if any banned phrase appears in the marketing or app bundle.",
+      "patterns": [
+        "institutional[- ]grade",
+        "bank[- ]level security",
+        "military[- ]grade",
+        "guaranteed (returns|profits|gains)",
+        "risk[- ]free",
+        "beat the market",
+        "powered by robinhood",
+        "partnered with robinhood",
+        "backed by robinhood"
+      ],
+      "case_sensitive": false
+    },
+    "performance_claim_regex": {
+      "description": "Flag any numeric performance representation for human review.",
+      "patterns": [
+        "\\d+(\\.\\d+)?%\\s*(return|gain|profit|win rate|accuracy|ROI)",
+        "\\$[\\d,]+\\s*(profit|gain|made|earned)",
+        "(up|down)\\s+\\d+(\\.\\d+)?%\\s+(this|last)\\s+(week|month|year)",
+        "sharpe",
+        "backtest(ed)?"
+      ],
+      "action": "warn_and_require_manual_approval"
+    },
+    "placeholder_check": {
+      "description": "Fail the production build if any {{TOKEN}} placeholder survives into a shipped bundle.",
+      "pattern": "\\{\\{[A-Z_0-9-]+\\}\\}"
+    },
+    "disclosure_presence_check": {
+      "description": "Post-deploy smoke test asserting the trademark disclaimer is present in the prerendered HTML of every route.",
+      "implementation": "For each route in the sitemap, fetch and assert the response body contains 'Not affiliated with or endorsed by Robinhood Markets, Inc.'"
+    }
+  },
+
+  "qa_checklist": [
+    "Trademark disclaimer present in prerendered HTML on every route (curl, not browser)",
+    "Zero Robinhood brand assets in the repo",
+    "Zero noun-phrase Robinhood product constructions",
+    "Meta keywords tag removed",
+    "'Institutional-grade' returns zero grep hits",
+    "Every technical claim traces to a resolved HD-05 row",
+    "Four legal routes return 200 with full prerendered content",
+    "All four linked from the footer on every page",
+    "Trust bar renders above the fold at 390px viewport width",
+    "AI-provider data flow disclosed on /security and /privacy",
+    "Zero forbidden certification claims anywhere",
+    "Zero surviving {{TOKEN}} placeholders",
+    "Paper-default test passes",
+    "No-autoexecute test passes",
+    "PERSONALIZATION_LEVEL flag exists and is capped below PROFILE",
+    "Disclosure strings imported from the shared module in every location — zero inline duplicates",
+    "Footer disclosure block meets 4.5:1 contrast at 12px minimum",
+    "sitemap.xml updated, robots.txt permits all four routes",
+    "Each legal page shows a server-rendered 'Last updated' date",
+    "CI checks wired and failing correctly on a deliberately seeded violation"
+  ],
+
+  "definition_of_done": {
+    "shippable": [
+      "FIN-001 complete and verified",
+      "FIN-002 complete and verified",
+      "FIN-004 complete and verified",
+      "FIN-003 engineering controls complete"
+    ],
+    "not_closeable_by_code": [
+      "FIN-003 registration question — requires a licensed securities attorney. This spec's job is to make that consultation efficient, not to substitute for it."
+    ],
+    "explicitly_out_of_scope": [
+      "Any performance display feature",
+      "Suitability or risk-tolerance intake",
+      "Any personalization above PORTFOLIO level",
+      "Marketing copy for social channels — governed by the same guardrails but is a separate workstream"
+    ]
+  },
+
+  "closing_note_to_the_implementing_agent": "The instinct that will cause the most damage on this task is the instinct to be thorough. A privacy policy that covers every clause a template offers, a security page that reads as confidently as a Series B company's, a technology page dense with impressive-sounding methods — each of those is worse than a shorter honest version, because each unverified sentence is a representation that someone can later hold the operator to. When you are uncertain whether something is true, the correct output is a TODO and a question, not a plausible sentence. Ship less and mean all of it."
+}

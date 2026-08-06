@@ -1,0 +1,67 @@
+# Fincai — robots.txt
+# Search engines: full access to public content.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# AI answer engines / GEO — explicitly welcomed so Fincai can be surfaced and
+# cited in AI prompts and answers (ChatGPT, Claude, Perplexity, Google AI, etc.).
+# Named groups override the "*" group, so each repeats Disallow: /api/ to keep
+# the JSON API off-limits while allowing all public HTML.
+User-agent: GPTBot
+Allow: /
+Disallow: /api/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot
+Allow: /
+Disallow: /api/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+Sitemap: https://fincai.ai/sitemap.xml

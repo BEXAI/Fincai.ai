@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "psXQdnr2_itGwYuvPZIEj"
+uri = "file://exports/fincai-autonomous-trader.claude-code.json"
+type = "unspecified"
+title = "Fincai Autonomous Trader — Claude Code Build Brief (JSON)"

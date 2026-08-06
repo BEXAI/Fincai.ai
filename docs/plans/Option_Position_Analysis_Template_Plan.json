@@ -1,0 +1,718 @@
+{
+  "meta": {
+    "document_name": "Option Position Analysis Template Plan",
+    "version": "1.0.0",
+    "created_date": "2025-12-03",
+    "purpose": "LLM-optimized template for iterative stock option position analysis within FincAI/OptionStratViz platforms",
+    "author": "Claude + Nathaniel",
+    "related_projects": ["FincAI", "OptionStratViz"],
+    "silent_compiler_integrated": true
+  },
+
+  "position_data_schema": {
+    "description": "Canonical data structure for representing a single option position",
+    "schema": {
+      "position_id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Unique identifier for this position"
+      },
+      "underlying": {
+        "symbol": {
+          "type": "string",
+          "example": "GOOG",
+          "description": "Ticker symbol of underlying asset"
+        },
+        "current_price": {
+          "type": "number",
+          "example": 316.80,
+          "unit": "USD"
+        },
+        "price_timestamp": {
+          "type": "datetime",
+          "format": "ISO8601"
+        }
+      },
+      "contract": {
+        "type": {
+          "type": "enum",
+          "values": ["call", "put"],
+          "example": "call"
+        },
+        "strike_price": {
+          "type": "number",
+          "example": 345.00,
+          "unit": "USD"
+        },
+        "expiration_date": {
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "example": "2026-01-02"
+        },
+        "days_to_expiration": {
+          "type": "integer",
+          "computed": true,
+          "example": 30
+        },
+        "option_symbol": {
+          "type": "string",
+          "format": "OCC",
+          "example": "GOOG260102C00345000",
+          "description": "Standard OCC option symbol"
+        }
+      },
+      "position": {
+        "contracts": {
+          "type": "integer",
+          "example": 2,
+          "description": "Number of contracts held (positive = long, negative = short)"
+        },
+        "multiplier": {
+          "type": "integer",
+          "default": 100,
+          "description": "Shares per contract"
+        },
+        "average_cost": {
+          "type": "number",
+          "example": 5.00,
+          "unit": "USD per share",
+          "description": "Average price paid per share (not per contract)"
+        },
+        "total_cost_basis": {
+          "type": "number",
+          "computed": true,
+          "formula": "contracts * multiplier * average_cost",
+          "example": 1000.00,
+          "unit": "USD"
+        },
+        "date_acquired": {
+          "type": "date",
+          "format": "YYYY-MM-DD",
+          "example": "2025-11-28"
+        }
+      },
+      "current_valuation": {
+        "current_price": {
+          "type": "number",
+          "example": 2.62,
+          "unit": "USD per share"
+        },
+        "market_value": {
+          "type": "number",
+          "computed": true,
+          "formula": "contracts * multiplier * current_price",
+          "example": 524.00,
+          "unit": "USD"
+        },
+        "breakeven_price": {
+          "type": "number",
+          "computed": true,
+          "formula_call": "strike_price + average_cost",
+          "formula_put": "strike_price - average_cost",
+          "example": 350.00,
+          "unit": "USD"
+        }
+      },
+      "returns": {
+        "unrealized_pnl_dollars": {
+          "type": "number",
+          "computed": true,
+          "formula": "market_value - total_cost_basis",
+          "example": -476.00,
+          "unit": "USD"
+        },
+        "unrealized_pnl_percent": {
+          "type": "number",
+          "computed": true,
+          "formula": "(unrealized_pnl_dollars / total_cost_basis) * 100",
+          "example": -47.60,
+          "unit": "percent"
+        },
+        "today_return_dollars": {
+          "type": "number",
+          "example": -60.00,
+          "unit": "USD"
+        },
+        "today_return_percent": {
+          "type": "number",
+          "example": -10.27,
+          "unit": "percent"
+        }
+      }
+    },
+    "example_position": {
+      "position_id": "pos_goog_345c_20260102",
+      "underlying": {
+        "symbol": "GOOG",
+        "current_price": 316.80,
+        "price_timestamp": "2025-12-03T16:00:00Z"
+      },
+      "contract": {
+        "type": "call",
+        "strike_price": 345.00,
+        "expiration_date": "2026-01-02",
+        "days_to_expiration": 30,
+        "option_symbol": "GOOG260102C00345000"
+      },
+      "position": {
+        "contracts": 2,
+        "multiplier": 100,
+        "average_cost": 5.00,
+        "total_cost_basis": 1000.00,
+        "date_acquired": "2025-11-28"
+      },
+      "current_valuation": {
+        "current_price": 2.62,
+        "market_value": 524.00,
+        "breakeven_price": 350.00
+      },
+      "returns": {
+        "unrealized_pnl_dollars": -476.00,
+        "unrealized_pnl_percent": -47.60,
+        "today_return_dollars": -60.00,
+        "today_return_percent": -10.27
+      }
+    }
+  },
+
+  "analytics_calculations": {
+    "description": "Computed metrics for position analysis",
+    
+    "moneyness_analysis": {
+      "distance_to_strike": {
+        "formula": "strike_price - underlying_price",
+        "example": 28.20,
+        "interpretation": "GOOG needs to rise $28.20 to reach strike"
+      },
+      "distance_to_strike_percent": {
+        "formula": "((strike_price - underlying_price) / underlying_price) * 100",
+        "example": 8.90,
+        "interpretation": "GOOG needs to rise 8.90% to reach strike"
+      },
+      "distance_to_breakeven": {
+        "formula": "breakeven_price - underlying_price",
+        "example": 33.20,
+        "interpretation": "GOOG needs to rise $33.20 to breakeven"
+      },
+      "distance_to_breakeven_percent": {
+        "formula": "((breakeven_price - underlying_price) / underlying_price) * 100",
+        "example": 10.48,
+        "interpretation": "GOOG needs to rise 10.48% to breakeven"
+      },
+      "moneyness_status": {
+        "type": "enum",
+        "values": ["deep_ITM", "ITM", "ATM", "OTM", "deep_OTM"],
+        "current": "OTM",
+        "threshold_definitions": {
+          "deep_ITM": "underlying > strike * 1.10 (calls)",
+          "ITM": "underlying > strike",
+          "ATM": "abs(underlying - strike) / strike < 0.02",
+          "OTM": "underlying < strike",
+          "deep_OTM": "underlying < strike * 0.90"
+        }
+      }
+    },
+
+    "time_analysis": {
+      "days_to_expiration": {
+        "formula": "expiration_date - current_date",
+        "example": 30
+      },
+      "calendar_days_held": {
+        "formula": "current_date - date_acquired",
+        "example": 5
+      },
+      "trading_days_to_expiration": {
+        "formula": "business_days(current_date, expiration_date)",
+        "example": 21
+      },
+      "theta_exposure_category": {
+        "type": "enum",
+        "values": ["minimal", "accelerating", "critical"],
+        "thresholds": {
+          "minimal": "DTE > 45",
+          "accelerating": "21 < DTE <= 45",
+          "critical": "DTE <= 21"
+        },
+        "current": "accelerating"
+      }
+    },
+
+    "greeks_estimation": {
+      "description": "Estimated Greeks using Black-Scholes model",
+      "required_inputs": {
+        "underlying_price": 316.80,
+        "strike_price": 345.00,
+        "days_to_expiration": 30,
+        "implied_volatility": "fetch_from_market_data",
+        "risk_free_rate": 0.0525,
+        "dividend_yield": 0.00
+      },
+      "outputs": {
+        "delta": {
+          "description": "Price change per $1 underlying move",
+          "estimated_range": "0.15 - 0.25 for deep OTM call"
+        },
+        "gamma": {
+          "description": "Delta change per $1 underlying move",
+          "note": "Increases as expiration approaches for ATM options"
+        },
+        "theta": {
+          "description": "Daily time decay in dollars",
+          "estimated": "-$0.05 to -$0.10 per day at this moneyness"
+        },
+        "vega": {
+          "description": "Price change per 1% IV change",
+          "note": "Higher for longer-dated options"
+        },
+        "rho": {
+          "description": "Price change per 1% interest rate change",
+          "note": "Minimal impact for short-dated options"
+        }
+      }
+    },
+
+    "scenario_analysis": {
+      "price_targets": {
+        "underlying_prices": [300, 310, 320, 330, 340, 345, 350, 360, 370, 380],
+        "compute_for_each": [
+          "option_intrinsic_value",
+          "estimated_option_price",
+          "position_value",
+          "position_pnl_dollars",
+          "position_pnl_percent"
+        ]
+      },
+      "time_decay_scenarios": {
+        "dates": ["today", "+7_days", "+14_days", "+21_days", "expiration"],
+        "compute_for_each": [
+          "estimated_time_value_remaining",
+          "projected_option_price_at_current_underlying",
+          "break_even_probability_change"
+        ]
+      },
+      "volatility_scenarios": {
+        "iv_changes": [-20, -10, 0, 10, 20],
+        "unit": "percent_change_in_IV",
+        "compute_for_each": [
+          "new_option_price",
+          "vega_impact_dollars"
+        ]
+      }
+    },
+
+    "risk_metrics": {
+      "max_loss": {
+        "formula": "total_cost_basis (for long positions)",
+        "value": 1000.00,
+        "description": "Maximum possible loss if option expires worthless"
+      },
+      "current_loss_to_max_loss_ratio": {
+        "formula": "(current_unrealized_loss / max_loss) * 100",
+        "value": 47.60,
+        "interpretation": "Position has already lost 47.6% of maximum possible loss"
+      },
+      "required_move_for_recovery": {
+        "value": 10.48,
+        "unit": "percent",
+        "description": "Underlying must move this % just to breakeven"
+      },
+      "probability_of_profit": {
+        "requires": "IV and probability distribution model",
+        "note": "Estimate based on normal distribution and current IV"
+      }
+    }
+  },
+
+  "iteration_workflow": {
+    "description": "Automated and manual triggers for position re-analysis",
+    
+    "automatic_triggers": [
+      {
+        "event": "price_threshold_breach",
+        "conditions": [
+          "underlying_price crosses strike_price",
+          "underlying_price crosses breakeven_price",
+          "underlying_moves > 3% intraday"
+        ],
+        "action": "recalculate_all_metrics"
+      },
+      {
+        "event": "time_decay_checkpoint",
+        "conditions": [
+          "DTE == 30",
+          "DTE == 21",
+          "DTE == 14",
+          "DTE == 7",
+          "DTE == 3",
+          "DTE == 1"
+        ],
+        "action": "generate_time_decay_alert"
+      },
+      {
+        "event": "loss_threshold",
+        "conditions": [
+          "unrealized_loss_percent >= 50%",
+          "unrealized_loss_percent >= 75%",
+          "unrealized_loss_percent >= 90%"
+        ],
+        "action": "generate_risk_alert_with_exit_analysis"
+      },
+      {
+        "event": "recovery_opportunity",
+        "conditions": [
+          "today_return_percent >= 10%",
+          "underlying_gap_up >= 2%"
+        ],
+        "action": "generate_exit_opportunity_analysis"
+      }
+    ],
+
+    "manual_analysis_modes": [
+      {
+        "mode": "quick_snapshot",
+        "outputs": ["current_pnl", "distance_to_breakeven", "days_to_expiration"],
+        "format": "single_line_summary"
+      },
+      {
+        "mode": "detailed_analysis",
+        "outputs": ["all_metrics", "scenario_tables", "recommendations"],
+        "format": "full_report"
+      },
+      {
+        "mode": "exit_strategy",
+        "outputs": ["current_value", "exit_scenarios", "roll_options", "close_impact"],
+        "format": "decision_matrix"
+      },
+      {
+        "mode": "comparison",
+        "outputs": ["side_by_side_positions", "relative_risk", "correlation"],
+        "format": "comparison_table"
+      }
+    ],
+
+    "refresh_schedule": {
+      "market_hours": {
+        "frequency": "every_5_minutes",
+        "data_points": ["underlying_price", "option_price", "bid_ask"]
+      },
+      "after_hours": {
+        "frequency": "every_30_minutes",
+        "data_points": ["underlying_price"]
+      },
+      "daily_summary": {
+        "time": "16:05_ET",
+        "generate": ["daily_pnl_report", "next_day_scenarios"]
+      }
+    }
+  },
+
+  "ai_function_tools": {
+    "description": "Claude function calling tools for conversational analysis",
+    
+    "tools": [
+      {
+        "name": "get_position_summary",
+        "description": "Get current status of an option position",
+        "parameters": {
+          "position_id": { "type": "string", "required": false },
+          "symbol": { "type": "string", "required": false }
+        },
+        "returns": {
+          "summary": "string",
+          "metrics": "position_data_schema"
+        }
+      },
+      {
+        "name": "analyze_breakeven_probability",
+        "description": "Calculate probability of reaching breakeven by expiration",
+        "parameters": {
+          "position_id": { "type": "string", "required": true },
+          "target_price": { "type": "number", "required": false, "default": "breakeven_price" }
+        },
+        "returns": {
+          "probability_percent": "number",
+          "required_daily_move": "number",
+          "confidence_interval": "object"
+        }
+      },
+      {
+        "name": "generate_scenario_table",
+        "description": "Generate what-if scenarios for price/time/volatility changes",
+        "parameters": {
+          "position_id": { "type": "string", "required": true },
+          "scenario_type": { "type": "enum", "values": ["price", "time", "volatility", "combined"] },
+          "range": { "type": "object", "description": "Custom range for scenarios" }
+        },
+        "returns": {
+          "table": "array of scenario objects",
+          "key_insights": "array of strings"
+        }
+      },
+      {
+        "name": "recommend_exit_strategy",
+        "description": "Analyze exit options: close, roll, average down, hold",
+        "parameters": {
+          "position_id": { "type": "string", "required": true },
+          "risk_tolerance": { "type": "enum", "values": ["conservative", "moderate", "aggressive"] }
+        },
+        "returns": {
+          "recommended_action": "string",
+          "rationale": "string",
+          "alternatives": "array of exit options with pros/cons"
+        }
+      },
+      {
+        "name": "calculate_roll_options",
+        "description": "Find potential roll opportunities to extend or adjust position",
+        "parameters": {
+          "position_id": { "type": "string", "required": true },
+          "roll_type": { "type": "enum", "values": ["out_in_time", "down_in_strike", "up_in_strike", "diagonal"] }
+        },
+        "returns": {
+          "roll_candidates": "array of new contracts",
+          "cost_to_roll": "number",
+          "breakeven_improvement": "number"
+        }
+      },
+      {
+        "name": "compare_positions",
+        "description": "Side-by-side comparison of multiple option positions",
+        "parameters": {
+          "position_ids": { "type": "array of strings", "required": true }
+        },
+        "returns": {
+          "comparison_table": "object",
+          "risk_ranking": "array",
+          "portfolio_correlation": "number"
+        }
+      }
+    ]
+  },
+
+  "ui_components": {
+    "description": "React components for position visualization in OptionStratViz",
+    
+    "PositionCard": {
+      "props": ["position_data", "display_mode"],
+      "display_modes": ["compact", "expanded", "detail"],
+      "elements": {
+        "header": "Symbol + Strike + Type + Expiration",
+        "price_section": "Current price, bid/ask, change",
+        "pnl_section": "Today return, total return with color coding",
+        "metrics_section": "Breakeven, distance to strike, DTE",
+        "action_buttons": "Close, Roll, Analyze"
+      },
+      "color_states": {
+        "profit": "#00C805 (Robinhood green)",
+        "loss": "#FF5000 (Robinhood red)",
+        "neutral": "#9BA3AF"
+      }
+    },
+
+    "BreakevenChart": {
+      "type": "area_chart",
+      "x_axis": "underlying_price_range",
+      "y_axis": "profit_loss",
+      "annotations": [
+        "current_underlying_price",
+        "strike_price",
+        "breakeven_price",
+        "cost_basis_line"
+      ],
+      "interactive": ["hover_for_values", "drag_to_zoom"]
+    },
+
+    "ScenarioGrid": {
+      "type": "heatmap_table",
+      "rows": "underlying_prices",
+      "columns": "days_to_expiration",
+      "cells": "pnl_value_with_color_gradient",
+      "color_scale": "red (loss) -> yellow (breakeven) -> green (profit)"
+    },
+
+    "TimeDecayChart": {
+      "type": "line_chart",
+      "x_axis": "days_to_expiration",
+      "y_axis": "option_value",
+      "lines": [
+        "theoretical_decay_curve",
+        "actual_value_history",
+        "intrinsic_value_line"
+      ]
+    },
+
+    "GreeksDisplay": {
+      "layout": "horizontal_cards",
+      "metrics": ["Delta", "Gamma", "Theta", "Vega", "IV"],
+      "format": "value + visual_gauge + interpretation"
+    }
+  },
+
+  "silent_compiler_rules": {
+    "description": "Operational rules for AI analysis persona within FincAI",
+    
+    "persona": "Options Position Analyst - focused, data-driven, risk-aware",
+    
+    "negative_constraints": [
+      "NEVER provide buy/sell recommendations as financial advice",
+      "NEVER guarantee profit or loss outcomes",
+      "NEVER make predictions about specific future prices",
+      "NEVER access or display positions without user authorization",
+      "NEVER execute trades without explicit user confirmation",
+      "NEVER dismiss risk concerns or losses casually",
+      "NEVER provide tax advice - suggest consulting tax professional",
+      "NEVER assume user risk tolerance without explicit indication"
+    ],
+    
+    "required_disclosures": {
+      "on_analysis": "Analysis is educational only, not financial advice",
+      "on_recommendations": "User should consult financial advisor for personalized advice",
+      "on_projections": "Scenarios are hypothetical based on current market conditions",
+      "on_probability": "Probabilities are estimates and not guarantees"
+    },
+    
+    "logic_guards": {
+      "data_validation": [
+        "Verify option symbol format before processing",
+        "Check for stale price data (> 15 min during market hours)",
+        "Validate position quantities are non-zero",
+        "Confirm expiration date is in the future"
+      ],
+      "calculation_checks": [
+        "Verify Greeks are within valid ranges",
+        "Check for division by zero in percentage calculations",
+        "Validate scenario results are mathematically consistent"
+      ]
+    },
+
+    "output_templates": {
+      "quick_summary": "[SYMBOL] $[STRIKE] [TYPE] | [DTE] days | [PNL$] ([PNL%]) | [DISTANCE_TO_BE]% to breakeven",
+      "position_alert": "⚠️ [ALERT_TYPE]: [POSITION] - [TRIGGER_CONDITION]. [RECOMMENDED_ACTION]",
+      "scenario_insight": "If [UNDERLYING] reaches $[PRICE] by [DATE]: Position value → $[VALUE] ([PNL_CHANGE])"
+    }
+  },
+
+  "implementation_phases": {
+    "phase_1_data_layer": {
+      "duration": "3-4 days",
+      "tasks": [
+        "Define TypeScript interfaces matching position_data_schema",
+        "Create position parser from Robinhood screenshot/API data",
+        "Implement calculation functions for all computed fields",
+        "Build Yahoo Finance integration for real-time underlying prices",
+        "Create localStorage persistence for position tracking"
+      ],
+      "dependencies": ["Yahoo Finance API key", "React project setup"]
+    },
+    
+    "phase_2_analytics_engine": {
+      "duration": "4-5 days",
+      "tasks": [
+        "Implement Black-Scholes Greeks calculator",
+        "Build scenario generator for price/time/IV matrices",
+        "Create probability estimation module",
+        "Implement risk metrics calculations",
+        "Build alert trigger evaluation system"
+      ],
+      "dependencies": ["phase_1_data_layer"]
+    },
+
+    "phase_3_ui_components": {
+      "duration": "5-6 days",
+      "tasks": [
+        "Build PositionCard with three display modes",
+        "Create BreakevenChart with TradingView Lightweight Charts",
+        "Implement ScenarioGrid heatmap component",
+        "Build TimeDecayChart visualization",
+        "Create GreeksDisplay with gauges",
+        "Style all components with glassmorphic Robinhood aesthetic"
+      ],
+      "dependencies": ["phase_2_analytics_engine", "TradingView charts library"]
+    },
+
+    "phase_4_ai_integration": {
+      "duration": "4-5 days",
+      "tasks": [
+        "Implement all 6 Claude function tools",
+        "Build conversational context manager for position awareness",
+        "Create natural language query parser for position analysis",
+        "Integrate inline result cards in chat interface",
+        "Add voice/quick-action shortcuts for common analyses"
+      ],
+      "dependencies": ["phase_3_ui_components", "Claude API key", "Anthropic SDK"]
+    }
+  },
+
+  "sample_analysis_output": {
+    "description": "Example of complete analysis for the GOOG $345 Call position",
+    
+    "quick_summary": "GOOG $345 Call | 30 days | -$476.00 (-47.60%) | 10.48% to breakeven",
+    
+    "detailed_analysis": {
+      "position_status": {
+        "verdict": "Deep out-of-the-money with significant time decay exposure",
+        "risk_level": "HIGH - Position has lost nearly half its value",
+        "time_pressure": "ACCELERATING - 30 DTE puts position in theta decay acceleration zone"
+      },
+      "key_metrics": {
+        "current_underlying": "$316.80",
+        "strike": "$345.00",
+        "breakeven": "$350.00",
+        "distance_to_strike": "$28.20 (8.90%)",
+        "distance_to_breakeven": "$33.20 (10.48%)",
+        "days_to_expiration": 30,
+        "contracts": 2,
+        "market_value": "$524.00",
+        "total_loss": "-$476.00 (-47.60%)",
+        "max_loss_remaining": "$524.00"
+      },
+      "scenario_insights": [
+        "If GOOG rallies to $340 in 2 weeks: Position value ≈ $500-700, still at loss",
+        "If GOOG rallies to $350 in 2 weeks: Position value ≈ $1,000-1,400, potential profit",
+        "If GOOG stays flat: Position loses ≈$50-80/week to theta decay",
+        "At expiration with GOOG at current price: Position expires worthless (-100%)"
+      ],
+      "exit_considerations": [
+        {
+          "action": "Close now",
+          "proceeds": "≈$524 (locks in 47.6% loss)",
+          "rationale": "Preserve remaining capital, avoid total loss"
+        },
+        {
+          "action": "Roll to later expiration",
+          "estimated_cost": "$200-400 debit depending on strike adjustment",
+          "rationale": "Buys more time for GOOG recovery"
+        },
+        {
+          "action": "Hold through earnings (if applicable)",
+          "risk": "High - binary outcome could accelerate loss or recovery",
+          "rationale": "Only if strong conviction in GOOG upside catalyst"
+        },
+        {
+          "action": "Average down (buy more contracts)",
+          "risk": "VERY HIGH - increases max loss exposure",
+          "rationale": "Only with extremely high conviction and available capital"
+        }
+      ]
+    },
+    "disclaimer": "This analysis is for educational purposes only and does not constitute financial advice. Consult a licensed financial advisor for personalized recommendations."
+  },
+
+  "next_steps": {
+    "immediate": [
+      "Import this JSON into OptionStratViz project",
+      "Create TypeScript types from position_data_schema",
+      "Build position parser to extract data from Robinhood screenshots/exports"
+    ],
+    "this_week": [
+      "Implement core calculation functions",
+      "Build first PositionCard component",
+      "Test with live GOOG data from Yahoo Finance"
+    ],
+    "integration_points": {
+      "fincai_connection": "Use same position schema for live trading positions",
+      "claude_mcp": "Consider building MCP server for position analysis tools"
+    }
+  }
+}

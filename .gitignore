@@ -1,0 +1,28 @@
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+/logs/
+
+# Temporary files
+/tmp/
+
+# Generated assets
+attached_assets/generated_*
+
+# Test coverage
+coverage/
+
+# Replit configuration
+.replit
+replit.nix

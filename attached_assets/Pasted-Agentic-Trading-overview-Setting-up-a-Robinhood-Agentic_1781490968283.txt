@@ -1,0 +1,114 @@
+Agentic Trading overview
+Setting up a Robinhood Agentic Trading account offers you a world of opportunities to uplevel and automate your trading. You’ll first need to connect a third-party AI agent and then follow the on-screen steps to connect it with your Agentic account through the Robinhood Trading MCP (Model Context Protocol).
+
+What’s an MCP?
+Model Context Protocol (MCP) is an open standard that lets AI agents connect to external apps and services. Instead of just answering questions, an AI with MCP access can take actions on your behalf.
+
+What your agent can do
+Your agent can ask about your portfolio value, buying power, and account information, and help with your investing, including placing orders with the different available order types. Ultimately, you are in control of your agent, but the following are a few examples of what you can set your agent up to do for you when it’s connected to your Robinhood Agentic account. Check out Trading with your agent for details.
+
+Build portfolios: “Look through news and industry reports to build a portfolio that represents little-known tickers across the AI supply chain.”
+Automate trading strategies: “Buy $100 of ROAR every time the price decreases 2% or more in 1 day.”
+Adjust your portfolio: “Rebalance my portfolio to achieve a 20% allocation in ROAR and 80% allocation in HMNI.”
+Analyze your portfolio: “Look at my portfolio and tell me what risks I’m exposed to.”
+Analyze market data: "Why is ROAR up today?" or “Look at news, social sentiment, and recent quotes to build a bull and bear thesis for ROAR.”
+NOTE
+These examples are provided for informational purposes only and should not be construed as a recommendation or endorsement. We’ll be adding more features and capabilities soon.
+
+Risks
+You are ultimately responsible for the trades your AI agent places in your account. You’re in charge of your trades. When you use an AI agent to place orders, all investment decisions are yours. Before your agent takes action, you can review what it’s about to do. Be aware that if you’ve asked your agent to take action without asking your approval, it can place trades without your confirmation. Review Disclosures for more details about the risks.
+
+What your agent can access
+When you connect your AI agent to the Robinhood Trading MCP, it will have read access to these data points:
+
+All your Robinhood accounts, including your Robinhood account numbers
+All details about your positions and balances
+All details about your transactions, including your order history
+IMPORTANT
+Your agent can only place trades in your Robinhood Agentic account.
+
+Connect your AI agent
+Before you can create your Robinhood Agentic account, you’ll need to choose an agentic AI platform. Once you’re set up on a platform, follow the applicable instructions to connect the Robinhood Trading MCP.
+
+The following are some of the AI platforms that work with the Robinhood Trading MCP.
+
+Claude Code
+
+Run this command in your terminal: claude mcp add robinhood-trading --transport http https://agent.robinhood.com/mcp/trading
+Enter /mcp in Claude Code
+Select robinhood-trading and authenticate
+For details, review Claude Code documentation.
+
+Claude Desktop
+
+Go to Settings → Connectors → Add custom connector
+Add this MCP link: https://agent.robinhood.com/mcp/trading
+For details, review Claude Desktop documentation.
+
+ChatGPT
+
+Turn on Developer Mode
+Go to Settings → Apps → Create app
+Add this MCP link: https://agent.robinhood.com/mcp/trading
+For details, review ChatGPT API documentation.
+
+Codex
+
+Go to Settings → MCP servers
+Select Streamable HTTP
+Add this MCP link: https://agent.robinhood.com/mcp/trading
+For details, review Codex documentation.
+
+Codex CLI
+
+Run this command in your terminal: codex mcp add robinhood-trading --url https://agent.robinhood.com/mcp/trading
+Enter /mcp in Codex CLI
+Select robinhood-trading
+For details, review Codex CLI documentation.
+
+Cursor
+
+Give your agent this MCP link: https://agent.robinhood.com/mcp/trading
+Go to Settings → Cursor Settings
+Select Tools & MCPs → Connect
+For details, review Cursor documentation.
+
+Grok
+
+Start a chat and select + (plus sign)
+Select Add connector → Custom
+Add this MCP link: https://agent.robinhood.com/mcp/trading
+For details, review Grok instructions.
+
+Other platforms
+
+You can connect to the Robinhood Trading MCP on other AI platforms that support MCP connections. Just use the Robinhood Trading MCP link: https://agent.robinhood.com/mcp/trading.
+
+Open an Agentic account
+A Robinhood Agentic account is a type of self-directed, individual investing account. For investing purposes, you can have up to 10 self-directed individual investing accounts, including your Agentic account. To open an Agentic account, you’re required to:
+
+Have a primary individual investing account that’s in good standing before you open additional accounts.
+Complete the onboarding that auto-opens after you connect to the Robinhood Trading MCP.
+To open an account for your agent to use:
+
+Connect your AI agent (choose an AI platform and follow the applicable instructions)
+When authenticating the AI agent, we’ll prompt you to open an Agentic account
+Follow the on-screen steps to complete the setup
+NOTE
+You can only open an agentic account and authenticate your agent on a desktop device. If you’re connecting to the Robinhood Trading MCP on a mobile device, copy the onboarding URL and open it in a desktop browser.
+
+Troubleshooting
+Make sure your AI platform is connected to the Robinhood Trading MCP.
+If you are experiencing issues with your MCP connection, disconnect and reconnect the Robinhood Trading MCP on your AI platform.
+For issues with your AI platform, follow the platform’s instructions in their documentation for debugging.
+Following your AI platform’s debugging steps, you can verify if the platform is connected to and using the Robinhood Trading MCP.
+Most issues can be resolved by ensuring the AI platform is properly connected to the Robinhood Trading MCP.
+If your agent tells you there was an error on the Robinhood side, contact us.
+Disclosures
+Robinhood Agentic Trading is a new type of brokerage product that allows you to connect a third-party AI agent to a dedicated Robinhood account to automate investment decisions and order placement. This product operates differently from traditional investing and trades may be executed by an AI agent without your direct input on each transaction.
+
+Agentic trading involves significant risk, including the possible loss of your entire investment. AI-driven strategies may perform poorly under certain market conditions, move quickly, and may be difficult to monitor or stop in real time. This product may not be appropriate for all investors.
+
+AI agents can make errors, misinterpret instructions, act on incomplete or outdated information, and may behave in unexpected ways. Robinhood does not guarantee the accuracy, completeness, or suitability of any agent output, and is not responsible for losses resulting from agent-generated decisions. You are responsible for reviewing account activity, monitoring positions, and ensuring the agent is operating as intended.
+
+You assume all risk for trades executed by AI agents and for any use of your data by third-party AI providers. Brokerage services are offered through Robinhood Financial LLC, ("RHF") a registered broker dealer (member SIPC) and clearing services through Robinhood Securities, LLC, ("RHS") a registered broker dealer (member SIPC). RHF and RHS are not banks.

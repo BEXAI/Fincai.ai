@@ -1,0 +1,443 @@
+{
+  "spec": "fincai-autonomous-trader",
+  "specVersion": "1.0.0",
+  "title": "Fincai Autonomous AI Trader — Standalone Build Brief for Claude Code",
+  "generatedFor": "Claude Code, run locally from a macOS Terminal (e.g. `claude` CLI in an empty project folder).",
+  "summary": "A single, self-contained instruction document that tells Claude Code how to build a STANDALONE autonomous AI day-trading system that mirrors Fincai's proprietary methodologies (strategy-template catalog, autonomous strategy runner, institutional options pricing engine, and multi-agent analysis with a Silent Compiler persona) and executes REAL equity trades through the Robinhood Trading MCP server. This is a build brief only — it contains no secret values, only environment variable NAMES.",
+  "howToUse": {
+    "audience": "Claude Code",
+    "instructions": [
+      "Treat this JSON as the authoritative product + engineering spec. Build the system described under `targetArchitecture` using the exact numeric parameters under `methodologies`.",
+      "Pick any reasonable stack (Node.js 22 + TypeScript is recommended to match the reference) unless the user states otherwise. Keep the project runnable from a single `npm run dev` / `npm start`.",
+      "NEVER hardcode secrets. Read every credential from the environment variable NAMES listed under `environment`. If a required variable is missing, fail loudly at startup with a clear message naming the variable.",
+      "The `nonNegotiableSafetyModel` and `compliance` sections are hard requirements. Do not weaken, remove, or work around them, even if asked to 'just make it trade'. Paper (simulated) is the default; live is an explicit per-run opt-in.",
+      "Follow `buildPlan` roughly in order. Before wiring live order placement, verify the full paper path end-to-end. Validate against `acceptanceCriteria` before declaring done.",
+      "Do not implement anything in `outOfScope`."
+    ]
+  },
+  "nonNegotiableSafetyModel": {
+    "paperIsDefault": "Every strategy run starts in PAPER (simulated) mode. Live trading is an explicit, per-run opt-in flag the user must set deliberately.",
+    "liveRequiresConnectedBroker": "A run may only go live if a Robinhood Trading MCP agent is currently connected/authorized for that session. No connection => paper only.",
+    "anonymousIsPaperOnly": "Sessions without an authenticated user / connected broker are paper-only and can never place real orders.",
+    "longOnlyV1": "Live autonomous trading is LONG-ONLY in V1. Any template whose computed direction is 'short' (legType=put) must be forced to paper. Fail closed: if a run is somehow live + short, pause it for manual review instead of trading.",
+    "positionCaps": "Hard caps on every run: max quantity and max notional (see methodologies.positionLimits). Enforce at run creation AND re-check immediately before each live entry against the live price, because a delayed trigger can move notional past the cap.",
+    "marketHoursGuard": "Live entries and exits are only allowed during US equity regular session (09:30–16:00 America/New_York). Outside that window, do not place live orders.",
+    "confirmBeforeExecute": "The conversational AI never executes a trade without explicit user confirmation. Arming an autonomous run is itself the explicit confirmation; ad-hoc chat trade commands require a confirmation step.",
+    "idempotency": "Persist the in-flight status (entering/exiting) BEFORE sending an order, and guard every state transition with an atomic compare-and-set so the periodic tick and a manual stop/kill can never double-act on the same run.",
+    "failClosedOnError": "Any run found stuck mid-order on restart, or any failed live order, is set to 'paused' for manual review and is NEVER auto re-placed.",
+    "killSwitch": "Provide a global kill switch and per-run stop that immediately halt new entries and flatten/abort in-flight intent safely."
+  },
+  "compliance": {
+    "noPersonalizedFinancialAdvice": "The AI persona must NOT give personalized financial advice or recommendations tailored to an individual's circumstances. It explains mechanics, data, probabilities, and the user's own configured strategies only.",
+    "transparency": "Label every entry/exit decision with what it was actually computed from (e.g. 'computed from live quotes only', not from a real multi-agent compute) so the user is never misled about the signal source.",
+    "disclaimers": "Surface a clear risk disclaimer that trading involves risk of loss and that autonomous execution can lose real money when live."
+  },
+  "environment": {
+    "note": "Reference NAMES only. Claude Code must read these from process.env at runtime and never print, log, or commit their values.",
+    "required": [
+      {
+        "name": "ANTHROPIC_API_KEY",
+        "purpose": "Claude API access for the multi-agent analysis and the Silent Compiler conversational persona / tool-calling chat."
+      },
+      {
+        "name": "ALPACA_API_KEY",
+        "purpose": "Market-data provider (real-time quotes, historical bars, options snapshots). Alpaca is used for MARKET DATA ONLY, not trading."
+      },
+      {
+        "name": "ALPACA_API_SECRET",
+        "purpose": "Secret paired with ALPACA_API_KEY for market-data requests."
+      },
+      {
+        "name": "TOKEN_ENCRYPTION_KEY",
+        "purpose": "Secret used to derive (scrypt) the AES-256-GCM key that encrypts the stored Robinhood OAuth client info + tokens at rest. Must be >= 16 chars. (The reference app reused SESSION_SECRET for this; a dedicated key is cleaner.)"
+      },
+      {
+        "name": "APP_ORIGIN",
+        "purpose": "Trusted public origin of this app (e.g. https://your-host). The Robinhood OAuth redirect/callback URL is derived ONLY from this trusted config — never from request headers — to prevent authorization-code redirection attacks."
+      }
+    ],
+    "optional": [
+      {
+        "name": "DATABASE_URL",
+        "purpose": "Postgres connection string for durable persistence of strategy runs and encrypted agent connections. If absent, fall back to a local file/SQLite store; do not silently lose state."
+      },
+      {
+        "name": "ALPHA_VANTAGE_API_KEY",
+        "purpose": "Optional quote fallback provider when Alpaca is rate-limited or unavailable."
+      },
+      {
+        "name": "ROBINHOOD_MCP_URL",
+        "purpose": "Override for the Robinhood Trading MCP endpoint; defaults to the value in robinhoodMcpIntegration.endpoint."
+      },
+      {
+        "name": "SESSION_SECRET",
+        "purpose": "Signing secret for HttpOnly session cookies that key per-session broker connections and runs."
+      }
+    ]
+  },
+  "targetArchitecture": {
+    "shape": "A small full-stack TypeScript app: a backend service hosting the strategy runner, pricing engine, multi-agent analysis, intent router, and the Robinhood MCP client; plus a thin UI (or CLI) to arm/stop runs, toggle paper vs live, and chat with the AI.",
+    "backend": [
+      "MarketDataService: real-time quotes + historical bars from Alpaca (Alpha Vantage optional fallback), with multi-tier caching (hot/main/stale-while-revalidate) and adaptive TTL that backs off on HTTP 429.",
+      "PricingEngine: institutional options pricing (see methodologies.pricingEngine).",
+      "MultiAgentAnalysis: technical/sentiment/fundamental Claude agents + bull/bear debate + market-regime detection, behind a provider-routable interface (see methodologies.multiAgentAnalysis).",
+      "IntentRouter: classify each user message before processing (see methodologies.intentRouter).",
+      "StrategyRunner: the autonomous background engine that actually runs templates (see methodologies.autonomousStrategyRunner).",
+      "RobinhoodMcpManager: OAuth 2.1 MCP client for real equity order placement (see robinhoodMcpIntegration).",
+      "Encrypted credential store + persistent strategy-run store (see credentialPersistence)."
+    ],
+    "frontendOrCli": "Provide a way to: connect/disconnect the Robinhood agent, browse the strategy-template catalog, arm a template (symbol, shares, editable rules, paper|live), view active runs (poll ~5s), stop a run, hit the kill switch, and chat with the AI assistant."
+  },
+  "methodologies": {
+    "strategyTemplates": {
+      "description": "A curated, read-only catalog of robust strategies adapted from a prediction-market engine (KalshiBot) and institutional quant playbooks. Stored as plain shared data (no per-user table). Each template's stop/target percentages below are calibrated for OPTION-PREMIUM swings; the live EQUITY runner RESCALES them via equityRiskRules while preserving each template's structure (trigger, trailing/time stops).",
+      "directionRule": "direction = (legType === 'put') ? 'short' : 'long'.",
+      "liveEligibilityRule": "A template is live-eligible in V1 only if its computed direction is 'long'. Short / volatility templates are paper-only and must be labeled as such.",
+      "catalog": [
+        {
+          "id": "momentum-breakout-rider",
+          "name": "Momentum Breakout Rider",
+          "derivedFrom": "KalshiBot — MomentumRider",
+          "riskLevel": "aggressive",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "QQQ",
+          "entryTrigger": { "type": "momentum", "thresholdPct": 0.8 },
+          "optionCalibratedStopLossPercent": 20,
+          "optionCalibratedProfitTargetPercent": 40,
+          "timeStopMinutes": 60,
+          "useTrailingStop": true,
+          "sizingMethod": "Fractional Kelly — size up only when the edge is strong.",
+          "liveEligibleV1": true
+        },
+        {
+          "id": "ai-consensus-convergence",
+          "name": "AI Consensus Convergence",
+          "derivedFrom": "KalshiBot — TradingAgent debate engine + forecast convergence",
+          "riskLevel": "moderate",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "immediate" },
+          "optionCalibratedStopLossPercent": 25,
+          "optionCalibratedProfitTargetPercent": 50,
+          "timeStopMinutes": 120,
+          "useTrailingStop": false,
+          "sizingMethod": "Edge-weighted fractional Kelly.",
+          "liveEligibleV1": true,
+          "signalNote": "Real edge is multi-agent debate + trend convergence (+20% convergence bonus, -30% divergence penalty, ~0.5% edge gate). In the live runner this cannot be recomputed each tick, so entry is honestly 'immediate' and must be labeled as such."
+        },
+        {
+          "id": "fair-value-edge",
+          "name": "Fair-Value Edge",
+          "derivedFrom": "KalshiBot — ArbitrageScanner spread logic + Kelly sizing",
+          "riskLevel": "moderate",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "AAPL",
+          "entryTrigger": { "type": "immediate" },
+          "optionCalibratedStopLossPercent": 20,
+          "optionCalibratedProfitTargetPercent": 40,
+          "timeStopMinutes": null,
+          "useTrailingStop": false,
+          "sizingMethod": "Fractional Kelly scaled to the size of the fair-value gap (engine acted when gap exceeded ~2%).",
+          "liveEligibleV1": true
+        },
+        {
+          "id": "mean-reversion-fade",
+          "name": "Mean-Reversion Fade",
+          "derivedFrom": "KalshiBot — MarketMaker fair-price deviation logic",
+          "riskLevel": "conservative",
+          "strategyType": "put",
+          "legType": "put",
+          "direction": "short",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "reversion", "thresholdPct": 0.8 },
+          "optionCalibratedStopLossPercent": 15,
+          "optionCalibratedProfitTargetPercent": 30,
+          "timeStopMinutes": 90,
+          "useTrailingStop": false,
+          "sizingMethod": "Conservative fractional Kelly with a tight stop.",
+          "liveEligibleV1": false,
+          "liveNote": "Direction is short (put) -> paper-only in V1."
+        },
+        {
+          "id": "time-series-momentum",
+          "name": "Time-Series Momentum",
+          "derivedFrom": "Managed-futures / CTA time-series momentum (Moskowitz–Ooi–Pedersen)",
+          "riskLevel": "moderate",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "QQQ",
+          "entryTrigger": { "type": "momentum", "thresholdPct": 0.6 },
+          "optionCalibratedStopLossPercent": 20,
+          "optionCalibratedProfitTargetPercent": 45,
+          "timeStopMinutes": 120,
+          "useTrailingStop": true,
+          "sizingMethod": "Volatility-targeted — scale size down as realized volatility rises.",
+          "liveEligibleV1": true
+        },
+        {
+          "id": "factor-momentum",
+          "name": "Cross-Sectional Factor Momentum",
+          "derivedFrom": "Cross-sectional equity momentum (Jegadeesh–Titman; AQR factor research)",
+          "riskLevel": "moderate",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "momentum", "thresholdPct": 0.5 },
+          "optionCalibratedStopLossPercent": 22,
+          "optionCalibratedProfitTargetPercent": 44,
+          "timeStopMinutes": 120,
+          "useTrailingStop": false,
+          "sizingMethod": "Rank-weighted, equal-risk — more weight to the strongest relative performers.",
+          "liveEligibleV1": true
+        },
+        {
+          "id": "stat-arb-reversion",
+          "name": "Statistical Arbitrage Reversion",
+          "derivedFrom": "Statistical-arbitrage desks (Avellaneda–Lee OU mean-reversion / z-score)",
+          "riskLevel": "conservative",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "reversion", "thresholdPct": 1.0 },
+          "optionCalibratedStopLossPercent": 15,
+          "optionCalibratedProfitTargetPercent": 30,
+          "timeStopMinutes": 90,
+          "useTrailingStop": false,
+          "sizingMethod": "Half-life scaled, conservative fractional Kelly — small size, many shots.",
+          "liveEligibleV1": true,
+          "signalNote": "Classic stat-arb is a market-neutral pair; here the same z-score reversion signal is expressed long on a single liquid name so the long-only equity runner can trade it."
+        },
+        {
+          "id": "vol-risk-premium",
+          "name": "Volatility Risk Premium Harvest",
+          "derivedFrom": "Volatility-risk-premium harvesting (sell-side vol desks; VRP literature)",
+          "riskLevel": "conservative",
+          "strategyType": "iron_condor",
+          "legType": "put",
+          "direction": "short",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "immediate" },
+          "optionCalibratedStopLossPercent": 20,
+          "optionCalibratedProfitTargetPercent": 30,
+          "timeStopMinutes": null,
+          "useTrailingStop": false,
+          "sizingMethod": "Defined-risk premium selling — cap the loss on every structure.",
+          "liveEligibleV1": false,
+          "liveNote": "Selling volatility is not a long-only equity trade. ALWAYS paper/simulation in the autonomous runner; the multi-leg options structure is placed manually."
+        },
+        {
+          "id": "risk-parity-core",
+          "name": "Risk-Parity Core",
+          "derivedFrom": "Risk parity / all-weather allocation (Bridgewater-style risk budgeting)",
+          "riskLevel": "conservative",
+          "strategyType": "call",
+          "legType": "call",
+          "direction": "long",
+          "defaultSymbol": "SPY",
+          "entryTrigger": { "type": "immediate" },
+          "optionCalibratedStopLossPercent": 16,
+          "optionCalibratedProfitTargetPercent": 32,
+          "timeStopMinutes": null,
+          "useTrailingStop": false,
+          "sizingMethod": "Inverse-volatility risk budgeting — equalize risk contribution, not dollars.",
+          "liveEligibleV1": true
+        }
+      ],
+      "equityRiskRules": {
+        "rationale": "Template stop/target percentages are calibrated for option-premium swings (15-50%), which are unrealistic for the underlying EQUITY. The runner trades equity, so it rescales risk to realistic intraday equity moves while preserving each template's structure. All keep a 2:1 reward-to-risk.",
+        "byRiskProfile": {
+          "conservative": {
+            "stopPercent": 1.0,
+            "targetPercent": 2.0,
+            "trailPercent": 1.0
+          },
+          "moderate": {
+            "stopPercent": 1.5,
+            "targetPercent": 3.0,
+            "trailPercent": 1.5
+          },
+          "aggressive": {
+            "stopPercent": 2.0,
+            "targetPercent": 4.0,
+            "trailPercent": 2.0
+          }
+        }
+      },
+      "equityRunDefaultsRule": "For an equity auto-trade from a template: direction = put?short:long; entryTriggerType/threshold come from the template's entryTrigger; stop/target/trail come from equityRiskRules[riskProfile]; useTrailingStop and timeStopMinutes are inherited from the template."
+    },
+    "autonomousStrategyRunner": {
+      "description": "A server-side background engine that makes the templates ACTUALLY RUN: it watches live quotes on a single non-overlapping interval and auto-applies each run's entry trigger, stop-loss, profit-target, trailing-stop, and time-stop, placing real EQUITY orders via the connected Robinhood MCP when live.",
+      "tickIntervalMs": 30000,
+      "tickModel": "A single setInterval loop; ticks must not overlap. Resume active runs on boot.",
+      "stateMachine": [
+        "watching",
+        "entering",
+        "in_position",
+        "exiting",
+        "closed",
+        "paused",
+        "error"
+      ],
+      "entryLogic": {
+        "momentum": "long: enter when changePct >= +thresholdPct; short: enter when changePct <= -thresholdPct.",
+        "reversion": "long: enter when changePct <= -thresholdPct (buy the dip); short: enter when changePct >= +thresholdPct (fade the rally).",
+        "immediate": "enter on the first tick.",
+        "referencePrice": "changePct is computed from quotes relative to the run's stored referencePrice (no real multi-agent/fair-value compute in the loop — label entries as quote-derived)."
+      },
+      "exitLogic": "While in_position, exit on whichever fires first: stop-loss, profit-target, trailing-stop (ratchets the stop as price moves favorably), or time-stop (close after timeStopMinutes).",
+      "idempotencyAndRecovery": {
+        "persistBeforeOrder": "Write the in-flight status (entering/exiting) to the store BEFORE calling the MCP order.",
+        "atomicTransition": "Guard every transition with an atomic compare-and-set (e.g. tryTransitionStrategyRun) so the tick and a user stop/kill cannot double-act.",
+        "reconcileOnBoot": "On startup, any run stuck mid-order (entering/exiting) is set to 'paused' for manual review and never auto re-placed.",
+        "failedOrder": "A failed live order sets the run to 'paused'."
+      },
+      "liveGuards": [
+        "Live requires a connected Robinhood agent for the session.",
+        "Anonymous => paper only.",
+        "Long-only V1: a live short run is paused (fail closed).",
+        "Market-hours guard for live entries and exits (09:30–16:00 ET).",
+        "Position caps re-checked against the live price at entry."
+      ],
+      "equityOrderArgs": {
+        "order_type": "market",
+        "time_in_force": "day",
+        "asset_type": "equity",
+        "sideForLong": "buy"
+      },
+      "deploymentCaveat": "The engine is an in-process interval loop. On a scale-to-zero / autoscale deployment the loop stops when the instance is torn down (runs resume on next boot; paused/mid-order ones stay paused). For always-on autonomous trading, run on an always-on host (Reserved VM / a persistent process)."
+    },
+    "positionLimits": {
+      "description": "Conservative position-size caps for autonomous agent-placed trading. Enforced at run creation AND again immediately before a live entry (a delayed trigger can move notional past the cap).",
+      "maxRunQuantity": 1000,
+      "maxRunQuantityUnit": "shares per run",
+      "maxRunNotional": 10000,
+      "maxRunNotionalUnit": "USD per run"
+    },
+    "pricingEngine": {
+      "description": "A broker-independent, institutional-grade options pricing engine. Orchestrates the kernels below and exposes single-quote, batch/chain, Greeks, IV, yield-curve, dividend, and volatility-surface operations, with put-call parity validation.",
+      "components": {
+        "generalizedBlackScholes": "European pricing with a cost-of-carry parameter b per asset class: stock b=r; index b=r-q; futures b=0 (Black-76); FX b=r_d-r_f (Garman-Kohlhagen). For near-expiry/0DTE, return intrinsic value to avoid instability.",
+        "americanBjerksundStensland2002": "Closed-form approximation for American options (captures early-exercise premium). Put uses the put-call transformation P(S,K,T,r,b)=C(K,S,T,r-b,-b). American value is floored at max(American, European, intrinsic).",
+        "greeks": "Carry-adjusted delta, gamma, theta (daily, annualized/365.25), vega (per 1% IV), rho (per 1%). Provide an all-at-once calculator plus portfolio and dollar-Greeks helpers.",
+        "impliedVolatility": "Solver ladder: Newton-Raphson (primary, quadratic convergence via vega) -> Brent's method (fallback, robust) -> bisection (last resort, guaranteed convergence). Validate the quote (mid vs intrinsic) before solving.",
+        "volatilitySurface": "SVI (Stochastic Volatility Inspired) parameterization for smoothing. Total variance w(k) = a + b*(rho*(k-m) + sqrt((k-m)^2 + sigma^2)); IV = sqrt(w/T). Fit params by gradient descent (Levenberg-Marquardt-like) with constraints (-0.99<rho<0.99, sigma>0.01); report RMSE. Compute 25-delta skew and ATM IV.",
+        "yieldCurveService": "Risk-free rate by interpolating a Treasury yield curve; default rate ~0.05 when unavailable.",
+        "dividendService": "Continuous dividend yield q by symbol; index symbols detected for b=r-q."
+      },
+      "putCallParity": "Validate C - P = S*e^{(b-r)T} - K*e^{-rT} within a tolerance of max(1% of S, 0.05)."
+    },
+    "multiAgentAnalysis": {
+      "description": "Specialized AI agents produce a consensus used for analysis (not for the autonomous loop). Surface the consensus, the three agents, the bull/bear debate, and a provenance line naming which model produced it.",
+      "agents": ["technical", "sentiment", "fundamental"],
+      "debate": "A bull/bear debate engine argues both sides and converges to a probability/edge.",
+      "regimeDetection": "Detect market regime (e.g. trending vs range-bound vs high-vol) to contextualize the consensus.",
+      "providerRouting": {
+        "default": "Claude (ANTHROPIC_API_KEY).",
+        "bringYourOwn": "Analysis (the three agents + debate) may optionally run on a user's own OpenAI or Google Gemini key, selected per session from a curated model allowlist. Tool-calling chat intentionally STAYS on Claude — only analysis is routable.",
+        "latchedFallback": "If a selected bring-your-own provider fails at call time (revoked key, quota, outage), the first failure transparently switches the whole run to Claude and reports that a fallback was used. Errors must be sanitized and never include the key.",
+        "completers": "Keep dependency-free REST completers (plain fetch, timeout, one transient retry, JSON output mode, sanitized errors)."
+      }
+    },
+    "intentRouter": {
+      "description": "An Intent-First Message Router classifies each user message BEFORE processing, so the assistant responds appropriately and avoids false trade triggers.",
+      "intents": [
+        "greeting",
+        "stock_query",
+        "trading_command",
+        "analysis_request",
+        "portfolio_query",
+        "education",
+        "help",
+        "smalltalk",
+        "unknown"
+      ],
+      "tickerBlacklist": "Maintain a symbol blacklist so common English words are not misread as tickers (prevents false-positive ticker matches).",
+      "behavior": "Route trading_command through the confirm-before-execute path; route analysis_request to the multi-agent analysis; greetings/smalltalk get conversational replies with no market calls."
+    },
+    "personaSilentCompiler": {
+      "identity": "Persona: 'Lead Quantitative CFO & AI Architect' — analytical, precise, executive-level communication, strategically KPI-aware.",
+      "methodology": "The 'Silent Compiler' methodology: strict syntax, low-temperature profiles, structured outputs, and negative constraints for precise, predictable, compliant behavior.",
+      "negativeConstraints": [
+        "No execution without explicit user confirmation.",
+        "No personalized financial advice.",
+        "No fabricated data — operate on real market data; when data is unavailable, say so explicitly instead of guessing."
+      ],
+      "memoryAndRecovery": "Include conversational memory, a welcome flow with suggested prompts, and graceful error recovery with honest fallbacks."
+    }
+  },
+  "robinhoodMcpIntegration": {
+    "description": "Connect a live AI agent to Robinhood's Trading MCP server over MCP Streamable HTTP using OAuth 2.1 (PKCE + dynamic client registration). This is the ONLY trading path; Alpaca is market-data only.",
+    "endpoint": "https://agent.robinhood.com/mcp/trading",
+    "transport": "MCP Streamable HTTP client.",
+    "oauth": {
+      "flow": "OAuth 2.1 Authorization Code + PKCE with dynamic client registration.",
+      "clientMetadata": {
+        "client_name": "Fincai Agentic Terminal",
+        "grant_types": ["authorization_code", "refresh_token"],
+        "response_types": ["code"],
+        "token_endpoint_auth_method": "none",
+        "redirect_uris": [
+          "Derived ONLY from trusted server config (APP_ORIGIN). NEVER from request headers."
+        ]
+      },
+      "redirectSecurityRule": "The OAuth callback/redirect URL must be built only from trusted server configuration (APP_ORIGIN), never from request headers (Host/Origin/Referer), to prevent authorization-code redirection attacks.",
+      "userStep": "Server captures the authorization URL instead of redirecting server-side; the user opens it in a DESKTOP browser to authorize. Map an opaque OAuth `state` -> session to complete `finishAuth(code)` on callback.",
+      "toolDiscovery": "After connect, list tools (listTools) and use the appropriate place-order tool for equity orders."
+    },
+    "connectionLifecycle": "Connection state must be durable across restarts (see credentialPersistence). Disconnect — or invalid/unrefreshable tokens — clears the stored record and reverts to demo/paper fallback."
+  },
+  "credentialPersistence": {
+    "description": "Persist the registered OAuth client info + tokens so an authorized agent connection survives a server restart, encrypted at rest.",
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "keyDerivation": "scrypt(TOKEN_ENCRYPTION_KEY, fixedSalt) -> 32-byte key. (The reference reuses SESSION_SECRET; a dedicated TOKEN_ENCRYPTION_KEY is recommended.) Require the secret to be >= 16 chars or refuse to encrypt.",
+      "storedFormat": "enc:<ivHex>:<authTagHex>:<ciphertextHex>",
+      "saltNote": "Pick one fixed salt string and NEVER change it, or previously stored rows become undecryptable."
+    },
+    "storage": "Store encrypted clientInfo + tokens keyed by an HttpOnly session cookie id (table/record per session). Use COALESCE-style upserts so a partial write can't null out existing credentials; full removal goes through an explicit delete.",
+    "restore": "Lazily restore a connection from the encrypted record on demand/boot (idempotent, best-effort). If tokens are invalid and cannot be refreshed, clear the record and prompt re-authorization.",
+    "fallback": "Demo / paper portfolio data is the fallback whenever no agent is connected."
+  },
+  "buildPlan": [
+    "1. Scaffold a Node.js 22 + TypeScript project that runs from a single command. Add a typed config module that reads the environment variable NAMES under `environment` and fails loudly on missing required vars.",
+    "2. Implement MarketDataService (Alpaca quotes/bars; optional Alpha Vantage fallback) with multi-tier caching and 429-adaptive TTL.",
+    "3. Implement the PricingEngine kernels (GBS, Bjerksund-Stensland 2002, Greeks, IV solver ladder, SVI surface, yield-curve + dividend services) and put-call parity validation.",
+    "4. Encode the strategy-template catalog, equityRiskRules, and the equityRunDefaults rule exactly as specified.",
+    "5. Build the persistence layer: encrypted agent-connection store (AES-256-GCM) and a durable strategy-run store with atomic compare-and-set transitions.",
+    "6. Implement the RobinhoodMcpManager (OAuth 2.1 + PKCE + dynamic client registration, Streamable HTTP), with the redirect-URL-from-trusted-config rule and connect/finishAuth/restore/disconnect lifecycle.",
+    "7. Implement the StrategyRunner: 30s non-overlapping tick, full state machine, entry/exit logic, idempotent persist-before-order, reconcile-on-boot, all live guards, and the equity order args. PAPER mode must work end-to-end with NO broker connection.",
+    "8. Implement the MultiAgentAnalysis (Claude default, optional OpenAI/Gemini analysis routing + latched fallback) and the IntentRouter with ticker blacklist, plus the Silent Compiler persona and its negative constraints.",
+    "9. Build the UI/CLI: connect/disconnect agent, browse catalog, arm run (symbol, shares, editable rules, paper|live), active-runs view (~5s poll), per-run stop, global kill switch, and AI chat.",
+    "10. Verify against `acceptanceCriteria`. Test the entire paper path before enabling any live order placement."
+  ],
+  "acceptanceCriteria": [
+    "App refuses to start (with a clear, variable-named error) if any required env var is missing; no secret value is ever logged or committed.",
+    "A user can arm any long-eligible template in PAPER mode with no broker connected, and the runner correctly enters/exits per the template's trigger and rescaled equity stop/target/trail/time rules.",
+    "Live mode is impossible without a connected Robinhood agent; anonymous sessions are paper-only.",
+    "A short/volatility template (mean-reversion-fade, vol-risk-premium) can never place a live order; if forced live it is paused with a safety message.",
+    "Position caps (1000 shares / $10,000 notional per run) are enforced at creation and re-checked at live entry against the live price.",
+    "Live entries/exits are blocked outside 09:30–16:00 America/New_York.",
+    "Killing the server mid-order and restarting leaves the affected run 'paused' (never auto re-placed); a failed live order also pauses the run.",
+    "Concurrent tick + manual stop cannot double-act on a run (atomic transition holds).",
+    "Robinhood OAuth callback URL is derived only from APP_ORIGIN; tampering with request headers cannot change the redirect target.",
+    "Stored OAuth client info + tokens are AES-256-GCM encrypted at rest and successfully restore the connection after a restart.",
+    "The AI assistant never executes a trade without explicit confirmation and never gives personalized financial advice.",
+    "The options pricing engine returns sane prices/Greeks/IV and passes put-call parity within tolerance on a smoke test."
+  ],
+  "outOfScope": [
+    "Any change to the original Fincai application — this brief produces a separate, standalone system.",
+    "Short selling, naked options writing, or margin/leverage beyond long equity in V1.",
+    "Real placement of multi-leg options structures by the autonomous runner (vol-risk-premium stays paper).",
+    "Embedding, printing, or committing any secret values; only environment variable NAMES are used.",
+    "Tax, legal, or personalized investment advice."
+  ]
+}

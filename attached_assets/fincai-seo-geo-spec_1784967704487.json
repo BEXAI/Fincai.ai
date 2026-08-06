@@ -1,0 +1,2398 @@
+{
+  "spec": {
+    "name": "fincai-seo-geo-optimization-spec",
+    "version": "1.0.0",
+    "generated_on": "2026-07-25",
+    "target_domain": "https://fincai.ai",
+    "owner_entity": "Fincai (product of AIManagement Inc.)",
+    "purpose": "Machine-readable implementation specification for an AI coding agent (Claude in Replit) to rebuild fincai.ai for search engine optimization (SEO) and generative engine optimization (GEO / AEO / LLM citation visibility).",
+    "consumer": "Claude agent running inside Replit with filesystem + shell access to the fincai.ai repository.",
+    "execution_contract": {
+      "read_order": [
+        "spec",
+        "audit_findings",
+        "swot_analysis",
+        "entity_strategy",
+        "technical_seo",
+        "structured_data",
+        "llms_txt",
+        "information_architecture",
+        "keyword_map",
+        "prompt_map",
+        "compliance_and_risk",
+        "offsite_authority_plan",
+        "measurement",
+        "implementation_roadmap",
+        "replit_agent_instructions"
+      ],
+      "rules": [
+        "Do not invent product features, pricing, performance figures, user counts, testimonials, or funding claims. Any field with value 'TODO_VERIFY' must be surfaced to the human operator, not filled in by the agent.",
+        "Every numeric or factual claim rendered on the site must be traceable to a source the operator has confirmed. Unverifiable claims are a YMYL trust liability and a securities-marketing liability.",
+        "All pages must be server-side rendered or statically pre-rendered. Client-side-only React content is the single most common cause of AI crawlers seeing an empty page.",
+        "Never gate primary marketing or educational content behind auth, modals, cookie walls, or scroll-triggered hydration.",
+        "Preserve existing meta hygiene that is already correct (canonical, Open Graph, robots max-snippet directives) rather than regenerating it from scratch.",
+        "Ship compliance disclosures on every page that discusses trading, strategies, or results."
+      ]
+    },
+    "evidence_base": {
+      "method": "Live crawl of https://fincai.ai on 2026-07-25, brand and category SERP sampling, review of Robinhood's official Agentic Trading documentation, and review of 2026 GEO research and Google's May 2026 guidance on optimizing for generative AI features.",
+      "key_external_sources": [
+        {
+          "id": "rh_agentic_overview",
+          "url": "https://robinhood.com/us/en/support/articles/agentic-trading-overview/",
+          "why_it_matters": "Robinhood publishes a named list of AI platforms that work with its Trading MCP (Claude Code, Claude Desktop, ChatGPT, Codex, Codex CLI, Cursor, Grok) plus an 'Other platforms' catch-all. Fincai is not named. This page is a top-of-funnel citation source that LLMs retrieve for 'how do I connect an AI agent to Robinhood'."
+        },
+        {
+          "id": "rh_agentic_marketing",
+          "url": "https://robinhood.com/us/en/agentic-trading/",
+          "why_it_matters": "Category-defining page. Establishes the vocabulary ('Agentic Account', 'Trading MCP', 'dedicated budget') that Fincai content must mirror to be retrieved for the same queries."
+        },
+        {
+          "id": "finder_listicle",
+          "url": "https://www.finder.com/stock-trading/best-agentic-trading-platforms",
+          "why_it_matters": "Exactly the class of third-party listicle that generative engines cite when asked to recommend agentic trading tools. Fincai is absent from it."
+        },
+        {
+          "id": "truthifi_mcp_guide",
+          "url": "https://truthifi.com/providermcps/robinhood-mcp",
+          "why_it_matters": "Demonstrates a competitor winning the 'Robinhood MCP' informational query with a single deep explainer page. This is a directly copyable and beatable content pattern."
+        },
+        {
+          "id": "google_genai_guidance_2026",
+          "url": "https://wetheflywheel.com/en/ai-search/generative-engine-optimization/",
+          "why_it_matters": "Summarizes Google's May 2026 position that optimizing for generative AI search is still SEO, and that llms.txt is not used by Google's own AI surfaces. Drives the decision to treat llms.txt as low-cost insurance for non-Google engines rather than a primary lever."
+        },
+        {
+          "id": "geo_playbook_2026",
+          "url": "https://www.tooljunction.io/guides/get-cited-by-chatgpt-perplexity",
+          "why_it_matters": "Documents that 40-60% of LLM-cited sources turn over month to month, that comparison ('X vs Y') content and community threads are disproportionately cited, and that the window for a new entrant to enter citation rotation is currently open."
+        }
+      ]
+    }
+  },
+  "audit_findings": {
+    "summary": "fincai.ai is a technically tidy but structurally invisible single-page site. Meta hygiene is above average for a pre-seed product; discoverability is effectively zero. The site has no crawlable internal link graph, no informational surface for retrieval, no structured data, and no third-party citation footprint in a category that is only eight weeks old and still uncontested.",
+    "severity_scale": "P0 = blocks all discovery, P1 = major ceiling on growth, P2 = meaningful lift, P3 = polish",
+    "findings": [
+      {
+        "id": "F01",
+        "severity": "P0",
+        "area": "indexation",
+        "observation": "A site: query for fincai.ai returns zero pages from the domain. Brand queries for 'fincai' return FINCA microfinance, Intercom's Fin AI, Fini AI, Finic.ai, thefin.ai, Finora, Finesso, Finny and Finelo instead.",
+        "diagnosis": "The domain is either unindexed, newly registered without crawl equity, or has zero inbound links. No amount of on-page work matters until a crawl path exists.",
+        "fix_reference": [
+          "technical_seo.indexation",
+          "offsite_authority_plan"
+        ]
+      },
+      {
+        "id": "F02",
+        "severity": "P0",
+        "area": "architecture",
+        "observation": "The crawled representation of the homepage is a single pre-rendered document of roughly 150 words with zero outbound internal links.",
+        "diagnosis": "One page cannot rank for or be retrieved against a category with dozens of distinct sub-intents. There is no link graph for a crawler to traverse and no passage-level content for a retriever to chunk and cite.",
+        "fix_reference": [
+          "information_architecture"
+        ]
+      },
+      {
+        "id": "F03",
+        "severity": "P0",
+        "area": "entity",
+        "observation": "Brand collision is severe. 'Fincai' is one character from 'Fin AI' (Intercom, which owns fin.ai and has a Wikipedia entity) and from 'FINCA' (an international microfinance network with multiple Wikipedia entities). Adjacent collisions include Fini AI, Finic.ai, thefin.ai, finclai.com, Finora, Finesso, Finny AI and Finelo AI.",
+        "diagnosis": "Search engines and LLMs resolve ambiguous brand strings toward the highest-authority entity. Today every 'fincai' query resolves to someone else. Without deliberate entity disambiguation, brand-name marketing spend leaks to competitors.",
+        "fix_reference": [
+          "entity_strategy"
+        ]
+      },
+      {
+        "id": "F04",
+        "severity": "P0",
+        "area": "geo_authority",
+        "observation": "Fincai appears in zero third-party sources: not on Robinhood's list of supported agentic platforms, not in the 2026 'best agentic trading' listicles, not in MCP server directories, not on Crunchbase, G2, Product Hunt, GitHub or Reddit.",
+        "diagnosis": "Generative engines cite third-party and community sources far more heavily than vendor-owned pages. A brand with no external footprint is structurally uncitable regardless of on-site quality.",
+        "fix_reference": [
+          "offsite_authority_plan"
+        ]
+      },
+      {
+        "id": "F05",
+        "severity": "P1",
+        "area": "structured_data",
+        "observation": "No JSON-LD structured data was observed in the crawled document. No Organization, SoftwareApplication, WebSite, FAQPage or HowTo markup.",
+        "diagnosis": "Schema is the cheapest available signal for entity resolution and for rich-result and AI-summary eligibility. Its absence is a pure unforced loss.",
+        "fix_reference": [
+          "structured_data"
+        ]
+      },
+      {
+        "id": "F06",
+        "severity": "P1",
+        "area": "content_depth",
+        "observation": "No pricing page, no security page, no documentation, no FAQ, no about page, no legal or disclosure pages, no blog or changelog.",
+        "diagnosis": "These are the exact page types an LLM retrieves when a user asks 'what does it cost', 'is it safe', 'how do I connect it', 'who built it'. Their absence means the model either says 'I don't have information about Fincai' or hallucinates. Both are worse than a competitor citation.",
+        "fix_reference": [
+          "information_architecture"
+        ]
+      },
+      {
+        "id": "F07",
+        "severity": "P1",
+        "area": "claim_precision",
+        "observation": "The meta keywords and description market 'AI options trading' and 'Robinhood AI agent', while the page body more carefully says the product 'executes equity trades'. Robinhood's own agentic execution scope has shifted since its 2026-05-27 launch, with crypto added 2026-07-20 and reporting inconsistent on options.",
+        "diagnosis": "A mismatch between marketed scope and executable scope is simultaneously an E-E-A-T problem, a conversion problem, and a securities-marketing problem. It also causes LLMs to describe the product inaccurately, which is very hard to correct once it enters citation rotation.",
+        "fix_reference": [
+          "compliance_and_risk.claim_precision",
+          "information_architecture.pages"
+        ]
+      },
+      {
+        "id": "F08",
+        "severity": "P1",
+        "area": "trademark_and_positioning",
+        "observation": "Keyword targeting includes 'Robinhood AI agent' and 'AI trading bot for Robinhood' with no visible non-affiliation disclaimer.",
+        "diagnosis": "Nominative use of a broker's trademark in marketing copy without an explicit non-affiliation statement invites a takedown demand and undermines trust signals. This is a low-cost fix with high downside if skipped.",
+        "fix_reference": [
+          "compliance_and_risk.trademark"
+        ]
+      },
+      {
+        "id": "F09",
+        "severity": "P2",
+        "area": "social_cards",
+        "observation": "og:image is declared as 1200x1200 with type image/jpeg.",
+        "diagnosis": "A square image renders poorly in the 1.91:1 summary_large_image card used by X, LinkedIn and Slack unfurls, reducing click-through on exactly the channels a pre-launch product depends on.",
+        "fix_reference": [
+          "technical_seo.social_cards"
+        ]
+      },
+      {
+        "id": "F10",
+        "severity": "P2",
+        "area": "profile_consistency",
+        "observation": "twitter:site is declared as @fincai. The handle's existence and ownership were not confirmable.",
+        "diagnosis": "A declared social profile that does not resolve to an owned, active account weakens sameAs entity linking and looks abandoned to a human evaluator.",
+        "fix_reference": [
+          "entity_strategy.sameas_profiles"
+        ]
+      },
+      {
+        "id": "F11",
+        "severity": "P3",
+        "area": "legacy_markup",
+        "observation": "A meta keywords tag is present with nine comma-separated terms.",
+        "diagnosis": "No major engine has used meta keywords for over a decade. It confers no benefit and mildly signals an unsophisticated setup to human reviewers. Remove it and move that intent into real content.",
+        "fix_reference": [
+          "technical_seo.head_cleanup"
+        ]
+      },
+      {
+        "id": "F12",
+        "severity": "P1",
+        "area": "crawler_access",
+        "observation": "robots.txt, sitemap.xml and llms.txt could not be retrieved during the audit and are presumed absent or unverified.",
+        "diagnosis": "If the site sits behind Cloudflare or a similar edge with default AI-bot blocking enabled, every GEO tactic downstream is inert. This must be verified before anything else is built.",
+        "fix_reference": [
+          "technical_seo.crawler_access",
+          "implementation_roadmap.phase_0"
+        ]
+      }
+    ],
+    "what_is_already_right": [
+      "Exact-match, category-appropriate .ai domain.",
+      "Bot-visible pre-rendered HTML exists, so an SSR or prerender path is already in the stack and can be extended rather than introduced.",
+      "Canonical tag present and self-referential.",
+      "robots meta already includes max-snippet:-1, max-image-preview:large and max-video-preview:-1, which is the correct permissive posture for AI Overviews and rich snippets.",
+      "Complete Open Graph and Twitter card sets with alt text.",
+      "theme-color, apple-mobile-web-app and viewport-fit metadata indicate PWA-grade mobile attention.",
+      "A risk disclaimer is already present on the homepage, which is the correct instinct for a YMYL financial product and a good foundation to build formal disclosures on.",
+      "Differentiated, specific positioning: multi-agent bull and bear debate, an options pricing engine with Greeks, paper-by-default with live opt-in, and OAuth rather than credential sharing. These are concrete, citable claims that most competitors do not make."
+    ]
+  },
+  "swot_analysis": {
+    "framing": "Two linked SWOTs. Classic SEO governs ranked blue links and AI Overviews, which are rooted in the same ranking systems. GEO governs whether Fincai appears inside answers generated by ChatGPT, Claude, Perplexity, Gemini and agentic shopping surfaces. They share a technical foundation and diverge on authority mechanics.",
+    "seo": {
+      "strengths": [
+        {
+          "id": "S1",
+          "point": "Exact-match brandable .ai domain aligned to the category.",
+          "leverage": "Anchor all entity signals to fincai.ai as the canonical home; never split brand equity across an app subdomain and a marketing host."
+        },
+        {
+          "id": "S2",
+          "point": "Pre-rendering pipeline already in place for crawlers.",
+          "leverage": "Extend the existing prerender path to every new route instead of introducing a new SSR framework."
+        },
+        {
+          "id": "S3",
+          "point": "Permissive robots meta directives already set correctly.",
+          "leverage": "Keep max-snippet:-1 sitewide so AI Overviews can quote long passages, which increases citation surface."
+        },
+        {
+          "id": "S4",
+          "point": "Zero legacy technical debt, no spam history, no penalty exposure, no redirect chains, no orphaned CMS cruft.",
+          "leverage": "A clean rebuild can be architecturally correct on day one, which is rare and materially faster than remediating an incumbent."
+        },
+        {
+          "id": "S5",
+          "point": "Concrete, specific product claims (Greeks engine, bull/bear debate, paper-by-default, OAuth-only) rather than generic AI copy.",
+          "leverage": "Specificity is what passage retrievers extract. Build each claim its own page section with its own heading."
+        }
+      ],
+      "weaknesses": [
+        {
+          "id": "W1",
+          "point": "Effectively zero indexed footprint and no discoverable backlinks.",
+          "impact": "critical",
+          "remedy_ref": "technical_seo.indexation"
+        },
+        {
+          "id": "W2",
+          "point": "Single-page architecture with no internal link graph.",
+          "impact": "critical",
+          "remedy_ref": "information_architecture"
+        },
+        {
+          "id": "W3",
+          "point": "Roughly 150 words of indexable body copy sitewide.",
+          "impact": "critical",
+          "remedy_ref": "information_architecture.pages"
+        },
+        {
+          "id": "W4",
+          "point": "No structured data of any kind.",
+          "impact": "high",
+          "remedy_ref": "structured_data"
+        },
+        {
+          "id": "W5",
+          "point": "YMYL category with no E-E-A-T apparatus: no named authors, no credentials, no about page, no methodology disclosure, no legal pages.",
+          "impact": "high",
+          "remedy_ref": "information_architecture.pages.about"
+        },
+        {
+          "id": "W6",
+          "point": "Brand string collides with several higher-authority entities.",
+          "impact": "high",
+          "remedy_ref": "entity_strategy"
+        },
+        {
+          "id": "W7",
+          "point": "No topical authority: no glossary, no explainers, no comparison content, no changelog cadence.",
+          "impact": "high",
+          "remedy_ref": "information_architecture.clusters"
+        },
+        {
+          "id": "W8",
+          "point": "Unverified crawler access at the edge; possible default AI-bot blocking.",
+          "impact": "high",
+          "remedy_ref": "technical_seo.crawler_access"
+        }
+      ],
+      "opportunities": [
+        {
+          "id": "O1",
+          "point": "The agentic-brokerage category is roughly eight weeks old. Query intent exists, competition for it does not.",
+          "action": "Publish the definitive setup and comparison pages before incumbents pivot their content calendars."
+        },
+        {
+          "id": "O2",
+          "point": "The 'connect an AI agent to Robinhood' query cluster is currently served mainly by Robinhood's own help centre and a small number of explainers.",
+          "action": "Own the third-party how-to layer with a genuinely better HowTo page including troubleshooting for the OAuth 2.1 and dynamic client registration failure modes."
+        },
+        {
+          "id": "O3",
+          "point": "Options and Greeks are almost entirely unserved in the agentic-trading content space, and are the single hardest thing for a generalist LLM plus raw MCP to do well.",
+          "action": "Build an options-analysis content moat: Greeks explainers, pricing-model methodology, IV and skew primers, each tied back to the product."
+        },
+        {
+          "id": "O4",
+          "point": "Comparison queries are high-intent, low-competition and disproportionately cited by generative engines.",
+          "action": "Ship a /compare hub covering the honest substitutes, including the free ones."
+        },
+        {
+          "id": "O5",
+          "point": "Broker and protocol directories accept third-party listings.",
+          "action": "Pursue Robinhood platform listing, MCP registries, and AI tool directories, which compound as citation sources."
+        },
+        {
+          "id": "O6",
+          "point": "Founder has genuine, verifiable finance credentials and an operating company.",
+          "action": "Convert that into E-E-A-T: named author bylines, credential disclosure, a real About page, and a Person entity linked via sameAs."
+        },
+        {
+          "id": "O7",
+          "point": "Sub-100ms greenfield performance is achievable.",
+          "action": "Ship Core Web Vitals in the green from day one rather than remediating later."
+        }
+      ],
+      "threats": [
+        {
+          "id": "T1",
+          "point": "Vertical integration. Robinhood, Webull, Public and SoFi are shipping first-party agentic surfaces and own the demand.",
+          "mitigation": "Position as the layer above any broker: multi-agent reasoning, options depth, and strategy governance the broker will not build."
+        },
+        {
+          "id": "T2",
+          "point": "The free substitute is excellent. A user can paste one MCP URL into Claude Desktop and trade for nothing.",
+          "mitigation": "This is the most important objection in the category. Answer it explicitly on a dedicated comparison page rather than pretending it does not exist. Evasion here is detected by both users and models."
+        },
+        {
+          "id": "T3",
+          "point": "YMYL scrutiny. Financial sites face the highest quality-rater bar and are demoted hardest for thin or anonymous content.",
+          "mitigation": "Full E-E-A-T build: named humans, credentials, methodology, citations, disclosures, and dated content."
+        },
+        {
+          "id": "T4",
+          "point": "Brand-name dilution against higher-authority homonyms.",
+          "mitigation": "Aggressive entity disambiguation plus consistent 'Fincai' one-word usage everywhere, never 'Fin CAI' or 'Finc AI'."
+        },
+        {
+          "id": "T5",
+          "point": "Category regulatory tightening around AI trading claims, performance representation and testimonials.",
+          "mitigation": "Conservative claims architecture reviewed by securities counsel before launch, not after."
+        },
+        {
+          "id": "T6",
+          "point": "Fast-follower risk. Any content advantage in a two-month-old category is copyable within weeks.",
+          "mitigation": "Compound on things that are hard to copy: proprietary methodology docs, real tooling, open-source artifacts, and community presence."
+        }
+      ]
+    },
+    "geo": {
+      "definition": "Generative Engine Optimization: structuring content, markup and earned-media footprint so that large language models retrieve, trust and cite Fincai when answering user prompts. The success metric is citation frequency per prompt across many phrasings, not rank position.",
+      "strengths": [
+        {
+          "id": "GS1",
+          "point": "Bot-visible pre-rendered text already exists, which is the single hardest prerequisite for retrieval and most JS-heavy startups fail it.",
+          "leverage": "Guarantee this property for every future route with an automated test."
+        },
+        {
+          "id": "GS2",
+          "point": "The homepage already uses an extractable format: a declarative opening sentence followed by a bulleted capability list.",
+          "leverage": "This is the correct GEO shape. Systematize it as the house style for every page."
+        },
+        {
+          "id": "GS3",
+          "point": "Positioning claims are unusually specific and therefore quotable in an answer.",
+          "leverage": "Write each claim as a standalone, self-contained sentence that survives being chunked away from its context."
+        },
+        {
+          "id": "GS4",
+          "point": "The existing risk disclaimer models the epistemic caution that safety-tuned models prefer to cite in financial contexts.",
+          "leverage": "Extend calibrated, non-hyped language sitewide. Models are measurably less willing to recommend financial products that make absolute claims."
+        }
+      ],
+      "weaknesses": [
+        {
+          "id": "GW1",
+          "point": "Zero third-party citations. Generative engines lean heavily on independent and community sources, not vendor copy.",
+          "impact": "critical"
+        },
+        {
+          "id": "GW2",
+          "point": "Not present in any 'best agentic trading' listicle, which is the retrieval substrate for every recommendation prompt in the category.",
+          "impact": "critical"
+        },
+        {
+          "id": "GW3",
+          "point": "No Reddit, Hacker News, GitHub or Product Hunt footprint. Community threads are among the most heavily weighted sources for tool-recommendation prompts.",
+          "impact": "critical"
+        },
+        {
+          "id": "GW4",
+          "point": "No llms.txt and no machine-readable product summary.",
+          "impact": "medium",
+          "note": "Google has stated it does not use llms.txt for its own AI surfaces. Treat it as inexpensive insurance for non-Google engines, not as a primary lever. Do not let it displace real content work."
+        },
+        {
+          "id": "GW5",
+          "point": "No FAQ or question-shaped content, so there is nothing matching the natural-language sub-queries a model decomposes a prompt into.",
+          "impact": "high"
+        },
+        {
+          "id": "GW6",
+          "point": "No dates, no changelog, no freshness signals. Generative engines discount stale pages in fast-moving categories.",
+          "impact": "medium"
+        },
+        {
+          "id": "GW7",
+          "point": "The entity 'Fincai' is not resolvable in any knowledge graph, so models cannot ground the name and will substitute a homonym.",
+          "impact": "critical"
+        }
+      ],
+      "opportunities": [
+        {
+          "id": "GO1",
+          "point": "Citation rotation in this category is highly unstable, with a large share of cited sources turning over month to month. The leaderboard has not calcified.",
+          "action": "Move now. A focused eight-week push can enter rotation before incumbents notice the category."
+        },
+        {
+          "id": "GO2",
+          "point": "Prompt volume, not keyword volume, is the demand signal. Users ask agentic questions in full sentences.",
+          "action": "Build the prompt_map into the content plan and write H2s as the literal questions users ask."
+        },
+        {
+          "id": "GO3",
+          "point": "Comparison and 'alternatives to' pages are disproportionately retrieved for recommendation prompts.",
+          "action": "Ship the compare cluster early; it outperforms brand pages for discovery prompts."
+        },
+        {
+          "id": "GO4",
+          "point": "MCP registries and agent directories are new, thinly populated and actively crawled.",
+          "action": "List in every registry; these are cheap, durable citation anchors."
+        },
+        {
+          "id": "GO5",
+          "point": "Open-sourcing a genuinely useful artifact, for example a Greeks and options-pricing utility or an MCP connection troubleshooter, creates a GitHub entity that models cite readily.",
+          "action": "Publish one real repository with a strong README rather than five thin ones."
+        },
+        {
+          "id": "GO6",
+          "point": "Being named on Robinhood's supported-platforms page would be the single highest-value citation available, because it is the canonical retrieval source for the category's core question.",
+          "action": "Pursue formally via Robinhood's partner channel."
+        }
+      ],
+      "threats": [
+        {
+          "id": "GT1",
+          "point": "Answer-engine zero-click. Even a perfect GEO outcome may produce a mention without a visit.",
+          "mitigation": "Optimize for branded mention share and for the downstream branded-search lift, not for raw sessions. Instrument referrer tracking for AI surfaces."
+        },
+        {
+          "id": "GT2",
+          "point": "Hallucinated attributes. Once a model asserts something false about Fincai, the error propagates and is slow to correct.",
+          "mitigation": "Publish an unambiguous, canonical fact block on-site and in llms.txt, and run a scheduled hallucination audit across engines."
+        },
+        {
+          "id": "GT3",
+          "point": "Safety-tuned models are conservative about recommending financial tools that can move real money.",
+          "mitigation": "Lead with the safety architecture: paper-by-default, confirmation-gated execution, OAuth without credential sharing, sandboxed agentic account. These are the attributes a cautious model needs in order to be willing to mention the product."
+        },
+        {
+          "id": "GT4",
+          "point": "Per-engine divergence. The same intervention lifts citations on one surface and does nothing on another.",
+          "mitigation": "Measure per engine rather than in aggregate, and do not over-invest in any single tactic."
+        },
+        {
+          "id": "GT5",
+          "point": "Brand homonyms cause misattribution, so answers about Fincai may describe Intercom's Fin AI or FINCA.",
+          "mitigation": "Entity disambiguation is the prerequisite for all other GEO work in this specific case."
+        }
+      ]
+    },
+    "strategic_conclusion": {
+      "single_biggest_constraint": "Entity invisibility. Fincai currently has no resolvable identity in any index or knowledge graph, so neither ranking nor citation is mechanically possible yet.",
+      "sequencing_logic": "Access before architecture, architecture before content, content before authority. Skipping to content production while crawler access is unverified wastes the entire investment.",
+      "highest_leverage_moves_ranked": [
+        "Verify and unblock crawler access at the edge, then submit to Google Search Console and Bing Webmaster Tools.",
+        "Ship a real multi-page information architecture with server-rendered content and a dense internal link graph.",
+        "Execute entity disambiguation across schema, sameAs profiles, Wikidata and consistent brand-string usage.",
+        "Publish the Robinhood MCP setup page and the comparison cluster, including the honest 'why not just use Claude Desktop for free' page.",
+        "Earn the first ten third-party citations: Robinhood platform listing, MCP registries, Product Hunt, GitHub, Crunchbase, and two category listicles."
+      ]
+    }
+  },
+  "entity_strategy": {
+    "problem_statement": "The string 'Fincai' is not currently a resolvable entity. Every major engine and model maps it to a higher-authority homonym. Until Fincai is disambiguated, all downstream SEO and GEO work is discounted or misattributed.",
+    "canonical_naming_rules": [
+      "Always render the brand as 'Fincai' in a single word, initial capital only. Never 'FinCAI', 'Fin CAI', 'FINCAI', 'Finc AI' or 'Fin AI'.",
+      "On first mention on every page, use the disambiguating long form: 'Fincai, an agentic AI trading assistant for stocks and options'.",
+      "Never abbreviate to 'Fin'.",
+      "Pair the brand with the domain in structured contexts: 'Fincai (fincai.ai)'.",
+      "In any context where confusion is plausible, add the explicit negative: 'Fincai is not affiliated with Fin AI by Intercom, FINCA International, or Fini AI.'"
+    ],
+    "known_homonyms": [
+      {
+        "name": "Fin AI (formerly Intercom)",
+        "domain": "fin.ai",
+        "authority": "very high, has a Wikipedia entity",
+        "collision_type": "phonetic and orthographic"
+      },
+      {
+        "name": "FINCA International and affiliates",
+        "domain": "finca.org",
+        "authority": "very high, multiple Wikipedia entities",
+        "collision_type": "orthographic"
+      },
+      {
+        "name": "Fini AI",
+        "domain": "usefini.com",
+        "authority": "medium",
+        "collision_type": "phonetic"
+      },
+      {
+        "name": "Finic",
+        "domain": "finic.ai",
+        "authority": "medium",
+        "collision_type": "orthographic, same industry adjacency"
+      },
+      {
+        "name": "The Fin AI",
+        "domain": "thefin.ai",
+        "authority": "medium, academic, financial AI",
+        "collision_type": "direct topical overlap"
+      },
+      {
+        "name": "FinCl AI",
+        "domain": "finclai.com",
+        "authority": "low",
+        "collision_type": "near-identical string"
+      },
+      {
+        "name": "Finora AI",
+        "domain": "finorabot.com",
+        "authority": "low",
+        "collision_type": "same category"
+      },
+      {
+        "name": "Finny AI",
+        "domain": "finnyai.tech",
+        "authority": "low",
+        "collision_type": "same category"
+      },
+      {
+        "name": "Finelo AI",
+        "domain": "finelo-ai.com",
+        "authority": "low",
+        "collision_type": "same category, reputationally risky adjacency"
+      }
+    ],
+    "disambiguation_tactics": [
+      {
+        "tactic": "Organization schema with a complete sameAs array pointing to every owned profile.",
+        "priority": "P0"
+      },
+      {
+        "tactic": "A dedicated /about page that states what Fincai is, who built it, what legal entity operates it, and what it is not.",
+        "priority": "P0"
+      },
+      {
+        "tactic": "Consistent NAP-equivalent data (legal entity name, operating entity, jurisdiction, founding year) across site, Crunchbase, LinkedIn and directories.",
+        "priority": "P0"
+      },
+      {
+        "tactic": "Create and claim owned profiles so sameAs has real targets.",
+        "priority": "P0"
+      },
+      {
+        "tactic": "Wikidata item creation once at least two independent sources exist. Do not attempt Wikipedia until notability thresholds are genuinely met; a rejected article is a negative signal.",
+        "priority": "P2"
+      },
+      {
+        "tactic": "An explicit disambiguation FAQ entry answering 'Is Fincai the same as Fin AI?'. This is a real user question and a directly citable answer.",
+        "priority": "P1"
+      }
+    ],
+    "sameas_profiles": {
+      "required": [
+        {
+          "platform": "X",
+          "url": "https://x.com/fincai",
+          "status": "TODO_VERIFY",
+          "note": "twitter:site currently declares @fincai. Confirm ownership or change the meta tag. A declared handle that does not resolve is worse than none."
+        },
+        {
+          "platform": "LinkedIn company page",
+          "url": "TODO_VERIFY",
+          "status": "create_if_missing",
+          "note": "High-trust entity anchor, indexed and cited frequently."
+        },
+        {
+          "platform": "GitHub organization",
+          "url": "TODO_VERIFY",
+          "status": "create_if_missing",
+          "note": "Strong technical-credibility and citation anchor."
+        },
+        {
+          "platform": "Crunchbase",
+          "url": "TODO_VERIFY",
+          "status": "create_if_missing"
+        },
+        {
+          "platform": "Product Hunt",
+          "url": "TODO_VERIFY",
+          "status": "create_if_missing"
+        }
+      ],
+      "recommended": [
+        {
+          "platform": "YouTube",
+          "note": "A two-minute setup walkthrough is highly retrievable and transcript-indexed."
+        },
+        {
+          "platform": "Reddit brand account",
+          "note": "Participate transparently and disclose affiliation. Undisclosed promotion is both a rules violation and a reputational risk."
+        },
+        {
+          "platform": "Discord or community hub",
+          "note": "Only if it will actually be staffed. A dead community is a negative trust signal."
+        }
+      ]
+    },
+    "founder_entity": {
+      "rationale": "YMYL financial content is rated substantially higher when authored by a named, credentialed human. A Person entity linked to the Organization also gives models a second grounding anchor for the brand.",
+      "person": {
+        "name": "Nathaniel Rub",
+        "role": "Founder",
+        "affiliation": "AIManagement Inc.",
+        "credentials_to_display": "TODO_VERIFY: display only credentials that are current and verifiable. If a designation is in progress, state it precisely as in progress rather than as awarded. Misstated financial credentials are a compliance issue, not a copy issue.",
+        "implementation": "Publish a real bio on /about, byline every /learn and /blog article, and emit Person schema with sameAs to LinkedIn."
+      }
+    }
+  },
+  "keyword_map": {
+    "method": "Intent-tiered. Each cluster is owned by exactly one page to prevent cannibalization. Volumes are deliberately omitted because this category is roughly eight weeks old and third-party volume data for it is unreliable; prioritize by intent quality and competitive vacancy instead.",
+    "clusters": [
+      {
+        "cluster_id": "KC01",
+        "name": "Agentic trading category",
+        "owner_page": "/",
+        "intent": "commercial_investigational",
+        "priority": "P0",
+        "primary": "agentic AI trading assistant",
+        "secondary": [
+          "agentic trading platform",
+          "AI trading agent",
+          "autonomous AI stock trading",
+          "AI agent that trades stocks",
+          "agentic AI for investing"
+        ],
+        "long_tail": [
+          "what is an agentic AI trading assistant",
+          "AI agent that can execute trades",
+          "autonomous trading agent with risk controls"
+        ],
+        "competition": "low",
+        "notes": "Head term for the category. Own it on the homepage with a definitional opening paragraph."
+      },
+      {
+        "cluster_id": "KC02",
+        "name": "Robinhood MCP connection",
+        "owner_page": "/robinhood-mcp",
+        "intent": "transactional_setup",
+        "priority": "P0",
+        "primary": "connect AI agent to Robinhood",
+        "secondary": [
+          "Robinhood MCP",
+          "Robinhood Trading MCP",
+          "Robinhood agentic account setup",
+          "AI trading bot for Robinhood",
+          "Robinhood AI agent"
+        ],
+        "long_tail": [
+          "how to connect an AI agent to Robinhood",
+          "Robinhood MCP OAuth error",
+          "Robinhood agentic account requirements",
+          "Robinhood MCP not connecting",
+          "how to set up Robinhood agentic trading"
+        ],
+        "competition": "low_but_rising",
+        "notes": "Highest-intent cluster on the site. Must carry a non-affiliation disclaimer. Troubleshooting sub-content is the differentiator: Robinhood's own docs give a thin troubleshooting section and real users hit OAuth 2.1 and dynamic client registration failures."
+      },
+      {
+        "cluster_id": "KC03",
+        "name": "AI options analysis",
+        "owner_page": "/options",
+        "intent": "commercial_investigational",
+        "priority": "P0",
+        "primary": "AI options trading analysis",
+        "secondary": [
+          "AI options analyzer",
+          "options Greeks calculator AI",
+          "AI implied volatility analysis",
+          "AI for options strategy selection"
+        ],
+        "long_tail": [
+          "can AI analyze options Greeks",
+          "best AI tool for options traders",
+          "AI that explains implied volatility skew",
+          "AI options trade idea generator"
+        ],
+        "competition": "low",
+        "notes": "This is the defensible moat. A generalist LLM plus a raw broker MCP is weak at options pricing and Greeks. Make the methodology explicit and verifiable."
+      },
+      {
+        "cluster_id": "KC04",
+        "name": "Multi-agent market analysis",
+        "owner_page": "/multi-agent-analysis",
+        "intent": "informational_to_commercial",
+        "priority": "P1",
+        "primary": "multi-agent AI market analysis",
+        "secondary": [
+          "AI bull bear debate",
+          "multi-agent stock research",
+          "AI equity research agent"
+        ],
+        "long_tail": [
+          "how does multi-agent AI analyze a stock",
+          "AI that argues both sides of a trade"
+        ],
+        "competition": "very_low"
+      },
+      {
+        "cluster_id": "KC05",
+        "name": "Comparison and alternatives",
+        "owner_page": "/compare (hub)",
+        "intent": "commercial_bottom_funnel",
+        "priority": "P0",
+        "primary": "best AI trading agents",
+        "secondary": [
+          "agentic trading platforms compared",
+          "Fincai alternatives",
+          "Claude Desktop vs dedicated trading agent"
+        ],
+        "long_tail": [
+          "is it better to use Claude with Robinhood MCP or a trading app",
+          "ChatGPT vs dedicated AI trading assistant",
+          "Webull MCP vs Robinhood MCP"
+        ],
+        "competition": "medium",
+        "notes": "Disproportionately cited by generative engines for recommendation prompts. Must be genuinely balanced or it will be discounted by both readers and models."
+      },
+      {
+        "cluster_id": "KC06",
+        "name": "Safety, security and trust",
+        "owner_page": "/security",
+        "intent": "objection_handling",
+        "priority": "P0",
+        "primary": "is AI trading safe",
+        "secondary": [
+          "AI trading agent security",
+          "OAuth brokerage connection security",
+          "can an AI agent lose my money"
+        ],
+        "long_tail": [
+          "what can an AI agent access in my Robinhood account",
+          "how to stop an AI trading agent",
+          "does an AI trading app need my brokerage password"
+        ],
+        "competition": "low",
+        "notes": "Critically important for GEO. Safety-tuned models will not recommend a money-moving tool they cannot verify is safe. This page is what makes a model willing to name Fincai."
+      },
+      {
+        "cluster_id": "KC07",
+        "name": "Paper trading and strategy testing",
+        "owner_page": "/paper-trading",
+        "intent": "informational_to_product",
+        "priority": "P1",
+        "primary": "AI paper trading",
+        "secondary": [
+          "test AI trading strategy without real money",
+          "paper trading vs live trading"
+        ],
+        "long_tail": [
+          "how to test an AI trading strategy safely",
+          "does Fincai support paper trading"
+        ]
+      },
+      {
+        "cluster_id": "KC08",
+        "name": "Education and glossary",
+        "owner_page": "/learn (hub)",
+        "intent": "informational_top_funnel",
+        "priority": "P1",
+        "primary": "what is agentic trading",
+        "secondary": [
+          "what is MCP model context protocol",
+          "options Greeks explained",
+          "AI trading risks"
+        ],
+        "long_tail": [
+          "what does delta mean in options",
+          "what is model context protocol in finance",
+          "risks of letting AI trade for you"
+        ],
+        "notes": "Definitional content is the highest-retrieval content type for generative engines. Each glossary entry should open with a one-sentence definition that can stand alone when chunked."
+      },
+      {
+        "cluster_id": "KC09",
+        "name": "Pricing",
+        "owner_page": "/pricing",
+        "intent": "transactional",
+        "priority": "P0",
+        "primary": "Fincai pricing",
+        "secondary": [
+          "AI trading assistant cost",
+          "free AI trading agent"
+        ],
+        "long_tail": [
+          "how much does an AI trading assistant cost",
+          "is there a free AI trading agent"
+        ],
+        "notes": "Do not hide pricing behind a demo request. 'Pricing not public' is a frequent reason models decline to recommend a product and instead name a competitor with transparent pricing."
+      },
+      {
+        "cluster_id": "KC10",
+        "name": "Brand and disambiguation",
+        "owner_page": "/about",
+        "intent": "navigational",
+        "priority": "P0",
+        "primary": "Fincai",
+        "secondary": [
+          "what is Fincai",
+          "who makes Fincai",
+          "Fincai review",
+          "is Fincai legit"
+        ],
+        "long_tail": [
+          "is Fincai the same as Fin AI",
+          "Fincai vs FINCA",
+          "who is behind Fincai"
+        ],
+        "notes": "Brand-defence cluster. 'Is X legit' is a very high-volume prompt shape for new fintech and is almost always answered by third-party sources; give models an on-site answer to anchor against."
+      }
+    ],
+    "cannibalization_rules": [
+      "One cluster, one owner page. If two pages could rank for the same primary, merge them or explicitly differentiate the intent.",
+      "Never target 'Robinhood' head terms from the homepage; route that intent to /robinhood-mcp.",
+      "Compare pages target 'X vs Y' only. They must not compete with the homepage for the category head term.",
+      "Learn pages target definitional intent only and always link down-funnel to the owning product page."
+    ]
+  },
+  "prompt_map": {
+    "rationale": "GEO demand is measured in prompt volume, not keyword volume. Models decompose a user prompt into sub-queries and retrieve against those. Content must be written to answer the sub-queries directly, in the first sentence of a section, in language that survives being chunked away from its surroundings.",
+    "target_prompts": [
+      {
+        "prompt": "What is the best AI agent for trading stocks?",
+        "surface": [
+          "ChatGPT",
+          "Claude",
+          "Perplexity",
+          "Gemini"
+        ],
+        "target_asset": "/compare/best-ai-trading-agents",
+        "current_status": "Fincai absent",
+        "win_condition": "Named in the answer body alongside at least one incumbent"
+      },
+      {
+        "prompt": "How do I connect an AI agent to my Robinhood account?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/robinhood-mcp",
+        "win_condition": "Cited as a source alongside Robinhood's help centre"
+      },
+      {
+        "prompt": "Is it safe to let an AI trade stocks for me?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/security and /learn/ai-trading-risks",
+        "win_condition": "Cited for the risk-controls framing"
+      },
+      {
+        "prompt": "What is agentic trading?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/learn/what-is-agentic-trading",
+        "win_condition": "Cited as a definitional source"
+      },
+      {
+        "prompt": "Can AI analyze options Greeks for me?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/options",
+        "win_condition": "Named as a tool that does this"
+      },
+      {
+        "prompt": "Should I just use Claude with the Robinhood MCP instead of paying for a trading app?",
+        "surface": [
+          "Claude",
+          "ChatGPT"
+        ],
+        "target_asset": "/compare/fincai-vs-claude-desktop-robinhood-mcp",
+        "win_condition": "Cited for a balanced answer; this prompt is a conversion moment"
+      },
+      {
+        "prompt": "What is Fincai?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/about and llms.txt",
+        "win_condition": "Correct entity resolution with no homonym contamination"
+      },
+      {
+        "prompt": "Is Fincai legit?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/about, /security, third-party listings",
+        "win_condition": "A grounded, accurate answer rather than 'no information available'"
+      },
+      {
+        "prompt": "What are the risks of AI trading bots?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/learn/ai-trading-risks",
+        "win_condition": "Cited; candid risk content is preferentially cited by safety-tuned models"
+      },
+      {
+        "prompt": "How much does an AI trading assistant cost?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/pricing",
+        "win_condition": "Concrete figures extracted into the answer"
+      },
+      {
+        "prompt": "Alternatives to Robinhood's built-in agentic trading",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/compare hub"
+      },
+      {
+        "prompt": "How do I test an AI trading strategy without risking money?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/paper-trading"
+      },
+      {
+        "prompt": "Why is my Robinhood MCP connection failing?",
+        "surface": [
+          "all"
+        ],
+        "target_asset": "/robinhood-mcp#troubleshooting",
+        "win_condition": "This is a high-frustration, low-supply query. Owning it earns durable citations."
+      }
+    ],
+    "answer_first_writing_rules": [
+      "Open every section with a direct, self-contained answer sentence, then support it. Do not build up to the answer.",
+      "Write H2s as the literal question a user would type or speak.",
+      "Keep each answer paragraph under about 60 words so it fits inside a citation snippet.",
+      "Include the entity name inside the answer sentence, not only in the heading, because chunks lose their headings.",
+      "Use concrete nouns and numbers over adjectives. 'Runs a bull and bear debate across four specialist agents' beats 'powerful AI analysis'.",
+      "Date every page with a visible 'Last updated' and a matching dateModified in schema.",
+      "Prefer lists and tables for comparative content; extractors handle them well.",
+      "Never write a claim you cannot substantiate, because a single detected overstatement in a YMYL context suppresses the whole domain."
+    ]
+  },
+  "technical_seo": {
+    "crawler_access": {
+      "priority": "P0",
+      "why_first": "If the edge is blocking AI crawlers, every other item in this specification produces zero return. Verify before building.",
+      "verification_checklist": [
+        "Confirm the hosting or CDN layer is not blocking AI bots. If Cloudflare is in front of the site, check that the AI Scrapers and Crawlers block and any bot-fight or managed-challenge rule is not intercepting GPTBot, ClaudeBot, PerplexityBot or Bingbot.",
+        "Confirm the origin returns HTTP 200 with full HTML to a plain curl request carrying a bot user agent, not a challenge page.",
+        "Confirm no rate limiting or geo-fencing rejects crawler ranges.",
+        "Confirm robots.txt returns 200 and is not a soft 404.",
+        "Confirm the site is reachable over both apex and www with one canonical host and a 301 from the other."
+      ],
+      "verification_commands": [
+        "curl -sS -o /dev/null -w '%{http_code}\\n' -A 'GPTBot/1.0' https://fincai.ai/",
+        "curl -sS -o /dev/null -w '%{http_code}\\n' -A 'ClaudeBot/1.0' https://fincai.ai/",
+        "curl -sS -o /dev/null -w '%{http_code}\\n' -A 'PerplexityBot/1.0' https://fincai.ai/",
+        "curl -sS -A 'Googlebot/2.1' https://fincai.ai/ | head -c 2000",
+        "curl -sS https://fincai.ai/robots.txt",
+        "curl -sS https://fincai.ai/sitemap.xml | head -c 1000"
+      ]
+    },
+    "robots_txt": {
+      "path": "/robots.txt",
+      "policy": "Explicitly allow all major search and AI crawlers. Do not block AI training crawlers at this stage; for a zero-authority brand, being learned and cited is worth far more than the theoretical cost of training use.",
+      "content": "# fincai.ai\n# Search crawlers\nUser-agent: Googlebot\nAllow: /\n\nUser-agent: Bingbot\nAllow: /\n\nUser-agent: DuckDuckBot\nAllow: /\n\nUser-agent: Applebot\nAllow: /\n\n# AI answer engines and assistants\nUser-agent: GPTBot\nAllow: /\n\nUser-agent: OAI-SearchBot\nAllow: /\n\nUser-agent: ChatGPT-User\nAllow: /\n\nUser-agent: ClaudeBot\nAllow: /\n\nUser-agent: Claude-User\nAllow: /\n\nUser-agent: Claude-SearchBot\nAllow: /\n\nUser-agent: anthropic-ai\nAllow: /\n\nUser-agent: PerplexityBot\nAllow: /\n\nUser-agent: Perplexity-User\nAllow: /\n\nUser-agent: Google-Extended\nAllow: /\n\nUser-agent: Applebot-Extended\nAllow: /\n\nUser-agent: Amazonbot\nAllow: /\n\nUser-agent: meta-externalagent\nAllow: /\n\nUser-agent: cohere-ai\nAllow: /\n\nUser-agent: DuckAssistBot\nAllow: /\n\nUser-agent: YouBot\nAllow: /\n\n# Default\nUser-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /app/\nDisallow: /auth/\nDisallow: /*?*session=\nDisallow: /*?*token=\n\nSitemap: https://fincai.ai/sitemap.xml\n",
+      "notes": [
+        "Do not disallow /learn, /compare, /blog or any marketing route.",
+        "Disallow authenticated application routes so crawl budget is spent on marketing surfaces and so no session-bearing URLs are indexed.",
+        "Google-Extended controls Gemini training use and does not affect AI Overviews eligibility. Allowing it is the right call for a brand that needs to be known."
+      ]
+    },
+    "sitemap": {
+      "path": "/sitemap.xml",
+      "generation": "Generate at build time from the route manifest in information_architecture.pages. Never hand-maintain.",
+      "requirements": [
+        "Absolute HTTPS URLs on the canonical host only.",
+        "Accurate lastmod derived from the content file's git commit date, not the build timestamp. A sitemap where every lastmod equals the deploy time is discounted.",
+        "Exclude noindex routes, redirects and authenticated routes.",
+        "Reference from robots.txt and submit in Google Search Console and Bing Webmaster Tools.",
+        "Split into a sitemap index once the route count exceeds a few hundred, which will not be the case at launch."
+      ]
+    },
+    "rendering": {
+      "requirement": "Every route in the public route manifest must return complete, meaningful HTML in the initial server response.",
+      "acceptance_test": "For each route, curl the URL with a bot user agent, strip tags, and assert the resulting text contains the page's H1 and at least 300 words of body copy. Fail the build otherwise.",
+      "test_command": "for u in / /how-it-works /robinhood-mcp /options /security /pricing /about /faq; do echo \"== $u\"; curl -sS -A 'GPTBot/1.0' \"https://fincai.ai$u\" | sed -e 's/<[^>]*>//g' | tr -s '[:space:]' ' ' | wc -w; done",
+      "notes": [
+        "The existing site already serves pre-rendered content to crawlers, so extend that mechanism rather than replacing it.",
+        "Content that appears only after hydration, only inside tabs, or only on scroll is frequently invisible to retrievers. Render tab and accordion content in the DOM and hide it visually, rather than mounting it on interaction."
+      ]
+    },
+    "head_cleanup": {
+      "remove": [
+        {
+          "tag": "meta name=keywords",
+          "reason": "Unused by every major engine for over a decade. Zero benefit, mild negative signal to human evaluators."
+        }
+      ],
+      "keep": [
+        "canonical, self-referential and absolute",
+        "meta robots with index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "full Open Graph and Twitter card sets",
+        "theme-color and viewport declarations"
+      ],
+      "add": [
+        {
+          "tag": "link rel=alternate type=application/rss+xml",
+          "target": "/blog/rss.xml",
+          "reason": "Feed discovery is used by several aggregation and AI ingestion pipelines."
+        },
+        {
+          "tag": "meta name=author",
+          "value": "per-article author name",
+          "reason": "E-E-A-T signal on YMYL content."
+        },
+        {
+          "tag": "link rel=me",
+          "targets": [
+            "X profile",
+            "LinkedIn profile"
+          ],
+          "reason": "Reinforces identity linkage."
+        }
+      ]
+    },
+    "social_cards": {
+      "fix": "Replace the 1200x1200 og:image with a 1200x630 asset and update og:image:width and og:image:height accordingly.",
+      "per_page": "Generate a unique OG image per page, with the page title rendered on it. Generic sitewide OG images measurably reduce click-through from social and chat unfurls.",
+      "twitter_handle": "Verify @fincai is owned and active, or update twitter:site. A declared handle that 404s weakens sameAs linkage."
+    },
+    "performance": {
+      "targets": {
+        "LCP": "<= 2.0s at p75 mobile",
+        "INP": "<= 200ms at p75",
+        "CLS": "<= 0.1",
+        "TTFB": "<= 500ms"
+      },
+      "tactics": [
+        "Preload the primary web font and use font-display: swap.",
+        "Serve images in AVIF or WebP with explicit width and height to prevent layout shift.",
+        "Defer all non-critical JavaScript; no blocking third-party tags above the fold.",
+        "Inline critical CSS for the hero.",
+        "Use a CDN with edge caching for all static marketing routes.",
+        "Avoid client-side data fetching for content that could be static."
+      ]
+    },
+    "indexation": {
+      "immediate_actions": [
+        "Create and verify Google Search Console for both the domain property and the URL prefix property.",
+        "Create and verify Bing Webmaster Tools. Bing's index feeds several AI answer surfaces, so this is disproportionately valuable for GEO and is routinely skipped.",
+        "Submit the sitemap in both.",
+        "Use the URL Inspection tool to request indexing for the top ten priority routes individually.",
+        "Enable IndexNow on Bing so new and updated URLs are pushed rather than waiting for discovery.",
+        "Verify there is no leftover noindex, no staging password wall, and no Disallow: / from a previous pre-launch state."
+      ],
+      "monitoring": [
+        "Track indexed page count weekly in both consoles until the full route manifest is covered.",
+        "Watch the Page Indexing report for 'Discovered - currently not indexed', which on a new domain signals insufficient authority and calls for more external links rather than more content."
+      ]
+    },
+    "internal_linking": {
+      "principles": [
+        "Every page must be reachable from the homepage within three clicks.",
+        "Every learn article links to at least one product page and at least two sibling learn articles.",
+        "Every product page links to /security, /pricing and at least one relevant comparison page.",
+        "Use descriptive anchor text matching the target's primary keyword. Never 'click here' or 'read more'.",
+        "Add a persistent footer with the full route map. Footers are crawled and are the cheapest way to give a small site a complete link graph.",
+        "Add breadcrumbs on every non-home route with matching BreadcrumbList schema."
+      ]
+    },
+    "url_conventions": {
+      "rules": [
+        "Lowercase, hyphen-separated, no trailing slash inconsistency. Pick one and 301 the other.",
+        "No dates in URLs for evergreen content, so pages can be updated without changing the URL.",
+        "Keep paths short and semantic: /learn/what-is-agentic-trading, not /learn/2026/07/post-14.",
+        "Never change a published URL without a 301."
+      ]
+    },
+    "international": {
+      "recommendation": "Ship English-only at launch with a single canonical host. Do not add hreflang or translations until English visibility is established; premature internationalization dilutes a new domain's authority.",
+      "note": "The founder is trilingual and Spanish-language agentic trading content is an unclaimed opportunity, but sequence it after the English cluster is indexed and citing."
+    }
+  },
+  "structured_data": {
+    "implementation_notes": [
+      "Emit as JSON-LD inside a script tag with type application/ld+json in the head of the server-rendered HTML.",
+      "One graph per page. Prefer a single @graph array over multiple disconnected script blocks so entity relationships resolve.",
+      "Use stable @id values so entities can be referenced across pages rather than duplicated.",
+      "Every schema claim must match visible on-page content. Markup describing content that is not visible is a violation and a manual-action risk.",
+      "Validate every template against the Rich Results Test and Schema.org validator before merge."
+    ],
+    "global_graph": {
+      "description": "Emit on every page. The Organization and WebSite nodes carry the entity identity.",
+      "jsonld": {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://fincai.ai/#organization",
+            "name": "Fincai",
+            "alternateName": "Fincai AI",
+            "legalName": "TODO_VERIFY: registered legal entity name, for example AIManagement Inc.",
+            "url": "https://fincai.ai/",
+            "logo": {
+              "@type": "ImageObject",
+              "@id": "https://fincai.ai/#logo",
+              "url": "https://fincai.ai/logo-512.png",
+              "width": 512,
+              "height": 512
+            },
+            "description": "Fincai is an agentic AI trading assistant that analyzes stocks and options in real time with a multi-agent AI system, runs autonomous strategies with built-in risk controls, and executes trades through a connected brokerage on user confirmation.",
+            "foundingDate": "TODO_VERIFY",
+            "founder": {
+              "@id": "https://fincai.ai/#founder"
+            },
+            "knowsAbout": [
+              "agentic AI trading",
+              "options pricing and Greeks",
+              "Model Context Protocol",
+              "multi-agent AI systems",
+              "algorithmic trading risk controls"
+            ],
+            "sameAs": [
+              "TODO_VERIFY: https://x.com/fincai",
+              "TODO_VERIFY: LinkedIn company URL",
+              "TODO_VERIFY: GitHub organization URL",
+              "TODO_VERIFY: Crunchbase URL",
+              "TODO_VERIFY: Product Hunt URL"
+            ],
+            "contactPoint": {
+              "@type": "ContactPoint",
+              "contactType": "customer support",
+              "email": "TODO_VERIFY",
+              "availableLanguage": [
+                "English",
+                "Spanish"
+              ]
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://fincai.ai/#founder",
+            "name": "Nathaniel Rub",
+            "jobTitle": "Founder",
+            "worksFor": {
+              "@id": "https://fincai.ai/#organization"
+            },
+            "description": "TODO_VERIFY: one-paragraph bio stating only verifiable finance and technology experience.",
+            "sameAs": [
+              "TODO_VERIFY: LinkedIn profile URL"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://fincai.ai/#website",
+            "url": "https://fincai.ai/",
+            "name": "Fincai",
+            "publisher": {
+              "@id": "https://fincai.ai/#organization"
+            },
+            "inLanguage": "en-US",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://fincai.ai/search?q={search_term_string}"
+              },
+              "query-input": "required name=search_term_string"
+            }
+          }
+        ]
+      }
+    },
+    "software_application": {
+      "emit_on": [
+        "/",
+        "/pricing"
+      ],
+      "jsonld": {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "@id": "https://fincai.ai/#software",
+        "name": "Fincai",
+        "applicationCategory": "FinanceApplication",
+        "applicationSubCategory": "Agentic AI trading assistant",
+        "operatingSystem": "Web",
+        "url": "https://fincai.ai/",
+        "publisher": {
+          "@id": "https://fincai.ai/#organization"
+        },
+        "description": "Agentic AI trading assistant for stocks and options. Multi-agent market analysis, an options pricing engine with Greeks, autonomous strategy execution with risk controls, and brokerage connectivity over OAuth via the Model Context Protocol.",
+        "featureList": [
+          "Multi-agent market analysis with structured bull and bear debate",
+          "Institutional-grade options pricing engine with Greeks",
+          "Autonomous strategy runner, paper trading by default with explicit live opt-in",
+          "Brokerage connection over OAuth with no password sharing",
+          "Conversational interface for analysis and confirmation-gated trade execution"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "TODO_VERIFY",
+          "priceCurrency": "USD",
+          "availability": "https://schema.org/InStock",
+          "url": "https://fincai.ai/pricing"
+        },
+        "aggregateRating": "OMIT_UNTIL_REAL: never emit aggregateRating without genuine, verifiable, on-page reviews. Fabricated ratings are a manual-action trigger and a consumer-protection exposure."
+      }
+    },
+    "faq_page": {
+      "emit_on": [
+        "/faq",
+        "and as a section-level FAQPage on /robinhood-mcp, /security, /pricing"
+      ],
+      "rules": [
+        "Only mark up questions and answers that are visibly rendered on the page.",
+        "Keep each answer between 40 and 90 words: long enough to be a complete answer, short enough to be extracted whole.",
+        "Write questions in the user's voice, not the brand's."
+      ],
+      "jsonld_template": {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": "https://fincai.ai/faq#faqpage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Fincai?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fincai is an agentic AI trading assistant for stocks and options. It analyzes markets using a multi-agent system that argues both the bull and bear case, prices options with a dedicated engine that computes Greeks, and can run autonomous strategies with built-in risk controls. Trades are executed through a connected brokerage account and are gated behind user confirmation."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is Fincai the same as Fin AI, Fini AI, or FINCA?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Fincai is an independent agentic AI trading assistant at fincai.ai. It is unrelated to Fin AI by Intercom, which builds customer support software, to Fini AI, or to FINCA International, a microfinance network. Fincai is not affiliated with any of these organizations."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Fincai need my brokerage password?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Fincai connects to a supported brokerage using OAuth, so credentials are entered on the broker's own site and never shared with Fincai. Access can be revoked from the brokerage app at any time without changing the password."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does Fincai give financial advice?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Fincai provides analysis and automation tools for informational purposes only and does not provide personalized investment advice or recommendations. All trading decisions and their outcomes remain the user's responsibility, and trading involves the risk of loss."
+            }
+          }
+        ]
+      }
+    },
+    "how_to": {
+      "emit_on": [
+        "/robinhood-mcp"
+      ],
+      "jsonld_template": {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to connect an AI trading agent to a Robinhood Agentic Account",
+        "description": "Step-by-step setup for connecting an AI agent to a Robinhood Agentic Account using the Robinhood Trading MCP server.",
+        "totalTime": "PT10M",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "position": 1,
+            "name": "Confirm eligibility",
+            "text": "TODO_VERIFY: state current eligibility requirements, including having a primary individual investing account in good standing, and note that account opening and agent authentication must be completed on a desktop browser."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 2,
+            "name": "Add the Robinhood Trading MCP server",
+            "text": "TODO_VERIFY: describe the exact connection procedure for the Fincai client."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 3,
+            "name": "Authenticate over OAuth",
+            "text": "TODO_VERIFY: describe the OAuth consent flow and the tool-level permission screen."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 4,
+            "name": "Fund the Agentic Account",
+            "text": "TODO_VERIFY: explain that the agentic account is funded with a dedicated budget separate from the primary portfolio."
+          },
+          {
+            "@type": "HowToStep",
+            "position": 5,
+            "name": "Start in paper mode",
+            "text": "Run strategies in paper mode first and review the agent's reasoning and order previews before enabling live execution."
+          }
+        ]
+      },
+      "warning": "Robinhood's supported asset classes for agentic trading have changed since launch. Verify current scope directly against Robinhood's official documentation before publishing, and add a visible 'Verified on YYYY-MM-DD' line. Publishing a stale procedure in this category damages trust quickly."
+    },
+    "breadcrumb_template": {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://fincai.ai/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "{SECTION_NAME}",
+          "item": "https://fincai.ai/{section}"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "{PAGE_NAME}",
+          "item": "https://fincai.ai/{section}/{slug}"
+        }
+      ]
+    },
+    "article_template": {
+      "emit_on": [
+        "/learn/*",
+        "/blog/*"
+      ],
+      "jsonld": {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "{TITLE}",
+        "description": "{META_DESCRIPTION}",
+        "datePublished": "{ISO_DATE}",
+        "dateModified": "{ISO_DATE}",
+        "author": {
+          "@id": "https://fincai.ai/#founder"
+        },
+        "publisher": {
+          "@id": "https://fincai.ai/#organization"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://fincai.ai/{path}"
+        },
+        "inLanguage": "en-US",
+        "isAccessibleForFree": true
+      }
+    },
+    "comparison_template": {
+      "emit_on": [
+        "/compare/*"
+      ],
+      "note": "Use ItemList of SoftwareApplication nodes. Describe competitors accurately and neutrally. Do not emit ratings for competitors.",
+      "jsonld": {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "{COMPARISON_TITLE}",
+        "itemListOrder": "https://schema.org/ItemListUnordered",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": {
+              "@type": "SoftwareApplication",
+              "name": "{TOOL_NAME}",
+              "applicationCategory": "FinanceApplication",
+              "url": "{TOOL_URL}"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "llms_txt": {
+    "decision": "Publish. Google has stated it does not use llms.txt for its own AI surfaces, so do not expect Google lift from it. It costs almost nothing, is consumed by some non-Google pipelines and agent frameworks, and doubles as a canonical fact sheet that reduces hallucination risk about the brand. Do not let it substitute for real content.",
+    "path": "/llms.txt",
+    "serve_as": "text/plain; charset=utf-8",
+    "content": "# Fincai\n\n> Fincai is an agentic AI trading assistant for stocks and options. It analyzes markets in real time using a multi-agent AI system that argues both the bull and bear case, prices options with a dedicated engine that computes Greeks, runs autonomous strategies with built-in risk controls, and executes trades through a connected brokerage account on the user's confirmation.\n\nFincai is operated at https://fincai.ai. Fincai is an independent product and is not affiliated with, endorsed by, or sponsored by Robinhood Markets, Inc. or any other brokerage.\n\nDisambiguation: Fincai (fincai.ai) is not Fin AI by Intercom (fin.ai), Fini AI (usefini.com), Finic (finic.ai), The Fin AI (thefin.ai), or FINCA International (finca.org). These are unrelated organizations with similar names.\n\nImportant: Fincai is an informational and automation tool. It does not provide personalized investment advice. Trading involves risk, including the possible loss of principal.\n\n## Product\n\n- [How it works](https://fincai.ai/how-it-works): The multi-agent analysis loop, from market data ingestion through to a confirmation-gated order.\n- [Options analysis](https://fincai.ai/options): The options pricing engine, Greeks computation, and how implied volatility is used in strategy selection.\n- [Multi-agent analysis](https://fincai.ai/multi-agent-analysis): How specialist agents construct opposing bull and bear theses and how disagreement is resolved.\n- [Autonomous strategies](https://fincai.ai/strategies): The strategy runner, its risk controls, and the paper-first execution model.\n- [Paper trading](https://fincai.ai/paper-trading): Testing strategies without capital at risk.\n- [Pricing](https://fincai.ai/pricing): Plans and current costs.\n\n## Setup\n\n- [Connect to Robinhood](https://fincai.ai/robinhood-mcp): Connecting Fincai to a Robinhood Agentic Account via the Robinhood Trading MCP server, including troubleshooting.\n- [Security](https://fincai.ai/security): OAuth connection model, what the agent can and cannot access, permission scopes, and how to revoke access.\n\n## Learn\n\n- [What is agentic trading](https://fincai.ai/learn/what-is-agentic-trading)\n- [What is the Model Context Protocol](https://fincai.ai/learn/what-is-mcp)\n- [Options Greeks explained](https://fincai.ai/learn/options-greeks-explained)\n- [Risks of AI trading](https://fincai.ai/learn/ai-trading-risks)\n- [Paper trading vs live trading](https://fincai.ai/learn/paper-trading-vs-live-trading)\n\n## Comparisons\n\n- [Fincai vs Claude Desktop with the Robinhood MCP](https://fincai.ai/compare/fincai-vs-claude-desktop-robinhood-mcp)\n- [Best AI trading agents](https://fincai.ai/compare/best-ai-trading-agents)\n\n## Company\n\n- [About](https://fincai.ai/about): Who builds Fincai and the operating entity behind it.\n- [FAQ](https://fincai.ai/faq)\n- [Changelog](https://fincai.ai/changelog)\n\n## Legal\n\n- [Terms of service](https://fincai.ai/legal/terms)\n- [Privacy policy](https://fincai.ai/legal/privacy)\n- [Risk disclosures](https://fincai.ai/legal/disclosures)\n",
+    "companion_file": {
+      "path": "/llms-full.txt",
+      "purpose": "Optional single-file concatenation of the full text of every marketing and learn page, for agents that prefer one fetch. Generate at build time from the same content source so it can never drift from the site.",
+      "priority": "P3"
+    }
+  },
+  "information_architecture": {
+    "principle": "Move from one page to roughly twenty-five high-quality routes. Every route owns exactly one intent cluster, opens with a direct answer, carries schema, and links into the graph. Depth beats breadth: twenty-five strong pages outrank and out-cite a hundred thin ones, and thin content in a YMYL category is actively harmful.",
+    "global_page_requirements": [
+      "Unique title tag, 50 to 60 characters, primary keyword near the front, brand suffix ' | Fincai'.",
+      "Unique meta description, 140 to 160 characters, written as a direct answer rather than a teaser.",
+      "Exactly one H1 matching the page intent.",
+      "H2s written as literal user questions where the section answers a question.",
+      "An opening paragraph of 40 to 70 words that fully answers the page's core question without preamble.",
+      "Visible 'Last updated' date matching schema dateModified.",
+      "Breadcrumbs with BreadcrumbList schema on every non-home route.",
+      "At least three contextual internal links with descriptive anchors.",
+      "A risk disclosure block on every page that discusses trading, strategies, execution or results.",
+      "Server-rendered HTML containing the full body copy."
+    ],
+    "pages": [
+      {
+        "route": "/",
+        "priority": "P0",
+        "cluster": "KC01",
+        "title": "Fincai — Agentic AI Trading Assistant for Stocks & Options",
+        "meta_description": "Fincai is an agentic AI trading assistant. Multi-agent market analysis, an options engine with Greeks, and autonomous strategies that trade only on your confirmation.",
+        "h1": "An agentic AI trading assistant for stocks and options",
+        "opening_answer": "Fincai is an agentic AI trading assistant. It analyzes stocks and options in real time using a multi-agent system that argues both the bull and bear case, prices options with a dedicated engine that computes Greeks, and runs autonomous strategies with built-in risk controls. It connects to a supported brokerage over OAuth and executes trades only on your confirmation.",
+        "sections": [
+          {
+            "h2": "What Fincai does",
+            "content": "Five capability blocks, each with its own subheading and a concrete one-sentence claim."
+          },
+          {
+            "h2": "How is this different from asking ChatGPT or Claude to trade for me?",
+            "content": "Answer this directly and honestly on the homepage. It is the first question every informed visitor and every LLM will ask. Link to the full comparison page."
+          },
+          {
+            "h2": "How Fincai keeps you in control",
+            "content": "Paper-by-default, confirmation-gated execution, OAuth without credential sharing, sandboxed agentic account, revocable access, position and loss limits."
+          },
+          {
+            "h2": "Who Fincai is for",
+            "content": "Named user segments with the specific job each is hiring the product to do."
+          },
+          {
+            "h2": "Frequently asked questions",
+            "content": "Four to six questions with FAQPage schema."
+          }
+        ],
+        "internal_links": [
+          "/how-it-works",
+          "/robinhood-mcp",
+          "/options",
+          "/security",
+          "/pricing",
+          "/compare/fincai-vs-claude-desktop-robinhood-mcp"
+        ],
+        "schema": [
+          "global_graph",
+          "software_application",
+          "faq_page"
+        ],
+        "target_word_count": 900
+      },
+      {
+        "route": "/how-it-works",
+        "priority": "P0",
+        "cluster": "KC01",
+        "title": "How Fincai Works: Multi-Agent Analysis to Confirmed Trade | Fincai",
+        "meta_description": "A step-by-step walkthrough of the Fincai pipeline: market data ingestion, multi-agent debate, options pricing, risk checks, and confirmation-gated execution.",
+        "h1": "How Fincai works, step by step",
+        "sections": [
+          {
+            "h2": "Step 1: Market data ingestion"
+          },
+          {
+            "h2": "Step 2: Multi-agent analysis and bull/bear debate"
+          },
+          {
+            "h2": "Step 3: Options pricing and Greeks"
+          },
+          {
+            "h2": "Step 4: Risk checks and position sizing"
+          },
+          {
+            "h2": "Step 5: Order preview and your confirmation"
+          },
+          {
+            "h2": "Step 6: Monitoring and exit logic"
+          },
+          {
+            "h2": "What Fincai does not do",
+            "content": "Explicit negative scope. Both users and models trust a product more when it states its limits, and this section is disproportionately quoted."
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1400
+      },
+      {
+        "route": "/robinhood-mcp",
+        "priority": "P0",
+        "cluster": "KC02",
+        "title": "Connect Fincai to Robinhood via the Trading MCP | Setup Guide",
+        "meta_description": "Step-by-step guide to connecting an AI trading agent to a Robinhood Agentic Account using the Robinhood Trading MCP, including OAuth troubleshooting.",
+        "h1": "How to connect Fincai to a Robinhood Agentic Account",
+        "opening_answer": "You connect Fincai to Robinhood through Robinhood's official Trading MCP server. Authentication happens over OAuth on Robinhood's own site, so your password is never shared with Fincai. Trades are placed only in a dedicated Robinhood Agentic Account that you fund separately from your main portfolio.",
+        "sections": [
+          {
+            "h2": "What is the Robinhood Trading MCP?"
+          },
+          {
+            "h2": "What you need before you start",
+            "content": "Eligibility requirements. TODO_VERIFY against Robinhood's current documentation."
+          },
+          {
+            "h2": "Step-by-step connection",
+            "content": "Numbered steps with HowTo schema."
+          },
+          {
+            "h2": "What Fincai can and cannot access",
+            "content": "Be precise and conservative. Enumerate the read scopes and state clearly that trading is confined to the agentic account."
+          },
+          {
+            "h2": "Which assets can an agent actually trade?",
+            "content": "TODO_VERIFY: Robinhood's supported asset classes for agentic trading have changed since the May 2026 launch, with crypto added in July 2026 and reporting inconsistent on options. State the verified current scope and the verification date. Do not imply capabilities the broker does not currently expose."
+          },
+          {
+            "h2": "Troubleshooting",
+            "content": "This is the differentiating section. Cover OAuth handshake failures, dynamic client registration issues, the desktop-only onboarding constraint, stale token states, and reconnect procedure. Real troubleshooting content earns durable citations because supply is near zero."
+          },
+          {
+            "h2": "Frequently asked questions"
+          }
+        ],
+        "required_disclaimer": "Fincai is not affiliated with, endorsed by, or sponsored by Robinhood Markets, Inc. Robinhood is a trademark of Robinhood Markets, Inc., used here only to describe compatibility.",
+        "schema": [
+          "global_graph",
+          "how_to",
+          "faq_page",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1800
+      },
+      {
+        "route": "/options",
+        "priority": "P0",
+        "cluster": "KC03",
+        "title": "AI Options Analysis: Greeks, Pricing and Strategy Selection | Fincai",
+        "meta_description": "How Fincai prices options, computes Greeks, reads implied volatility, and evaluates strategy structures. Methodology explained in full.",
+        "h1": "AI options analysis with a real pricing engine",
+        "sections": [
+          {
+            "h2": "Why general-purpose AI struggles with options",
+            "content": "The strategic core. A language model plus a raw broker connection cannot reliably compute Greeks or price a spread. Explain why, technically and specifically."
+          },
+          {
+            "h2": "The pricing engine",
+            "content": "State the models used and their assumptions. Methodology transparency is the strongest available E-E-A-T signal in quantitative finance."
+          },
+          {
+            "h2": "Greeks and what each one tells you"
+          },
+          {
+            "h2": "Implied volatility, rank and skew"
+          },
+          {
+            "h2": "How Fincai evaluates a strategy structure"
+          },
+          {
+            "h2": "Limitations of the model",
+            "content": "Name the assumptions that break. Candour here is both accurate and disproportionately cited."
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1600
+      },
+      {
+        "route": "/multi-agent-analysis",
+        "priority": "P1",
+        "cluster": "KC04",
+        "title": "Multi-Agent Market Analysis: Bull vs Bear Debate | Fincai",
+        "meta_description": "How Fincai's specialist agents build opposing bull and bear theses on a ticker, and how conflicting conclusions are resolved into a decision.",
+        "h1": "Multi-agent market analysis with structured bull and bear debate",
+        "sections": [
+          {
+            "h2": "What each agent specializes in"
+          },
+          {
+            "h2": "How the debate is structured"
+          },
+          {
+            "h2": "How disagreement is resolved"
+          },
+          {
+            "h2": "A worked example",
+            "content": "Use a clearly labelled illustrative example. Do not present it as a recommendation or as a historical result."
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1200
+      },
+      {
+        "route": "/strategies",
+        "priority": "P1",
+        "cluster": "KC01",
+        "title": "Autonomous Trading Strategies with Risk Controls | Fincai",
+        "meta_description": "Define a strategy in plain language, test it in paper mode, and set the risk limits that govern it. Live execution is opt-in and confirmation-gated.",
+        "h1": "Autonomous strategies, with risk controls you set",
+        "sections": [
+          {
+            "h2": "Defining a strategy in plain language"
+          },
+          {
+            "h2": "Risk controls: position limits, loss limits, and kill switches"
+          },
+          {
+            "h2": "Paper first, live by explicit opt-in"
+          },
+          {
+            "h2": "Monitoring and stopping a running strategy"
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1200
+      },
+      {
+        "route": "/security",
+        "priority": "P0",
+        "cluster": "KC06",
+        "title": "Security: How Fincai Connects to Your Brokerage | Fincai",
+        "meta_description": "OAuth-only brokerage connection with no password sharing, scoped permissions, a sandboxed agentic account, and revocable access. Full detail on data handling.",
+        "h1": "How Fincai handles your brokerage connection and your data",
+        "opening_answer": "Fincai never receives or stores your brokerage password. Connections use OAuth, so you authenticate on your broker's own site and grant scoped permissions there. Trading is confined to a dedicated agentic account that you fund separately, and you can revoke Fincai's access from your broker at any time.",
+        "sections": [
+          {
+            "h2": "What Fincai can read"
+          },
+          {
+            "h2": "What Fincai can do"
+          },
+          {
+            "h2": "What Fincai can never do"
+          },
+          {
+            "h2": "How to revoke access"
+          },
+          {
+            "h2": "Data storage, retention and deletion"
+          },
+          {
+            "h2": "Can an AI agent lose my money?",
+            "content": "Answer honestly: yes, trading involves risk and an agent can make errors. Then explain the specific controls that bound the exposure. An evasive answer here is detected and penalized by both readers and safety-tuned models."
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "faq_page",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1400,
+        "geo_note": "This is the single most important page for GEO in this category. A model will not name a money-moving tool it cannot verify is safe. Make the safety architecture explicit, specific and easy to quote."
+      },
+      {
+        "route": "/paper-trading",
+        "priority": "P1",
+        "cluster": "KC07",
+        "title": "Paper Trading: Test AI Strategies Without Risking Capital | Fincai",
+        "meta_description": "Run Fincai strategies in paper mode to review the agent's reasoning and order previews before any real capital is committed.",
+        "h1": "Test any strategy in paper mode first",
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 900
+      },
+      {
+        "route": "/pricing",
+        "priority": "P0",
+        "cluster": "KC09",
+        "title": "Fincai Pricing: Plans and Costs | Fincai",
+        "meta_description": "Transparent Fincai pricing. See what is included in each plan, what is free, and what a paid plan adds over connecting an AI agent to a broker yourself.",
+        "h1": "Pricing",
+        "sections": [
+          {
+            "h2": "Plans"
+          },
+          {
+            "h2": "What is included in each plan"
+          },
+          {
+            "h2": "What you get that a free MCP connection does not give you",
+            "content": "The value-justification section. Answer it plainly."
+          },
+          {
+            "h2": "Billing FAQ"
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "software_application",
+          "faq_page",
+          "breadcrumb_template"
+        ],
+        "rules": [
+          "Publish real numbers. Do not gate pricing behind a demo request; opaque pricing is a common reason models decline to recommend a product."
+        ],
+        "target_word_count": 700
+      },
+      {
+        "route": "/about",
+        "priority": "P0",
+        "cluster": "KC10",
+        "title": "About Fincai: Who Builds It and Why | Fincai",
+        "meta_description": "Fincai is an independent agentic AI trading assistant. Learn who builds it, the entity behind it, and how it differs from similarly named companies.",
+        "h1": "About Fincai",
+        "sections": [
+          {
+            "h2": "What Fincai is"
+          },
+          {
+            "h2": "Who builds Fincai",
+            "content": "Named founder, real bio, verifiable background, photo. This is the primary E-E-A-T asset for a YMYL site."
+          },
+          {
+            "h2": "The company behind Fincai",
+            "content": "Legal entity, jurisdiction, founding year, contact."
+          },
+          {
+            "h2": "Is Fincai the same as Fin AI, Fini AI, or FINCA?",
+            "content": "Explicit disambiguation section. This is a real query and answering it on-site is how you win entity resolution."
+          },
+          {
+            "h2": "Our approach to risk and claims",
+            "content": "State the editorial and claims policy: no performance guarantees, no unsubstantiated statistics, methodology published."
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 900
+      },
+      {
+        "route": "/faq",
+        "priority": "P1",
+        "cluster": "KC10",
+        "title": "Fincai FAQ: Common Questions Answered | Fincai",
+        "meta_description": "Answers to the most common questions about Fincai: how it connects to a broker, what it costs, whether it gives advice, and how it manages risk.",
+        "h1": "Frequently asked questions",
+        "rules": [
+          "Minimum 18 questions grouped by theme. Every answer 40 to 90 words. All rendered visibly and marked up with FAQPage schema."
+        ],
+        "schema": [
+          "global_graph",
+          "faq_page",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1800
+      },
+      {
+        "route": "/compare",
+        "priority": "P0",
+        "cluster": "KC05",
+        "title": "Compare AI Trading Agents and Agentic Platforms | Fincai",
+        "meta_description": "Honest comparisons of agentic trading options, including free alternatives, so you can pick the right approach for how you actually trade.",
+        "h1": "Compare agentic trading approaches",
+        "type": "hub",
+        "schema": [
+          "global_graph",
+          "comparison_template",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 700
+      },
+      {
+        "route": "/compare/fincai-vs-claude-desktop-robinhood-mcp",
+        "priority": "P0",
+        "cluster": "KC05",
+        "title": "Fincai vs Claude Desktop + Robinhood MCP: Which Should You Use?",
+        "meta_description": "A candid comparison between connecting Claude Desktop directly to the Robinhood MCP and using a purpose-built agentic trading assistant.",
+        "h1": "Fincai vs connecting Claude Desktop directly to the Robinhood MCP",
+        "strategic_note": "This is the most commercially important page on the site. The free substitute is genuinely good, and a defensive or dishonest treatment will be detected. Concede clearly what the free path does well, then be specific about where a purpose-built layer adds value: persistent strategy state between sessions, options pricing and Greeks, deterministic risk limits, execution audit logs, scheduled monitoring, and reproducible reasoning. Recommend the free path for the users it genuinely suits.",
+        "sections": [
+          {
+            "h2": "The short answer"
+          },
+          {
+            "h2": "What the free MCP path does well"
+          },
+          {
+            "h2": "Where a purpose-built layer adds value"
+          },
+          {
+            "h2": "Feature comparison",
+            "content": "Table. Tables are extracted cleanly by retrievers."
+          },
+          {
+            "h2": "Who should use which"
+          }
+        ],
+        "schema": [
+          "global_graph",
+          "comparison_template",
+          "faq_page",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 1600
+      },
+      {
+        "route": "/compare/best-ai-trading-agents",
+        "priority": "P0",
+        "cluster": "KC05",
+        "title": "Best AI Trading Agents in 2026: An Honest Comparison | Fincai",
+        "meta_description": "A comparison of agentic trading platforms and AI trading assistants in 2026, including what each does well and who each one suits.",
+        "h1": "AI trading agents compared",
+        "rules": [
+          "Include Fincai but do not rank it first by default. Self-serving listicles are discounted by readers and models.",
+          "Describe every competitor accurately and update quarterly.",
+          "Include a clear disclosure that this comparison is published by Fincai."
+        ],
+        "schema": [
+          "global_graph",
+          "comparison_template",
+          "breadcrumb_template"
+        ],
+        "target_word_count": 2200
+      },
+      {
+        "route": "/compare/fincai-vs-chatgpt-robinhood-mcp",
+        "priority": "P1",
+        "cluster": "KC05",
+        "target_word_count": 1400
+      },
+      {
+        "route": "/compare/agentic-brokerages-compared",
+        "priority": "P2",
+        "cluster": "KC05",
+        "note": "Compare the broker-side agentic offerings rather than the agent side. Useful, genuinely informational, and links naturally to /robinhood-mcp.",
+        "target_word_count": 1600
+      },
+      {
+        "route": "/learn",
+        "priority": "P1",
+        "cluster": "KC08",
+        "type": "hub",
+        "title": "Learn: Agentic Trading, Options and AI Explained | Fincai",
+        "target_word_count": 600
+      },
+      {
+        "route": "/learn/what-is-agentic-trading",
+        "priority": "P1",
+        "cluster": "KC08",
+        "h1": "What is agentic trading?",
+        "opening_answer": "Agentic trading is when an AI agent is given permission to analyze markets and place orders in a brokerage account on your behalf, rather than only answering questions. The agent works from instructions you set, and depending on how it is configured it may either preview each order for your approval or execute within limits you define.",
+        "target_word_count": 1200
+      },
+      {
+        "route": "/learn/what-is-mcp",
+        "priority": "P1",
+        "cluster": "KC08",
+        "h1": "What is the Model Context Protocol (MCP)?",
+        "opening_answer": "The Model Context Protocol is an open standard that lets AI agents connect to external applications and services. Instead of only generating text, an agent with MCP access can call defined tools and take actions. In trading, a broker exposes an MCP server so a connected agent can read account data and place orders within the permissions the user grants.",
+        "target_word_count": 1200
+      },
+      {
+        "route": "/learn/options-greeks-explained",
+        "priority": "P1",
+        "cluster": "KC08",
+        "target_word_count": 1800
+      },
+      {
+        "route": "/learn/ai-trading-risks",
+        "priority": "P0",
+        "cluster": "KC08",
+        "h1": "The real risks of letting AI trade for you",
+        "note": "Write this genuinely and without hedging toward the product. Candid risk content is among the most-cited content in YMYL categories precisely because most vendors will not publish it.",
+        "target_word_count": 1600
+      },
+      {
+        "route": "/learn/paper-trading-vs-live-trading",
+        "priority": "P2",
+        "cluster": "KC08",
+        "target_word_count": 1100
+      },
+      {
+        "route": "/learn/implied-volatility-explained",
+        "priority": "P2",
+        "cluster": "KC08",
+        "target_word_count": 1400
+      },
+      {
+        "route": "/changelog",
+        "priority": "P1",
+        "note": "Dated, factual release notes. The cheapest sustainable freshness signal and a genuine trust asset for a young product.",
+        "target_word_count": "ongoing"
+      },
+      {
+        "route": "/blog",
+        "priority": "P2",
+        "note": "Publish only when there is something real to say. A stale blog is worse than no blog."
+      },
+      {
+        "route": "/legal/terms",
+        "priority": "P0",
+        "note": "Required for trust and for app-store and directory listings."
+      },
+      {
+        "route": "/legal/privacy",
+        "priority": "P0"
+      },
+      {
+        "route": "/legal/disclosures",
+        "priority": "P0",
+        "note": "Consolidated risk disclosures. Link from the footer of every page."
+      }
+    ]
+  },
+  "compliance_and_risk": {
+    "disclaimer": "This section flags issues for the operator to review with qualified securities counsel. It is not legal advice and the implementing agent must not treat it as a substitute for counsel review.",
+    "why_this_is_in_an_seo_spec": "In YMYL finance, compliance and SEO are the same problem viewed from two angles. Overstated claims trigger both regulatory exposure and quality-rater demotion, and they cause safety-tuned models to refuse to recommend the product. Conservative, substantiated claims are simultaneously the compliant choice and the higher-performing GEO choice.",
+    "claim_precision": {
+      "rules": [
+        "Never state or imply guaranteed, expected, or typical returns.",
+        "Never publish backtested or hypothetical performance without prominent, adjacent disclosure of its hypothetical nature and its limitations.",
+        "Never publish testimonials or endorsements without the required disclosures, and never fabricate them.",
+        "Distinguish rigorously between what the software analyzes and what it can execute. If the connected broker does not currently support an asset class for agentic execution, do not market execution in that asset class.",
+        "Do not describe outputs as advice, recommendations, or signals to act. Use analysis, research, and information.",
+        "Where a capability is planned but not shipped, label it as planned with no implied date."
+      ],
+      "specific_flag": "Current site metadata markets AI options trading and a Robinhood AI agent while the body copy says equity execution. Reconcile these before launch and re-verify the broker's current agentic asset scope on the day of publication."
+    },
+    "trademark": {
+      "issue": "Marketing copy uses third-party broker trademarks in a keyword-targeting context.",
+      "required_mitigations": [
+        "Add a visible non-affiliation statement on every page that references a broker: 'Fincai is not affiliated with, endorsed by, or sponsored by Robinhood Markets, Inc.'",
+        "Use the broker's name descriptively rather than possessively. Prefer 'works with Robinhood via the official Trading MCP' over 'Robinhood AI agent'.",
+        "Do not use the broker's logo, wordmark styling, or brand colours.",
+        "Do not register or use domains or handles containing a broker's trademark.",
+        "Review the broker's brand usage and API terms before publishing compatibility claims."
+      ]
+    },
+    "advisory_status": {
+      "flag": "A product that analyzes securities and suggests actions may implicate investment adviser registration depending on how it is presented and compensated. How the marketing copy is written materially affects this analysis.",
+      "action": "Have securities counsel review all marketing copy, the disclaimer language, and the terms of service before launch. Do not treat the standard 'informational purposes only' line as sufficient on its own."
+    },
+    "required_disclosure_block": {
+      "placement": "Footer of every page, plus inline on any page discussing strategies, execution, or results.",
+      "text": "Fincai provides analysis and automation tools for informational purposes only. Fincai does not provide personalized investment advice or recommendations and is not a broker-dealer or an investment adviser. Trading involves risk, including the possible loss of principal. Options trading involves additional risk and is not suitable for all investors. Automated and AI-driven strategies can perform poorly, act on incomplete or outdated information, and behave in unexpected ways. You are responsible for reviewing your account activity and for all decisions made in your account. Fincai is not affiliated with, endorsed by, or sponsored by any brokerage."
+    },
+    "accessibility": {
+      "why_here": "Accessibility failures are also extraction failures. A screen reader and a retriever consume the same DOM.",
+      "requirements": [
+        "Semantic heading order with no skipped levels.",
+        "Descriptive alt text on every informative image; empty alt on decorative ones.",
+        "WCAG AA contrast minimum.",
+        "Keyboard-operable navigation and visible focus states.",
+        "Real HTML tables for tabular data, never divs styled as tables."
+      ]
+    }
+  },
+  "offsite_authority_plan": {
+    "principle": "This is the highest-leverage and slowest workstream. On-site work makes Fincai citable; off-site work makes Fincai cited. Generative engines weight independent and community sources far above vendor-owned pages, so no amount of on-site polish substitutes for external presence.",
+    "tier_1_do_first": [
+      {
+        "action": "Request inclusion on Robinhood's list of AI platforms that work with the Trading MCP.",
+        "channel": "Robinhood partner enquiry channel",
+        "why": "The single most valuable available citation. That help-centre page is the canonical retrieval source for the category's core question, and it currently names seven platforms and a catch-all.",
+        "effort": "low",
+        "impact": "very_high"
+      },
+      {
+        "action": "List in MCP server and agent registries and directories.",
+        "why": "New, thinly populated, actively crawled, and cited by models answering MCP-related prompts.",
+        "effort": "low",
+        "impact": "high"
+      },
+      {
+        "action": "Create and complete Crunchbase and LinkedIn company profiles.",
+        "why": "High-trust entity anchors that resolve the brand ambiguity problem and provide real sameAs targets.",
+        "effort": "low",
+        "impact": "high"
+      },
+      {
+        "action": "Publish one genuinely useful open-source repository under a Fincai GitHub organization, for example an options Greeks utility or an MCP connection diagnostic tool.",
+        "why": "GitHub is heavily weighted by models for technical credibility, and a strong README is itself a citable document.",
+        "effort": "medium",
+        "impact": "high"
+      },
+      {
+        "action": "Launch on Product Hunt with a prepared asset set.",
+        "why": "Durable, indexed, frequently cited in tool-recommendation answers.",
+        "effort": "medium",
+        "impact": "medium_high"
+      }
+    ],
+    "tier_2_next": [
+      {
+        "action": "Outreach to the authors of 2026 agentic-trading comparison articles requesting evaluation for inclusion.",
+        "targets": [
+          "finder.com best agentic trading platforms",
+          "intellectia.ai AI trading agent comparison",
+          "truthifi.com Robinhood MCP guide",
+          "genfinity.io",
+          "bitsminds.com"
+        ],
+        "why": "These are the retrieval substrate for every 'best AI trading agent' prompt. Absence from them is the direct cause of GEO invisibility.",
+        "method": "Offer a working demo account, verifiable technical detail, and a clear factual summary. Do not offer or accept payment for placement without disclosure."
+      },
+      {
+        "action": "Transparent participation in relevant communities.",
+        "targets": [
+          "r/algotrading",
+          "r/options",
+          "r/thetagang",
+          "r/ClaudeAI",
+          "r/mcp",
+          "Hacker News"
+        ],
+        "rules": [
+          "Always disclose affiliation.",
+          "Contribute substantive technical answers, not promotion.",
+          "Undisclosed astroturfing is a rules violation, a reputational risk, and increasingly detectable."
+        ],
+        "why": "Community threads are disproportionately cited by generative engines for tool-recommendation prompts."
+      },
+      {
+        "action": "Publish a short setup walkthrough video on YouTube.",
+        "why": "Transcripts are indexed and video results appear in AI answers for procedural queries."
+      },
+      {
+        "action": "List on AI tool directories.",
+        "targets": [
+          "There's An AI For That",
+          "Futurepedia",
+          "AI tool aggregators with editorial review"
+        ],
+        "note": "Prioritize directories with editorial review; low-quality bulk directories add nothing and can be a negative signal."
+      }
+    ],
+    "tier_3_compounding": [
+      {
+        "action": "Publish original research or data the category lacks, for example a structured evaluation of how well general-purpose LLMs price options against a reference model.",
+        "why": "Original data is the most durable citation magnet available and is very hard for fast followers to copy."
+      },
+      {
+        "action": "Create a Wikidata item once at least two independent reliable sources exist.",
+        "note": "Do not attempt a Wikipedia article before genuine notability. A rejected or deleted article is a negative signal and is difficult to reverse."
+      },
+      {
+        "action": "Pursue podcast and newsletter appearances in retail-trading and AI-agent media.",
+        "why": "Generative engines draw heavily on news and media sources."
+      },
+      {
+        "action": "Establish G2 or Capterra presence once there is a real user base to review it.",
+        "note": "Never seed fake reviews."
+      }
+    ],
+    "anti_patterns": [
+      "Purchased links, private blog networks, and bulk directory submissions. In a YMYL category these carry real penalty risk and negligible upside.",
+      "Undisclosed sponsored placements in comparison content.",
+      "Fabricated reviews, ratings, testimonials, or user counts.",
+      "AI-generated bulk content published at volume. It will not be cited, and it will suppress the pages that would have been."
+    ]
+  },
+  "measurement": {
+    "principle": "Measure SEO and GEO separately; they move on different timescales and respond to different interventions. Do not judge GEO by sessions, because a successful AI citation frequently produces a mention without a click.",
+    "seo_kpis": [
+      {
+        "metric": "Indexed pages",
+        "source": "Google Search Console, Bing Webmaster Tools",
+        "target_90d": "100% of the route manifest indexed"
+      },
+      {
+        "metric": "Branded impressions for 'fincai'",
+        "source": "GSC",
+        "target_90d": "Fincai is the top result for its own brand name"
+      },
+      {
+        "metric": "Non-branded impressions",
+        "source": "GSC",
+        "target_90d": "Rising trend across the ten keyword clusters"
+      },
+      {
+        "metric": "Referring domains",
+        "source": "any backlink tool",
+        "target_90d": "15 or more genuine referring domains"
+      },
+      {
+        "metric": "Core Web Vitals",
+        "source": "GSC CWV report",
+        "target": "All routes in the good bucket at p75"
+      }
+    ],
+    "geo_kpis": [
+      {
+        "metric": "Citation rate per prompt",
+        "method": "Run the prompt_map on a fixed schedule across ChatGPT, Claude, Perplexity, Gemini and Google AI Mode. Record whether Fincai is mentioned, whether it is cited with a link, and which page was cited.",
+        "cadence": "weekly",
+        "target_90d": "Mentioned in at least 30% of runs for the top five target prompts"
+      },
+      {
+        "metric": "Entity resolution accuracy",
+        "method": "Prompt each engine with 'What is Fincai?' and score the answer for correctness and homonym contamination.",
+        "cadence": "weekly",
+        "target_30d": "Zero homonym contamination across all tested engines"
+      },
+      {
+        "metric": "Hallucination rate",
+        "method": "Score answers for factually incorrect attributes about the product.",
+        "cadence": "weekly",
+        "target": "Zero material inaccuracies; correct any that appear by publishing an explicit on-site fact block"
+      },
+      {
+        "metric": "AI referral traffic",
+        "method": "Segment analytics by referrer host, including chatgpt.com, perplexity.ai, claude.ai, gemini.google.com and copilot.microsoft.com.",
+        "cadence": "weekly"
+      },
+      {
+        "metric": "AI crawler hit rate",
+        "method": "Parse server logs for GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot and Google-Extended. Track which routes they fetch and how often.",
+        "cadence": "weekly",
+        "note": "This is the earliest available leading indicator that GEO work is landing, and it moves weeks before citations do."
+      },
+      {
+        "metric": "Third-party citation count",
+        "method": "Manual register of external pages naming Fincai.",
+        "target_90d": "10 or more"
+      }
+    ],
+    "instrumentation_tasks": [
+      "Ship server-side log retention sufficient to analyze bot traffic, at minimum 30 days.",
+      "Add a referrer-based segment for AI surfaces in the analytics tool.",
+      "Build a small internal script that runs the prompt_map against available APIs and records mention and citation outcomes to a spreadsheet or database.",
+      "Set up Google Search Console and Bing Webmaster Tools email alerts for coverage errors and manual actions."
+    ]
+  },
+  "implementation_roadmap": {
+    "phase_0": {
+      "name": "Verification, days 0 to 3",
+      "gate": "Do not proceed to Phase 1 until every item passes. Building content on a blocked or unindexable origin wastes the entire effort.",
+      "tasks": [
+        {
+          "id": "P0-1",
+          "task": "Run the crawler access verification commands and confirm HTTP 200 with full HTML for every bot user agent.",
+          "acceptance": "All commands return 200 and body text contains the H1."
+        },
+        {
+          "id": "P0-2",
+          "task": "Confirm no CDN or WAF rule is blocking AI crawlers.",
+          "acceptance": "Edge configuration reviewed and AI-bot blocking confirmed off."
+        },
+        {
+          "id": "P0-3",
+          "task": "Confirm one canonical host with a 301 from the alternate.",
+          "acceptance": "Single canonical host resolves; alternate 301s."
+        },
+        {
+          "id": "P0-4",
+          "task": "Create and verify Google Search Console and Bing Webmaster Tools.",
+          "acceptance": "Both properties verified."
+        },
+        {
+          "id": "P0-5",
+          "task": "Confirm no residual noindex, staging auth wall, or blanket Disallow.",
+          "acceptance": "robots.txt and meta robots audited on every route."
+        },
+        {
+          "id": "P0-6",
+          "task": "Verify ownership of the @fincai handle or correct the twitter:site tag.",
+          "acceptance": "Declared handle resolves to an owned account."
+        }
+      ]
+    },
+    "phase_1": {
+      "name": "Technical foundation, days 1 to 14",
+      "tasks": [
+        {
+          "id": "P1-1",
+          "task": "Ship robots.txt per specification.",
+          "acceptance": "Returns 200, contains the sitemap directive, no AI crawler disallowed."
+        },
+        {
+          "id": "P1-2",
+          "task": "Ship build-time sitemap.xml generated from the route manifest with git-derived lastmod.",
+          "acceptance": "Valid XML, absolute canonical URLs only, no noindex routes, submitted in both consoles."
+        },
+        {
+          "id": "P1-3",
+          "task": "Ship llms.txt per specification.",
+          "acceptance": "Returns 200 as text/plain, all linked routes resolve."
+        },
+        {
+          "id": "P1-4",
+          "task": "Implement the global JSON-LD graph on every route.",
+          "acceptance": "Passes Rich Results Test and Schema.org validator; @id references resolve."
+        },
+        {
+          "id": "P1-5",
+          "task": "Remove the meta keywords tag; add author, RSS alternate and rel=me links.",
+          "acceptance": "Head audit clean on every route."
+        },
+        {
+          "id": "P1-6",
+          "task": "Replace the OG image with a 1200x630 asset and implement per-page OG image generation.",
+          "acceptance": "Cards render correctly in X, LinkedIn and Slack validators."
+        },
+        {
+          "id": "P1-7",
+          "task": "Build the route scaffold for the full IA with server-rendered shells and correct head tags.",
+          "acceptance": "Every route returns 200 with a unique title, description, H1 and canonical."
+        },
+        {
+          "id": "P1-8",
+          "task": "Implement breadcrumbs plus BreadcrumbList schema and a full-route-map footer.",
+          "acceptance": "Every page reachable within three clicks of the homepage."
+        },
+        {
+          "id": "P1-9",
+          "task": "Add the SSR word-count acceptance test to CI.",
+          "acceptance": "Build fails if any public route serves fewer than 300 words to a bot user agent."
+        },
+        {
+          "id": "P1-10",
+          "task": "Ship the compliance disclosure block in the global footer.",
+          "acceptance": "Present on every route."
+        }
+      ]
+    },
+    "phase_2": {
+      "name": "Content and information architecture, days 15 to 45",
+      "sequence_note": "Publish in priority order. Ten excellent pages beat twenty-five mediocre ones, and thin pages in a YMYL category actively suppress the domain.",
+      "order": [
+        "/ (rewrite)",
+        "/security",
+        "/robinhood-mcp",
+        "/pricing",
+        "/about",
+        "/how-it-works",
+        "/options",
+        "/compare/fincai-vs-claude-desktop-robinhood-mcp",
+        "/faq",
+        "/learn/ai-trading-risks",
+        "/learn/what-is-agentic-trading",
+        "/learn/what-is-mcp",
+        "/compare/best-ai-trading-agents",
+        "/multi-agent-analysis",
+        "/strategies",
+        "/paper-trading",
+        "/learn/options-greeks-explained",
+        "remaining learn and compare routes"
+      ],
+      "acceptance_per_page": [
+        "Meets the global page requirements.",
+        "Opening paragraph answers the page's core question in under 70 words.",
+        "All required schema validates.",
+        "Minimum three contextual internal links with descriptive anchors.",
+        "Every factual claim traceable to a verified source, with no TODO_VERIFY placeholders remaining.",
+        "Reviewed against the compliance claim-precision rules."
+      ]
+    },
+    "phase_3": {
+      "name": "Authority and citation, days 46 to 90",
+      "tasks": [
+        "Execute all Tier 1 off-site actions.",
+        "Begin Tier 2 outreach to comparison-article authors.",
+        "Publish the open-source repository with a substantial README.",
+        "Run the Product Hunt launch.",
+        "Begin weekly GEO prompt-panel measurement and log results.",
+        "Establish a changelog publishing cadence."
+      ],
+      "acceptance": "10 or more genuine referring domains, zero homonym contamination in entity-resolution prompts, and at least one third-party comparison listing that names Fincai."
+    },
+    "phase_4": {
+      "name": "Compounding, day 91 onward",
+      "tasks": [
+        "Refresh the comparison cluster quarterly; stale comparisons lose citations fast in this category.",
+        "Publish original research once per quarter.",
+        "Expand the learn cluster based on observed prompt gaps rather than keyword volume.",
+        "Re-verify all broker-dependent procedural content monthly, since the underlying platforms are changing rapidly.",
+        "Evaluate Spanish-language expansion once the English cluster is fully indexed and citing."
+      ]
+    }
+  },
+  "replit_agent_instructions": {
+    "role": "You are implementing this specification inside the fincai.ai repository in Replit. Work in priority order and do not skip Phase 0.",
+    "before_you_write_code": [
+      "Read the entire specification once before making changes.",
+      "Inspect the existing repository and identify the framework, the routing convention, and the existing prerender or SSR mechanism. Extend what exists; do not introduce a second rendering strategy.",
+      "Produce a written implementation plan mapping each spec item to concrete files, and confirm it with the operator before making broad changes.",
+      "Create a branch. Do not commit directly to the production branch."
+    ],
+    "hard_rules": [
+      "Never invent product facts, pricing, performance figures, user counts, testimonials, credentials, or dates. Every TODO_VERIFY must be escalated to the operator, never guessed.",
+      "Never emit aggregateRating, Review, or performance schema without real underlying data.",
+      "Never mark up content with schema that is not visibly rendered on the page.",
+      "Never remove or weaken the compliance disclosure block.",
+      "Never publish a route without server-rendered body copy.",
+      "Never use localStorage or sessionStorage for content that needs to be crawlable.",
+      "Never change a published URL without adding a 301."
+    ],
+    "definition_of_done_per_route": [
+      "Returns HTTP 200 with complete server-rendered HTML.",
+      "Unique title and meta description within the specified character limits.",
+      "Exactly one H1.",
+      "Valid JSON-LD that passes the Rich Results Test.",
+      "Breadcrumbs present with matching schema.",
+      "Three or more contextual internal links.",
+      "Visible last-updated date matching schema dateModified.",
+      "Included in sitemap.xml.",
+      "Compliance footer present.",
+      "Lighthouse SEO score of 100 and accessibility 95 or above."
+    ],
+    "suggested_file_layout": {
+      "note": "Adapt to the repository's actual framework; this is the intent, not a mandate.",
+      "paths": [
+        "public/robots.txt",
+        "public/llms.txt",
+        "src/content/pages/*.mdx",
+        "src/content/learn/*.mdx",
+        "src/content/compare/*.mdx",
+        "src/lib/seo/schema.ts",
+        "src/lib/seo/routes.ts",
+        "src/components/seo/JsonLd.tsx",
+        "src/components/seo/Breadcrumbs.tsx",
+        "src/components/legal/Disclosure.tsx",
+        "scripts/generate-sitemap.ts",
+        "scripts/generate-llms-full.ts",
+        "scripts/audit-ssr.sh",
+        "scripts/geo-prompt-panel.ts"
+      ]
+    },
+    "ci_checks_to_add": [
+      "SSR word-count assertion across the full route manifest.",
+      "JSON-LD validation for every route.",
+      "Broken internal link check.",
+      "Duplicate title and duplicate meta description detection.",
+      "Sitemap and route manifest parity check.",
+      "Lighthouse CI budget on the top ten routes."
+    ],
+    "how_to_use_this_file_in_replit": {
+      "note": "Exact commands. Run these from the Replit Shell tab. The first command confirms you are in the repository root before anything else.",
+      "commands": [
+        "pwd && ls -la",
+        "cd ~/workspace 2>/dev/null || cd /home/runner/$(basename $PWD); pwd",
+        "mkdir -p docs/seo",
+        "# Upload fincai-seo-geo-spec.json into the Replit file tree, then move it into place:",
+        "mv ~/fincai-seo-geo-spec.json docs/seo/fincai-seo-geo-spec.json 2>/dev/null || echo 'Drag the file into docs/seo/ in the Replit file pane, then re-run the next command'",
+        "ls -la docs/seo/",
+        "python3 -c \"import json;d=json.load(open('docs/seo/fincai-seo-geo-spec.json'));print('VALID JSON. Top-level keys:');[print(' -',k) for k in d]\"",
+        "git checkout -b seo-geo-implementation",
+        "git add docs/seo/fincai-seo-geo-spec.json",
+        "git commit -m 'Add SEO and GEO optimization specification'"
+      ],
+      "then_prompt_the_agent_with": "Read docs/seo/fincai-seo-geo-spec.json in full. Start with implementation_roadmap.phase_0 and run every verification command in technical_seo.crawler_access. Report the results to me before writing any code. Do not proceed to Phase 1 until I confirm Phase 0 passed."
+    }
+  },
+  "open_questions_for_operator": [
+    "Is fincai.ai currently behind Cloudflare or another CDN, and is AI-bot blocking enabled? This determines whether anything else in this spec can work.",
+    "Is @fincai on X owned and controlled?",
+    "What is the registered legal entity that operates Fincai, and should it be named publicly?",
+    "What is the launch pricing, and will it be published openly?",
+    "Which asset classes can Fincai actually execute today through the connected broker, verified as of the publication date?",
+    "Has securities counsel reviewed the marketing claims, the disclaimer language, and the terms of service?",
+    "Is there a real user base yet, and if so is there consent to publish any testimonial or case study?",
+    "Is there appetite to open-source a component, and if so which one?",
+    "Which founder credentials are current and verifiable for public display?"
+  ]
+}

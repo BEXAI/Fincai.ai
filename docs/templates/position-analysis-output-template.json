@@ -1,0 +1,433 @@
+{
+  "analysis_meta": {
+    "generated_at": "2025-12-03T03:41:44-05:00",
+    "template_version": "1.0.0",
+    "analysis_mode": "detailed_analysis",
+    "disclaimer": "This analysis is for educational purposes only and does not constitute financial advice."
+  },
+
+  "position_data": {
+    "position_id": "pos_goog_345c_20260102",
+    "underlying": {
+      "symbol": "GOOG",
+      "current_price": 316.80,
+      "price_timestamp": "2025-12-03T16:00:00Z"
+    },
+    "contract": {
+      "type": "call",
+      "strike_price": 345.00,
+      "expiration_date": "2026-01-02",
+      "days_to_expiration": 30,
+      "option_symbol": "GOOG260102C00345000"
+    },
+    "position": {
+      "contracts": 2,
+      "multiplier": 100,
+      "average_cost": 5.00,
+      "total_cost_basis": 1000.00,
+      "date_acquired": "2025-11-28",
+      "days_held": 5
+    },
+    "current_valuation": {
+      "current_price": 2.62,
+      "bid": null,
+      "ask": null,
+      "market_value": 524.00,
+      "breakeven_price": 350.00
+    },
+    "returns": {
+      "unrealized_pnl_dollars": -476.00,
+      "unrealized_pnl_percent": -47.60,
+      "today_return_dollars": -60.00,
+      "today_return_percent": -10.27
+    }
+  },
+
+  "moneyness_analysis": {
+    "status": "OTM",
+    "status_description": "Out of the Money",
+    "distance_to_strike": {
+      "dollars": 28.20,
+      "percent": 8.90,
+      "interpretation": "GOOG must rise $28.20 (8.90%) to reach the $345 strike price"
+    },
+    "distance_to_breakeven": {
+      "dollars": 33.20,
+      "percent": 10.48,
+      "interpretation": "GOOG must rise $33.20 (10.48%) to reach the $350 breakeven price"
+    },
+    "intrinsic_value": {
+      "per_share": 0.00,
+      "total": 0.00,
+      "note": "Option has zero intrinsic value - entirely extrinsic/time value"
+    },
+    "extrinsic_value": {
+      "per_share": 2.62,
+      "total": 524.00,
+      "percent_of_option_price": 100.00
+    }
+  },
+
+  "time_analysis": {
+    "days_to_expiration": 30,
+    "trading_days_to_expiration": 21,
+    "calendar_days_held": 5,
+    "theta_exposure_category": "accelerating",
+    "theta_exposure_description": "Position is in the theta acceleration zone (21-45 DTE). Time decay is increasing daily.",
+    "key_dates": {
+      "expiration": "2026-01-02",
+      "theta_critical_threshold": "2025-12-12",
+      "days_until_critical": 9
+    },
+    "time_decay_projection": {
+      "estimated_daily_theta": -0.08,
+      "estimated_weekly_decay_dollars": -56.00,
+      "estimated_weekly_decay_percent": -10.69,
+      "warning": "At current underlying price, position loses approximately $8/day to theta"
+    }
+  },
+
+  "greeks_estimation": {
+    "note": "Estimated values - actual Greeks require real-time IV data",
+    "inputs_used": {
+      "underlying_price": 316.80,
+      "strike_price": 345.00,
+      "days_to_expiration": 30,
+      "risk_free_rate": 0.0525,
+      "dividend_yield": 0.00,
+      "estimated_iv": 0.28
+    },
+    "estimated_greeks": {
+      "delta": {
+        "value": 0.18,
+        "interpretation": "For every $1 GOOG rises, option gains approximately $0.18",
+        "position_delta": 36,
+        "equivalent_shares": 36
+      },
+      "gamma": {
+        "value": 0.012,
+        "interpretation": "Delta increases by 0.012 for each $1 GOOG rises"
+      },
+      "theta": {
+        "value": -0.04,
+        "interpretation": "Option loses approximately $0.04/day ($8 position) to time decay"
+      },
+      "vega": {
+        "value": 0.35,
+        "interpretation": "For each 1% increase in IV, option gains approximately $0.35"
+      }
+    }
+  },
+
+  "risk_metrics": {
+    "max_loss": {
+      "dollars": 1000.00,
+      "description": "Total cost basis - maximum loss if option expires worthless"
+    },
+    "remaining_capital_at_risk": {
+      "dollars": 524.00,
+      "description": "Current market value - amount still at risk"
+    },
+    "loss_already_realized": {
+      "dollars": 476.00,
+      "percent": 47.60,
+      "description": "Unrealized loss as percentage of max possible loss"
+    },
+    "loss_velocity": {
+      "dollars_per_day_held": -95.20,
+      "description": "Average daily loss since position opened (5 days)"
+    },
+    "risk_reward_current": {
+      "max_additional_loss": 524.00,
+      "profit_at_breakeven": 0.00,
+      "profit_at_strike_plus_10": 700.00,
+      "ratio": "Risk $524 to make $0-$700+ depending on GOOG move"
+    }
+  },
+
+  "scenario_analysis": {
+    "price_scenarios_at_expiration": [
+      {
+        "goog_price": 300.00,
+        "option_intrinsic": 0.00,
+        "position_value": 0.00,
+        "pnl_dollars": -1000.00,
+        "pnl_percent": -100.00,
+        "outcome": "Total Loss"
+      },
+      {
+        "goog_price": 316.80,
+        "option_intrinsic": 0.00,
+        "position_value": 0.00,
+        "pnl_dollars": -1000.00,
+        "pnl_percent": -100.00,
+        "outcome": "Total Loss (current price)"
+      },
+      {
+        "goog_price": 330.00,
+        "option_intrinsic": 0.00,
+        "position_value": 0.00,
+        "pnl_dollars": -1000.00,
+        "pnl_percent": -100.00,
+        "outcome": "Total Loss"
+      },
+      {
+        "goog_price": 345.00,
+        "option_intrinsic": 0.00,
+        "position_value": 0.00,
+        "pnl_dollars": -1000.00,
+        "pnl_percent": -100.00,
+        "outcome": "At Strike - Expires Worthless"
+      },
+      {
+        "goog_price": 350.00,
+        "option_intrinsic": 5.00,
+        "position_value": 1000.00,
+        "pnl_dollars": 0.00,
+        "pnl_percent": 0.00,
+        "outcome": "Breakeven"
+      },
+      {
+        "goog_price": 360.00,
+        "option_intrinsic": 15.00,
+        "position_value": 3000.00,
+        "pnl_dollars": 2000.00,
+        "pnl_percent": 200.00,
+        "outcome": "Profit Zone"
+      },
+      {
+        "goog_price": 370.00,
+        "option_intrinsic": 25.00,
+        "position_value": 5000.00,
+        "pnl_dollars": 4000.00,
+        "pnl_percent": 400.00,
+        "outcome": "Strong Profit"
+      },
+      {
+        "goog_price": 380.00,
+        "option_intrinsic": 35.00,
+        "position_value": 7000.00,
+        "pnl_dollars": 6000.00,
+        "pnl_percent": 600.00,
+        "outcome": "Exceptional Profit"
+      }
+    ],
+    "time_decay_scenarios": [
+      {
+        "date": "2025-12-03",
+        "dte": 30,
+        "estimated_value_if_flat": 524.00,
+        "note": "Current"
+      },
+      {
+        "date": "2025-12-10",
+        "dte": 23,
+        "estimated_value_if_flat": 400.00,
+        "projected_loss": -124.00
+      },
+      {
+        "date": "2025-12-17",
+        "dte": 16,
+        "estimated_value_if_flat": 280.00,
+        "projected_loss": -244.00
+      },
+      {
+        "date": "2025-12-24",
+        "dte": 9,
+        "estimated_value_if_flat": 150.00,
+        "projected_loss": -374.00
+      },
+      {
+        "date": "2026-01-02",
+        "dte": 0,
+        "estimated_value_if_flat": 0.00,
+        "projected_loss": -524.00,
+        "note": "Expiration - Total remaining loss"
+      }
+    ],
+    "required_moves": {
+      "to_strike": {
+        "price_target": 345.00,
+        "move_required_dollars": 28.20,
+        "move_required_percent": 8.90,
+        "move_per_trading_day": 1.34,
+        "historical_context": "GOOG 30-day average daily move: ~1.2%"
+      },
+      "to_breakeven": {
+        "price_target": 350.00,
+        "move_required_dollars": 33.20,
+        "move_required_percent": 10.48,
+        "move_per_trading_day": 1.58
+      },
+      "to_recover_50_percent_loss": {
+        "option_price_needed": 4.88,
+        "estimated_goog_price": 338.00,
+        "move_required_percent": 6.69
+      }
+    }
+  },
+
+  "exit_strategy_analysis": {
+    "current_situation": {
+      "assessment": "HIGH RISK - Position has lost 47.6% in 5 days",
+      "time_pressure": "30 DTE with accelerating theta decay",
+      "probability_context": "Requires 10.48% move in underlying for breakeven"
+    },
+    "options": [
+      {
+        "strategy": "CLOSE_NOW",
+        "action": "Sell 2 contracts at market (~$2.62)",
+        "proceeds": 524.00,
+        "locked_loss": -476.00,
+        "locked_loss_percent": -47.60,
+        "pros": [
+          "Preserves $524 of capital",
+          "Eliminates further downside risk",
+          "Frees capital for other opportunities"
+        ],
+        "cons": [
+          "Realizes 47.6% loss",
+          "Misses potential GOOG recovery"
+        ],
+        "best_if": "No strong conviction in near-term GOOG upside catalyst"
+      },
+      {
+        "strategy": "ROLL_OUT_IN_TIME",
+        "action": "Sell Jan 2 $345 Call, Buy Feb or Mar $345 Call",
+        "estimated_debit": 150.00,
+        "new_cost_basis": 1150.00,
+        "new_breakeven": 356.50,
+        "additional_time": "30-60 days",
+        "pros": [
+          "Buys more time for GOOG recovery",
+          "Maintains strike exposure"
+        ],
+        "cons": [
+          "Increases total capital at risk",
+          "Raises breakeven price",
+          "Adds to losing position"
+        ],
+        "best_if": "High conviction GOOG will rally, just needs more time"
+      },
+      {
+        "strategy": "ROLL_DOWN_AND_OUT",
+        "action": "Sell Jan 2 $345 Call, Buy Feb $330 Call",
+        "estimated_debit": 300.00,
+        "new_cost_basis": 1300.00,
+        "new_strike": 330.00,
+        "new_breakeven": 343.00,
+        "pros": [
+          "Lowers strike closer to current price",
+          "Improves probability of profit",
+          "Adds time"
+        ],
+        "cons": [
+          "Significant additional capital required",
+          "Increases max loss exposure"
+        ],
+        "best_if": "Strong conviction but willing to invest more capital"
+      },
+      {
+        "strategy": "HOLD",
+        "action": "Maintain current position",
+        "time_remaining": 30,
+        "theta_cost_estimate": -240.00,
+        "pros": [
+          "No additional capital required",
+          "Maintains full profit potential if GOOG rallies sharply"
+        ],
+        "cons": [
+          "Theta decay continues (~$8/day)",
+          "High probability of further losses",
+          "Risk of total loss"
+        ],
+        "best_if": "Expecting imminent catalyst (earnings, news, sector rotation)"
+      },
+      {
+        "strategy": "PARTIAL_CLOSE",
+        "action": "Sell 1 contract, hold 1",
+        "proceeds": 262.00,
+        "remaining_risk": 262.00,
+        "locked_loss": -238.00,
+        "pros": [
+          "Reduces risk by 50%",
+          "Maintains some upside exposure",
+          "Balanced approach"
+        ],
+        "cons": [
+          "Still exposed to theta on remaining contract",
+          "Realizes partial loss"
+        ],
+        "best_if": "Uncertain about direction, want to hedge bets"
+      }
+    ],
+    "recommendation_by_risk_tolerance": {
+      "conservative": {
+        "strategy": "CLOSE_NOW",
+        "rationale": "47.6% loss is substantial. Preserving remaining $524 avoids potential total loss. GOOG needs 10.48% move in 30 days - historically challenging."
+      },
+      "moderate": {
+        "strategy": "PARTIAL_CLOSE",
+        "rationale": "Sell 1 contract to lock in some capital, hold 1 for potential recovery. Balances capital preservation with upside optionality."
+      },
+      "aggressive": {
+        "strategy": "HOLD or ROLL_DOWN_AND_OUT",
+        "rationale": "If high conviction in GOOG, either hold for potential catalyst or roll to improve breakeven. Accept higher risk for recovery potential."
+      }
+    }
+  },
+
+  "alerts_triggered": [
+    {
+      "alert_type": "LOSS_THRESHOLD",
+      "threshold": "unrealized_loss_percent >= 50%",
+      "current_value": 47.60,
+      "status": "APPROACHING",
+      "message": "Position approaching 50% loss threshold. Review exit strategy."
+    },
+    {
+      "alert_type": "THETA_ACCELERATION",
+      "threshold": "DTE <= 45",
+      "current_value": 30,
+      "status": "ACTIVE",
+      "message": "Position in theta acceleration zone. Time decay increasing daily."
+    },
+    {
+      "alert_type": "DEEP_OTM_WARNING",
+      "threshold": "distance_to_breakeven_percent > 10%",
+      "current_value": 10.48,
+      "status": "ACTIVE",
+      "message": "Position requires significant move (10.48%) to reach breakeven."
+    }
+  ],
+
+  "quick_summary": "GOOG $345 Call | 30 DTE | -$476.00 (-47.60%) | 10.48% to breakeven",
+
+  "key_insights": [
+    "Position has lost 47.6% of value in just 5 days - rapid deterioration",
+    "100% of remaining value ($524) is extrinsic/time value - will decay to zero if GOOG stays flat",
+    "GOOG must rally 10.48% in 30 days just to breakeven - historically a stretch",
+    "Theta decay will accelerate as expiration approaches - position loses ~$8/day currently",
+    "Each week of flat price action costs approximately $50-80 in time decay",
+    "At expiration: Any GOOG price below $345 = total loss of remaining $524"
+  ],
+
+  "next_analysis_triggers": [
+    {
+      "trigger": "GOOG crosses $325.00",
+      "action": "Recalculate probability of profit, update scenarios"
+    },
+    {
+      "trigger": "DTE reaches 21",
+      "action": "Critical theta warning - forced exit decision point"
+    },
+    {
+      "trigger": "Loss exceeds 60% (-$600)",
+      "action": "Generate urgent exit analysis"
+    },
+    {
+      "trigger": "GOOG rallies 5%+ in single day",
+      "action": "Generate recovery/exit opportunity analysis"
+    }
+  ]
+}

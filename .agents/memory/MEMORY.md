@@ -1,0 +1,15 @@
+- [Agentic Terminal / Robinhood MCP](agentic-terminal.md) — real MCP+OAuth agent feature; design + OAuth redirect-origin trust rule.
+- [Codebase audit traps](codebase-audit-notes.md) — by-design non-bugs (price-alert dedupeKey not a race; two distinct strategy-analyzers) + chat transport (SSE use-chat-stream live; /ws/chat server handler inert).
+- [Analysis provider routing (BYO)](analysis-provider-routing.md) — per-session OpenAI/Gemini for multi-agent analysis; module layering + latched Claude fallback rule.
+- [Repo env quirks](repo-env-quirks.md) — react-icons not resolvable (use lucide); tsx dev server doesn't watch (restart workflow before API smoke tests).
+- [Vite dep re-optimize transient](vite-dep-reoptimize-transient.md) — just-edited lazy page can crash once with "null reading useState" after restart; warm-load then re-test, usually not a real bug.
+- [Strategy Templates (KalshiBot-derived)](strategy-templates.md) — which Kalshi bot strategies transfer to Fincai stocks/options + static-catalog template wiring.
+- [Autonomous Strategy Runner](strategy-runner.md) — background engine auto-trades templates via Robinhood MCP; paper-default/live-opt-in, long-only, paused-on-mid-order idempotency, CAS locking.
+- [Compliance copy guardrails](compliance-copy-guardrails.md) — armed live runs trade unattended, so never claim "confirm every trade"; no fabricated legal/security or "institutional-grade" claims; lint scope/wrap gaps.
+- [Alpaca market-data auth](alpaca-market-data-auth.md) — data.alpaca.markets needs APCA trading-key headers, NOT broker OAuth; prefer trading keys to avoid 503/OAuth storm.
+- [Alpaca market-data quirks](alpaca-market-data.md) — options snapshots paginate (1000/page, follow next_page_token); indicative feed OI=0 by design; VIX unsupported, canonicalize ^VIX→VIX.
+- [Notifications feed + alert firing](notifications-feed.md) — every price-alert-firing path must route through shared notification-first triggerAlertAndNotify or alerts silently bypass NotificationBell.
+- [Onboarding walkthrough & checklist](onboarding-walkthrough.md) — first-run tour + getting-started checklist; localStorage(anon)+account-flag(logged-in) gating, no new tables.
+- [No fabricated data](no-fabricated-data.md) — never fake prices/holdings (intraday→'unavailable'/503, portfolio→'none' empty); only exception is labeled landing "Demo Preview".
+- [Mobile Safari viewport](mobile-safari-viewport.md) — dvh+safe-area+visualViewport keyboard-inset recipe; iOS ignores maximum-scale, pinch-zoom looks like a keyboard, Tailwind p-* beats component-layer padding.
+- [SPA SEO canonical + GEO](spa-seo-canonical.md) — one shared seo-config drives server crawler-injection + client RouteSeo/useSeo; sitemap routes need self-canonical or they inherit homepage canonical and get deindexed.

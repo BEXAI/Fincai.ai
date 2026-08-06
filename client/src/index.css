@@ -1,0 +1,1271 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   LUX BLACK & GOLD DESIGN SYSTEM
+   Sacred Geometry-inspired luxury fintech palette
+   Pure black backgrounds with gold chrome accents
+   ============================================ */
+
+/* LIGHT MODE (matches dark for consistency) */
+:root {
+  /* Gold Chrome Primary Colors - Extracted from sacred geometry logo */
+  --gold-primary: 46 65% 52%;        /* #D4AF37 - Base gold */
+  --gold-dark: 43 75% 31%;           /* #8B6914 - Deep bronze shadow */
+  --gold-light: 51 100% 50%;         /* #FFD700 - Highlight gold */
+  --gold-ambient: 44 63% 43%;        /* #B68F2A - Soft ambient gold */
+  
+  /* Semantic Financial Colors */
+  --profit: 158 82% 44%;
+  --profit-muted: 158 40% 25%;
+  --loss: 4 100% 66%;
+  --loss-muted: 7 55% 25%;
+  --neutral: 0 0% 55%;
+  
+  /* Core UI Colors */
+  --button-outline: rgba(212, 175, 55, 0.15);
+  --badge-outline: rgba(212, 175, 55, 0.08);
+  --opaque-button-border-intensity: 8;
+  --elevate-1: rgba(212, 175, 55, 0.06);
+  --elevate-2: rgba(212, 175, 55, 0.12);
+  
+  /* Surfaces - Pure Black Foundation */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 94%;
+  --border: 46 45% 18%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 94%;
+  --card-border: 46 30% 15%;
+  
+  /* Sidebar */
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 0 0% 94%;
+  --sidebar-border: 46 30% 12%;
+  --sidebar-primary: 46 65% 52%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 8%;
+  --sidebar-accent-foreground: 0 0% 94%;
+  --sidebar-ring: 46 65% 52%;
+  
+  /* Popover */
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 94%;
+  --popover-border: 46 30% 15%;
+  
+  /* Primary - Gold Chrome */
+  --primary: 46 65% 52%;
+  --primary-foreground: 0 0% 5%;
+  
+  /* Secondary */
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 90%;
+  
+  /* Muted */
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 55%;
+  
+  /* Accent - Gold tint */
+  --accent: 46 40% 12%;
+  --accent-foreground: 46 65% 60%;
+  
+  /* Destructive */
+  --destructive: 4 84% 55%;
+  --destructive-foreground: 0 0% 100%;
+  
+  /* Input & Ring */
+  --input: 0 0% 15%;
+  --ring: 46 65% 52%;
+  
+  /* Chart Colors - Gold-focused palette */
+  --chart-1: 46 65% 52%;
+  --chart-2: 51 100% 50%;
+  --chart-3: 43 75% 40%;
+  --chart-4: 38 90% 45%;
+  --chart-5: 32 85% 50%;
+  
+  /* Glass Effects - iOS Keyboard-Inspired Translucency */
+  /* Chat overlay: 20% opacity (80% see-through) */
+  --glass-chat: rgba(0, 0, 0, 0.20);
+  --glass-chat-hover: rgba(0, 0, 0, 0.25);
+  --glass-input: rgba(30, 30, 35, 0.25);
+  --glass-header: rgba(0, 0, 0, 0.20);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-glow: rgba(212, 175, 55, 0.16);
+  --glass-blur: 40px;
+  /* Message bubbles: 95% opacity (5% see-through for readability) */
+  --glass-message-user: rgba(100, 80, 180, 0.95);
+  --glass-message-user-border: rgba(140, 120, 220, 0.40);
+  --glass-message-assistant: rgba(35, 35, 45, 0.95);
+  --glass-message-assistant-border: rgba(255, 255, 255, 0.15);
+  
+  /* iOS Keyboard Translucent Keys */
+  --glass-key: rgba(60, 60, 70, 0.45);
+  --glass-key-hover: rgba(80, 80, 95, 0.55);
+  --glass-key-active: rgba(100, 100, 120, 0.6);
+  --glass-key-border: rgba(255, 255, 255, 0.15);
+  
+  /* Translucent Gradient Colors (picked up from chart behind) */
+  --translucent-purple: rgba(120, 80, 200, 0.25);
+  --translucent-orange: rgba(220, 120, 80, 0.25);
+  
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Inter', var(--font-sans);
+  --font-mono: 'Space Grotesk', 'SF Mono', 'Fira Code', monospace;
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  
+  /* Border Radius */
+  --radius: 0.75rem;
+  --radius-sm: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-full: 9999px;
+  
+  /* Shadows - Gold-tinted */
+  --shadow-color: 0 0% 0%;
+  --shadow-2xs: 0 1px 2px hsl(var(--shadow-color) / 0.3);
+  --shadow-xs: 0 1px 3px hsl(var(--shadow-color) / 0.35);
+  --shadow-sm: 0 2px 4px hsl(var(--shadow-color) / 0.35);
+  --shadow: 0 4px 8px hsl(var(--shadow-color) / 0.4);
+  --shadow-md: 0 6px 16px hsl(var(--shadow-color) / 0.45);
+  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.5);
+  --shadow-xl: 0 20px 48px hsl(var(--shadow-color) / 0.55);
+  --shadow-2xl: 0 32px 64px hsl(var(--shadow-color) / 0.6);
+  
+  /* Glow Effects - Gold accents */
+  --glow-profit: 0 0 20px rgba(19, 196, 139, 0.35);
+  --glow-loss: 0 0 20px rgba(255, 97, 85, 0.35);
+  --glow-primary: 0 0 24px rgba(212, 175, 55, 0.35);
+  --glow-gold: 0 0 30px rgba(255, 215, 0, 0.25);
+  
+  /* Animation Timing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  
+  /* Duration Scale */
+  --duration-fast: 100ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 500ms;
+  
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
+
+  /* Fallback borders */
+  --sidebar-primary-border: hsl(var(--sidebar-primary));
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(var(--sidebar-accent));
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(var(--primary));
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(var(--secondary));
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(var(--muted));
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(var(--accent));
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(var(--destructive));
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+/* DARK MODE - Lux Black & Gold Theme (mirrors :root) */
+.dark {
+  /* Gold Chrome Primary Colors */
+  --gold-primary: 46 65% 52%;
+  --gold-dark: 43 75% 31%;
+  --gold-light: 51 100% 50%;
+  --gold-ambient: 44 63% 43%;
+  
+  /* Semantic Financial Colors - Dark mode */
+  --profit: 158 82% 48%;
+  --profit-muted: 158 40% 25%;
+  --loss: 4 100% 68%;
+  --loss-muted: 7 55% 25%;
+  --neutral: 0 0% 55%;
+  
+  /* Core UI Colors */
+  --button-outline: rgba(212, 175, 55, 0.15);
+  --badge-outline: rgba(212, 175, 55, 0.08);
+  --opaque-button-border-intensity: 8;
+  --elevate-1: rgba(212, 175, 55, 0.06);
+  --elevate-2: rgba(212, 175, 55, 0.12);
+  
+  /* Surfaces - Pure Black Foundation */
+  --background: 0 0% 0%;
+  --foreground: 0 0% 94%;
+  --border: 46 45% 18%;
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 94%;
+  --card-border: 46 30% 15%;
+  
+  /* Sidebar */
+  --sidebar: 0 0% 3%;
+  --sidebar-foreground: 0 0% 94%;
+  --sidebar-border: 46 30% 12%;
+  --sidebar-primary: 46 65% 52%;
+  --sidebar-primary-foreground: 0 0% 5%;
+  --sidebar-accent: 0 0% 8%;
+  --sidebar-accent-foreground: 0 0% 94%;
+  --sidebar-ring: 46 65% 52%;
+  
+  /* Popover */
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 94%;
+  --popover-border: 46 30% 15%;
+  
+  /* Primary - Gold Chrome */
+  --primary: 46 65% 52%;
+  --primary-foreground: 0 0% 5%;
+  
+  /* Secondary */
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 90%;
+  
+  /* Muted */
+  --muted: 0 0% 12%;
+  --muted-foreground: 0 0% 55%;
+  
+  /* Accent - Gold tint */
+  --accent: 46 40% 12%;
+  --accent-foreground: 46 65% 60%;
+  
+  /* Destructive */
+  --destructive: 4 84% 55%;
+  --destructive-foreground: 0 0% 100%;
+  
+  /* Input & Ring */
+  --input: 0 0% 15%;
+  --ring: 46 65% 52%;
+  
+  /* Chart Colors - Gold-focused palette */
+  --chart-1: 46 65% 52%;
+  --chart-2: 51 100% 50%;
+  --chart-3: 43 75% 40%;
+  --chart-4: 38 90% 45%;
+  --chart-5: 32 85% 50%;
+  
+  /* Glass Effects - iOS Keyboard-Inspired Translucency (Dark Mode) */
+  /* Chat overlay: 20% opacity (80% see-through) */
+  --glass-chat: rgba(0, 0, 0, 0.20);
+  --glass-chat-hover: rgba(0, 0, 0, 0.25);
+  --glass-input: rgba(30, 30, 35, 0.25);
+  --glass-header: rgba(0, 0, 0, 0.20);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-glow: rgba(212, 175, 55, 0.16);
+  --glass-blur: 40px;
+  /* Message bubbles: 95% opacity (5% see-through for readability) */
+  --glass-message-user: rgba(100, 80, 180, 0.95);
+  --glass-message-user-border: rgba(140, 120, 220, 0.40);
+  --glass-message-assistant: rgba(35, 35, 45, 0.95);
+  --glass-message-assistant-border: rgba(255, 255, 255, 0.15);
+  
+  /* iOS Keyboard Translucent Keys */
+  --glass-key: rgba(60, 60, 70, 0.45);
+  --glass-key-hover: rgba(80, 80, 95, 0.55);
+  --glass-key-active: rgba(100, 100, 120, 0.6);
+  --glass-key-border: rgba(255, 255, 255, 0.15);
+  
+  /* Translucent Gradient Colors */
+  --translucent-purple: rgba(120, 80, 200, 0.25);
+  --translucent-orange: rgba(220, 120, 80, 0.25);
+  
+  /* Shadows - Dark mode */
+  --shadow-color: 0 0% 0%;
+  --shadow-2xs: 0 1px 2px hsl(var(--shadow-color) / 0.3);
+  --shadow-xs: 0 1px 3px hsl(var(--shadow-color) / 0.35);
+  --shadow-sm: 0 2px 4px hsl(var(--shadow-color) / 0.35);
+  --shadow: 0 4px 8px hsl(var(--shadow-color) / 0.4);
+  --shadow-md: 0 6px 16px hsl(var(--shadow-color) / 0.45);
+  --shadow-lg: 0 12px 32px hsl(var(--shadow-color) / 0.5);
+  --shadow-xl: 0 20px 48px hsl(var(--shadow-color) / 0.55);
+  --shadow-2xl: 0 32px 64px hsl(var(--shadow-color) / 0.6);
+  
+  /* Glow Effects - Gold accents */
+  --glow-profit: 0 0 24px rgba(19, 196, 139, 0.35);
+  --glow-loss: 0 0 24px rgba(255, 97, 85, 0.35);
+  --glow-primary: 0 0 30px rgba(212, 175, 55, 0.35);
+  --glow-gold: 0 0 30px rgba(255, 215, 0, 0.25);
+
+  /* Fallback borders */
+  --sidebar-primary-border: hsl(var(--sidebar-primary));
+  --sidebar-primary-border: hsl(from hsl(var(--sidebar-primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --sidebar-accent-border: hsl(var(--sidebar-accent));
+  --sidebar-accent-border: hsl(from hsl(var(--sidebar-accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --primary-border: hsl(var(--primary));
+  --primary-border: hsl(from hsl(var(--primary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --secondary-border: hsl(var(--secondary));
+  --secondary-border: hsl(from hsl(var(--secondary)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --muted-border: hsl(var(--muted));
+  --muted-border: hsl(from hsl(var(--muted)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --accent-border: hsl(var(--accent));
+  --accent-border: hsl(from hsl(var(--accent)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+  --destructive-border: hsl(var(--destructive));
+  --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    min-height: 100%;
+    /* Stop iOS rubber-band scroll from revealing blank areas behind the app */
+    overscroll-behavior: none;
+  }
+  
+  /* Financial numbers - tabular figures */
+  .tabular-nums {
+    font-feature-settings: 'tnum' 1, 'ss01' 1;
+  }
+}
+
+/* ============================================
+   ELEVATION SYSTEM
+   ============================================ */
+@layer utilities {
+  /* Hide search cancel button */
+  input[type="search"]::-webkit-search-cancel-button {
+    @apply hidden;
+  }
+
+  /* Placeholder for contentEditable */
+  [contenteditable][data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: hsl(var(--muted-foreground));
+    pointer-events: none;
+  }
+
+  /* Escape hatches */
+  .no-default-hover-elevate {}
+  .no-default-active-elevate {}
+
+  /* Toggle elevate system */
+  .toggle-elevate::before,
+  .toggle-elevate-2::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  .toggle-elevate.toggle-elevated::before {
+    background-color: var(--elevate-2);
+  }
+
+  .border.toggle-elevate::before {
+    inset: -1px;
+  }
+
+  /* Hover/Active elevate system */
+  .hover-elevate:not(.no-default-hover-elevate),
+  .active-elevate:not(.no-default-active-elevate),
+  .hover-elevate-2:not(.no-default-hover-elevate),
+  .active-elevate-2:not(.no-default-active-elevate) {
+    position: relative;
+    z-index: 0;
+  }
+
+  .hover-elevate:not(.no-default-hover-elevate)::after,
+  .active-elevate:not(.no-default-active-elevate)::after,
+  .hover-elevate-2:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:not(.no-default-active-elevate)::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0px;
+    border-radius: inherit;
+    z-index: 999;
+    transition: background-color var(--duration-fast) var(--ease-out-quart);
+  }
+
+  .hover-elevate:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-1);
+  }
+
+  .hover-elevate-2:hover:not(.no-default-hover-elevate)::after,
+  .active-elevate-2:active:not(.no-default-active-elevate)::after {
+    background-color: var(--elevate-2);
+  }
+
+  .border.hover-elevate:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate:not(.no-active-interaction-elevate)::after,
+  .border.hover-elevate-2:not(.no-hover-interaction-elevate)::after,
+  .border.active-elevate-2:not(.no-active-interaction-elevate)::after {
+    inset: -1px;
+  }
+  
+  /* Financial value colors */
+  .text-profit {
+    color: hsl(var(--profit));
+  }
+  
+  .text-loss {
+    color: hsl(var(--loss));
+  }
+  
+  .bg-profit-muted {
+    background-color: hsl(var(--profit-muted));
+  }
+  
+  .bg-loss-muted {
+    background-color: hsl(var(--loss-muted));
+  }
+  
+  /* Aurora glow utilities */
+  .glow-profit {
+    box-shadow: var(--glow-profit);
+  }
+  
+  .glow-loss {
+    box-shadow: var(--glow-loss);
+  }
+  
+  .glow-primary {
+    box-shadow: var(--glow-primary);
+  }
+}
+
+/* Safe area insets for iOS */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ============================================
+   GLASSMORPHISM COMPONENTS
+   ============================================ */
+@layer components {
+  /* Glass surfaces - iOS Keyboard Translucent Effect */
+  .glass-chat {
+    background: var(--glass-chat);
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
+    border: 1px solid var(--glass-border);
+    transition: background var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .glass-chat:hover {
+    background: var(--glass-chat-hover);
+  }
+  
+  /* 98% transparent chat overlay - clear view of chart behind */
+  .glass-chat-translucent {
+    background: rgba(0, 0, 0, 0.02);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: none;
+  }
+  
+  .glass-header {
+    background: var(--glass-header);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  
+  /* iOS Keyboard-style translucent input */
+  .glass-input {
+    background: var(--glass-input);
+    backdrop-filter: blur(24px) saturate(150%);
+    -webkit-backdrop-filter: blur(24px) saturate(150%);
+    border: 1px solid var(--glass-border);
+    transition: all var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .glass-input:focus-within {
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Translucent key style for buttons/chips */
+  .glass-key {
+    background: var(--glass-key);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-key-border);
+    color: white;
+    transition: all var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .glass-key:hover {
+    background: var(--glass-key-hover);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .glass-key:active {
+    background: var(--glass-key-active);
+    transform: scale(0.98);
+  }
+  
+  /* Agentic terminal ticker tape */
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* Glass panels */
+  .glass-panel {
+    background: var(--glass-chat);
+    backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+  }
+  
+  .glass-panel-elevated {
+    background: var(--glass-chat-hover);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* Message bubbles - iOS-style translucent with gradient color pickup */
+  .glass-message-user {
+    background: var(--glass-message-user);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-message-user-border);
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
+    color: white;
+  }
+  
+  .glass-message-assistant {
+    background: var(--glass-message-assistant);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-message-assistant-border);
+    border-radius: var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-sm);
+    color: white;
+  }
+  
+  /* Gradient message variations based on position */
+  .glass-message-gradient-left {
+    background: linear-gradient(
+      135deg,
+      rgba(120, 80, 200, 0.4) 0%,
+      rgba(80, 60, 150, 0.35) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(140, 100, 220, 0.3);
+    color: white;
+  }
+  
+  .glass-message-gradient-right {
+    background: linear-gradient(
+      135deg,
+      rgba(200, 100, 80, 0.4) 0%,
+      rgba(150, 80, 60, 0.35) 100%
+    );
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(220, 120, 100, 0.3);
+    color: white;
+  }
+  
+  /* Chart overlay gradient */
+  .chart-overlay-gradient {
+    background: linear-gradient(
+      to top,
+      hsl(var(--background)) 0%,
+      hsl(var(--background) / 0.8) 20%,
+      hsl(var(--background) / 0.4) 50%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+  
+  /* Overlay transitions */
+  .chat-overlay-transition {
+    transition: height var(--duration-slow) var(--ease-out-expo),
+                opacity var(--duration-base) var(--ease-out-quart),
+                backdrop-filter var(--duration-base) var(--ease-out-quart);
+  }
+  
+  /* Typing indicator */
+  .typing-dot {
+    animation: typingPulse 1.4s infinite var(--ease-in-out);
+  }
+  
+  .typing-dot:nth-child(1) { animation-delay: 0ms; }
+  .typing-dot:nth-child(2) { animation-delay: 160ms; }
+  .typing-dot:nth-child(3) { animation-delay: 320ms; }
+  
+  @keyframes typingPulse {
+    0%, 60%, 100% { 
+      transform: scale(1); 
+      opacity: 0.4; 
+    }
+    30% { 
+      transform: scale(1.15); 
+      opacity: 1; 
+    }
+  }
+  
+  /* Chart glow effects */
+  .chart-glow-profit {
+    filter: drop-shadow(0 0 12px hsl(var(--profit) / 0.5));
+  }
+  
+  .chart-glow-loss {
+    filter: drop-shadow(0 0 12px hsl(var(--loss) / 0.5));
+  }
+  
+  /* Drag handle */
+  .drag-handle {
+    width: 36px;
+    height: 4px;
+    background: var(--glass-border);
+    border-radius: var(--radius-full);
+    cursor: grab;
+    transition: background var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .drag-handle:hover {
+    background: var(--glass-glow);
+  }
+  
+  .drag-handle:active {
+    cursor: grabbing;
+  }
+  
+  /* Scrollbar utilities */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .quick-chips-scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .quick-chips-scroll::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* ============================================
+     GOLD CHROME BUTTON STYLES
+     ============================================ */
+  .btn-gold {
+    background: linear-gradient(135deg, hsl(var(--gold-dark)), hsl(var(--gold-primary)), hsl(var(--gold-light)));
+    color: hsl(0 0% 5%);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--gold-light) / 0.3);
+    transition: all var(--duration-fast) var(--ease-out-quart);
+    cursor: pointer;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .btn-gold:hover {
+    background: linear-gradient(135deg, hsl(var(--gold-primary)), hsl(var(--gold-light)), hsl(var(--gold-light)));
+    transform: translateY(-1px);
+    box-shadow: var(--glow-gold), var(--shadow-md);
+  }
+  
+  .btn-gold:active {
+    transform: translateY(0) scale(0.98);
+  }
+  
+  .btn-ghost-gold {
+    background: transparent;
+    color: hsl(var(--gold-primary));
+    border: 1px solid hsl(var(--gold-primary) / 0.3);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    transition: all var(--duration-fast) var(--ease-out-quart);
+    cursor: pointer;
+  }
+  
+  .btn-ghost-gold:hover {
+    background: hsl(var(--gold-primary) / 0.1);
+    border-color: hsl(var(--gold-primary) / 0.5);
+  }
+  
+  /* Gold glow utility */
+  .glow-gold {
+    box-shadow: var(--glow-gold);
+  }
+  
+  /* Gold text utility */
+  .text-gold {
+    color: hsl(var(--gold-primary));
+  }
+  
+  .text-gold-light {
+    color: hsl(var(--gold-light));
+  }
+  
+  /* ============================================
+     CARD STYLES - MINIMAL
+     ============================================ */
+  .card-minimal {
+    background: hsl(var(--card));
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    transition: all var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .card-minimal:hover {
+    border-color: var(--glass-glow);
+  }
+  
+  .card-elevated {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  /* ============================================
+     ANIMATION UTILITIES
+     ============================================ */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from { 
+      opacity: 0; 
+      transform: translateY(8px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  @keyframes fadeInDown {
+    from { 
+      opacity: 0; 
+      transform: translateY(-8px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  @keyframes scaleIn {
+    from { 
+      opacity: 0; 
+      transform: scale(0.95); 
+    }
+    to { 
+      opacity: 1; 
+      transform: scale(1); 
+    }
+  }
+  
+  @keyframes slideInRight {
+    from { 
+      opacity: 0; 
+      transform: translateX(16px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
+  }
+  
+  @keyframes slideInLeft {
+    from { 
+      opacity: 0; 
+      transform: translateX(-16px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateX(0); 
+    }
+  }
+  
+  @keyframes valueUpdate {
+    0% { 
+      opacity: 0.6; 
+      transform: translateY(-4px); 
+    }
+    100% { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+  
+  @keyframes pulseSubtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  
+  /* Animation utility classes */
+  .animate-fade-in {
+    animation: fadeIn var(--duration-base) var(--ease-out-quart);
+  }
+  
+  .animate-fade-in-up {
+    animation: fadeInUp var(--duration-base) var(--ease-out-expo);
+  }
+  
+  .animate-fade-in-down {
+    animation: fadeInDown var(--duration-base) var(--ease-out-expo);
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn var(--duration-base) var(--ease-out-expo);
+  }
+  
+  .animate-slide-in-right {
+    animation: slideInRight var(--duration-base) var(--ease-out-expo);
+  }
+  
+  .animate-slide-in-left {
+    animation: slideInLeft var(--duration-base) var(--ease-out-expo);
+  }
+  
+  .animate-value-update {
+    animation: valueUpdate var(--duration-fast) var(--ease-out-quart);
+  }
+  
+  .animate-pulse-subtle {
+    animation: pulseSubtle 2s var(--ease-in-out) infinite;
+  }
+  
+  /* Stagger animations for lists */
+  .stagger-item {
+    animation: fadeInUp var(--duration-base) var(--ease-out-expo) backwards;
+  }
+  
+  .stagger-item:nth-child(1) { animation-delay: 0ms; }
+  .stagger-item:nth-child(2) { animation-delay: 40ms; }
+  .stagger-item:nth-child(3) { animation-delay: 80ms; }
+  .stagger-item:nth-child(4) { animation-delay: 120ms; }
+  .stagger-item:nth-child(5) { animation-delay: 160ms; }
+  .stagger-item:nth-child(6) { animation-delay: 200ms; }
+  .stagger-item:nth-child(7) { animation-delay: 240ms; }
+  .stagger-item:nth-child(8) { animation-delay: 280ms; }
+  .stagger-item:nth-child(9) { animation-delay: 320ms; }
+  .stagger-item:nth-child(10) { animation-delay: 360ms; }
+  
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted-foreground) / 0.1) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--radius-sm);
+  }
+  
+  /* ============================================
+     TYPOGRAPHY UTILITIES
+     ============================================ */
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  
+  .font-financial {
+    font-family: var(--font-mono);
+    font-feature-settings: 'tnum' 1;
+    letter-spacing: -0.01em;
+  }
+  
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Price display styles */
+  .price-hero {
+    font-family: var(--font-mono);
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-feature-settings: 'tnum' 1;
+    line-height: 1;
+  }
+  
+  .price-large {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    font-feature-settings: 'tnum' 1;
+  }
+  
+  .price-medium {
+    font-family: var(--font-mono);
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-feature-settings: 'tnum' 1;
+  }
+  
+  .price-small {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-feature-settings: 'tnum' 1;
+  }
+  
+  .percent-change {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    font-feature-settings: 'tnum' 1;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+  }
+  
+  .percent-change-profit {
+    color: hsl(var(--profit));
+    background: hsl(var(--profit-muted));
+  }
+  
+  .percent-change-loss {
+    color: hsl(var(--loss));
+    background: hsl(var(--loss-muted));
+  }
+  
+  /* ============================================
+     MOBILE-RESPONSIVE UTILITIES
+     Compact spacing and typography for mobile
+     ============================================ */
+  
+  /* Mobile-compact padding - reduces padding on mobile */
+  .mobile-compact-p {
+    @apply p-3 sm:p-4 md:p-6;
+  }
+  
+  .mobile-compact-px {
+    @apply px-2 sm:px-3 md:px-4;
+  }
+  
+  .mobile-compact-py {
+    @apply py-1.5 sm:py-2 md:py-3;
+  }
+  
+  /* Mobile-compact gaps */
+  .mobile-compact-gap {
+    @apply gap-2 sm:gap-3 md:gap-4;
+  }
+  
+  .mobile-compact-gap-x {
+    @apply gap-x-1.5 sm:gap-x-2 md:gap-x-3;
+  }
+  
+  .mobile-compact-gap-y {
+    @apply gap-y-1.5 sm:gap-y-2 md:gap-y-3;
+  }
+  
+  /* Mobile text sizes - smaller on mobile */
+  .mobile-text-xs {
+    @apply text-[10px] sm:text-xs;
+  }
+  
+  .mobile-text-sm {
+    @apply text-xs sm:text-sm;
+  }
+  
+  .mobile-text-base {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-text-lg {
+    @apply text-base sm:text-lg;
+  }
+  
+  .mobile-text-xl {
+    @apply text-lg sm:text-xl;
+  }
+  
+  .mobile-text-2xl {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  /* Mobile headings */
+  .mobile-heading-lg {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold;
+  }
+  
+  .mobile-heading-md {
+    @apply text-base sm:text-lg font-semibold;
+  }
+  
+  .mobile-heading-sm {
+    @apply text-sm sm:text-base font-medium;
+  }
+  
+  /* Mobile card padding */
+  .mobile-card-p {
+    @apply p-2 sm:p-3 md:p-4;
+  }
+  
+  /* Mobile icon sizes */
+  .mobile-icon-sm {
+    @apply w-3 h-3 sm:w-4 sm:h-4;
+  }
+  
+  .mobile-icon-md {
+    @apply w-4 h-4 sm:w-5 sm:h-5;
+  }
+  
+  .mobile-icon-lg {
+    @apply w-5 h-5 sm:w-6 sm:h-6;
+  }
+  
+  /* Mobile spacing for chat messages */
+  .mobile-chat-message {
+    @apply px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-3;
+  }
+  
+  /* Compact badges on mobile */
+  .mobile-badge {
+    @apply text-[10px] px-1.5 py-0.5 sm:text-xs sm:px-2 sm:py-1;
+  }
+  
+  /* Responsive max-width for chat bubbles */
+  .mobile-chat-max-width {
+    @apply max-w-[90%] sm:max-w-[80%] md:max-w-[70%];
+  }
+  
+  /* ============================================
+     MOBILE TOUCH TARGET OPTIMIZATION
+     iOS Human Interface Guidelines: 44pt minimum
+     Material Design: 48dp minimum
+     ============================================ */
+  
+  /* Mobile touch targets - minimum 48px on mobile, normal on desktop */
+  .mobile-touch-target {
+    @apply min-h-[48px] min-w-[48px] md:min-h-[36px] md:min-w-[36px];
+  }
+  
+  .mobile-touch-target-sm {
+    @apply min-h-[44px] min-w-[44px] md:min-h-[32px] md:min-w-[32px];
+  }
+  
+  .mobile-touch-target-lg {
+    @apply min-h-[52px] min-w-[52px] md:min-h-[40px] md:min-w-[40px];
+  }
+  
+  /* Mobile button sizes - larger on mobile for touch */
+  .mobile-btn {
+    @apply min-h-[48px] px-4 text-sm md:min-h-[36px] md:px-3 md:text-sm;
+  }
+  
+  .mobile-btn-sm {
+    @apply min-h-[44px] px-3 text-xs md:min-h-[32px] md:px-2.5 md:text-xs;
+  }
+  
+  .mobile-btn-icon {
+    @apply !h-11 !w-11 md:!h-9 md:!w-9;
+  }
+  
+  .mobile-btn-icon-sm {
+    @apply !h-11 !w-11 md:!h-8 md:!w-8;
+  }
+  
+  /* ============================================
+     iOS SAFE AREA INSETS
+     ============================================ */
+  
+  /* Safe area padding for all directions */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+  
+  /* Bottom safe area with fallback for older browsers */
+  .safe-area-bottom {
+    padding-bottom: max(env(safe-area-inset-bottom, 0px), 8px);
+  }
+  
+  .safe-area-all {
+    padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  }
+  
+  /* ============================================
+     MOBILE KEYBOARD HANDLING
+     ============================================ */
+  
+  /* Container that respects keyboard on iOS */
+  .keyboard-aware {
+    @apply transition-all duration-200;
+  }
+  
+  /* Hide scrollbar but keep scrolling */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Input that doesn't zoom on iOS (minimum 16px) */
+  .mobile-input-no-zoom {
+    font-size: 16px !important;
+  }
+  
+  @media screen and (min-width: 768px) {
+    .mobile-input-no-zoom {
+      font-size: inherit !important;
+    }
+  }
+  
+  /* ============================================
+     MOBILE DENSITY OPTIMIZATION
+     ============================================ */
+  
+  /* Tighter padding on mobile cards */
+  .mobile-dense-card {
+    @apply p-2.5 sm:p-3 md:p-4;
+  }
+  
+  /* Tighter empty state padding */
+  .mobile-empty-state {
+    @apply py-6 sm:py-8 md:py-12;
+  }
+  
+  /* Compact header on mobile */
+  .mobile-header {
+    @apply h-12 md:h-14 px-3 md:px-4;
+  }
+  
+  /* Compact section spacing */
+  .mobile-section-gap {
+    @apply space-y-3 sm:space-y-4 md:space-y-6;
+  }
+  
+  /* Tighter list spacing on mobile */
+  .mobile-list-gap {
+    @apply space-y-2 sm:space-y-2.5 md:space-y-3;
+  }
+  
+  /* ============================================
+     MOBILE TAB OPTIMIZATION
+     ============================================ */
+  
+  /* Scrollable tabs on mobile */
+  .mobile-tabs-scroll {
+    @apply flex overflow-x-auto hide-scrollbar snap-x snap-mandatory;
+  }
+  
+  .mobile-tabs-scroll > * {
+    @apply snap-start flex-shrink-0;
+  }
+  
+  /* 2-column tabs on mobile, expandable on desktop */
+  .mobile-tabs-grid {
+    @apply grid grid-cols-2 gap-1 md:grid-cols-4 md:gap-2;
+  }
+  
+  /* ============================================
+     MOBILE TYPOGRAPHY DENSITY
+     ============================================ */
+  
+  /* Compact label */
+  .mobile-label {
+    @apply text-[11px] sm:text-xs font-medium;
+  }
+  
+  /* Compact value display */
+  .mobile-value {
+    @apply text-sm sm:text-base tabular-nums;
+  }
+  
+  /* Compact large value */
+  .mobile-value-lg {
+    @apply text-base sm:text-lg md:text-xl tabular-nums font-semibold;
+  }
+  
+  /* ============================================
+     MOBILE BOTTOM NAV OPTIMIZATION
+     ============================================ */
+  
+  /* Bottom nav height for content offset */
+  .mobile-nav-offset {
+    @apply pb-[72px] md:pb-0;
+  }
+  
+  /* Content with bottom nav space.
+     Bottom padding clears the fixed mobile bottom nav (h-14 = 3.5rem) plus the
+     iOS home-indicator safe area, so page content is never hidden behind it.
+     On md+ the bottom nav is hidden, so normal page padding applies. */
+  .mobile-content-area {
+    @apply flex-1 overflow-auto;
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px) + 0.75rem);
+  }
+
+  @media (min-width: 768px) {
+    .mobile-content-area {
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  /* App shell sized to the *dynamic* viewport so the bottom nav and content are
+     never pushed under the mobile Safari address bar (100vh is too tall on
+     iOS). Top + horizontal safe-area padding keeps content clear of the status
+     bar (standalone) and the notch (landscape). */
+  .app-shell {
+    height: 100vh;
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
+    padding-right: env(safe-area-inset-right, 0px);
+  }
+
+  /* Min-height variant of the dynamic viewport for centered full-page states. */
+  .app-min-h {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
