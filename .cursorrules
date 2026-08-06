@@ -1,0 +1,70 @@
+# Fincai — AI Collaboration Rules
+#
+# These are the rules that governed AI-assisted ("vibe-coded") development of
+# this project. They are real, enforced conventions — several are backed by CI
+# tests in this repo, so breaking them fails the build.
+
+## Compliance & public copy (CI-enforced)
+
+- Never hardcode a disclaimer or risk disclosure inline. All disclosure copy is
+  canonical in `shared/disclosures.ts` and must be imported from there.
+- All public-facing copy (landing page, README.md, PRD.md, app bundle) is
+  scanned by the compliance lint in
+  `client/src/test/compliance-ci-checks.test.ts`. It hard-fails on:
+  - superlative security/quality grades and guaranteed-outcome marketing,
+  - any numeric performance figure that a human has not explicitly reviewed
+    and allowlisted,
+  - blanket confirmation claims that ignore the autonomous runner.
+- Scope confirmation language to MANUAL trades only. An armed live strategy
+  places and closes orders within the user's configured limits WITHOUT a
+  separate confirmation for each order — copy must say so, in exactly those
+  terms.
+- No advice-like language. Fincai is software, not an investment adviser;
+  never write copy that recommends buying or selling anything.
+
+## Honesty rules
+
+- Never fabricate market data. If a provider fails, surface an explicit
+  "unavailable" state (HTTP 503 / empty portfolio), never an invented number.
+  The only simulated data allowed is the clearly-labeled demo preview and
+  paper runs.
+- Never document a behavior the code does not implement. Verify every factual
+  claim (provider order, middleware coverage, guard semantics) against the
+  actual code path before writing it into README/PRD/marketing copy.
+- Screenshots and demos illustrate software behavior, not trading results.
+
+## Safety-first defaults (anything touching a brokerage)
+
+- Paper (simulated) mode is the default everywhere; live trading is a
+  separate, explicit per-run opt-in. Anonymous users are paper-only.
+- Fail closed: position caps are centralized and re-checked against the live
+  price at order entry; live entries/exits gate on market hours; the live
+  entry path guards on direction (long-only V1).
+- An order with an unknown outcome (failed call, restart mid-flight) pauses
+  the run for human review. Never auto-retry an order that may have executed.
+- Order-placing state transitions must be claimed atomically (compare-and-set)
+  so a background tick and a manual stop cannot double-act on one run.
+- OAuth callback URLs derive from trusted server configuration only — never
+  from request Host headers. Broker tokens are stored AES-256-GCM encrypted;
+  never log or persist plaintext credentials. State-changing routes validate
+  CSRF (double-submit cookie/header).
+
+## Architecture conventions
+
+- TypeScript end-to-end. Shared types and the database schema live in
+  `shared/schema.ts`; data access goes through the storage layer
+  (`server/storage.ts`), not ad-hoc queries in routes.
+- Route modules live under `server/routes/`; long-running engines (strategy
+  runner, MCP session manager) are server-side singletons with explicit state
+  machines persisted to the database.
+- UI: shadcn/ui + Tailwind, lucide icons (no emojis in product UI), TanStack
+  Query for server state, wouter for routing.
+- Broker MCP tool schemas are discovered at runtime and are opaque at build
+  time; order payloads keep redundant descriptor fields for compatibility.
+
+## Workflow
+
+- `npm run check` (TypeScript) and `npx vitest run` (test suite, including the
+  compliance lint) must pass before any change ships.
+- Docs are part of the product: README.md and PRD.md sit inside the compliance
+  scan set, so copy edits run through the same gate as code.
