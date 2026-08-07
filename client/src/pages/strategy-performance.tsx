@@ -153,7 +153,8 @@ function KpiCard({ title, value, icon: Icon, sub, valueClass, testId }: KpiCardP
 export default function StrategyPerformance() {
   const { data, isLoading, isError, error, refetch } = useQuery<HistoryResponse>({
     queryKey: ["/api/strategy-runs/history"],
-    refetchInterval: 10000,
+    // Historical data changes only when a run closes; 60s is plenty.
+    refetchInterval: 60000,
   });
 
   const [modeFilter, setModeFilter] = useState<"all" | "paper" | "live">("all");

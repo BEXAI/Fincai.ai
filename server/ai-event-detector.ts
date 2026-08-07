@@ -53,6 +53,7 @@ export class AIEventDetector {
   private eventCallbacks: Set<(event: MarketEvent) => void> = new Set();
   private emittedEventKeys: Set<string> = new Set();
   private lastEventCleanup: number = Date.now();
+  private checkInFlight = false;
 
   constructor(
     marketDataService: MarketDataService,
@@ -73,11 +74,25 @@ export class AIEventDetector {
       clearInterval(this.monitoringInterval);
     }
 
-    this.monitoringInterval = setInterval(async () => {
-      await this.checkAllSymbols();
+    // Guarded tick: a rejected check must not become an unhandled rejection,
+    // and a slow check must not overlap the next tick.
+    this.monitoringInterval = setInterval(() => {
+      if (this.checkInFlight) return;
+      this.checkInFlight = true;
+      this.checkAllSymbols()
+        .catch((err) => console.error("[AIEventDetector] Symbol check failed:", err))
+        .finally(() => {
+          this.checkInFlight = false;
+        });
     }, this.config.checkIntervalMs);
 
-    await this.checkAllSymbols();
+    // Startup scan shares the in-flight flag so the first tick can't overlap it.
+    this.checkInFlight = true;
+    try {
+      await this.checkAllSymbols();
+    } finally {
+      this.checkInFlight = false;
+    }
     
     console.log(`[AIEventDetector] Started monitoring ${symbols.length} symbols`);
   }

@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -65,7 +66,7 @@ export function usePricingGreeks(
   contracts: ContractInput[],
   enabled: boolean = true
 ) {
-  const contractsHash = createContractsHash(contracts);
+  const contractsHash = useMemo(() => createContractsHash(contracts), [contracts]);
   const roundedSpotPrice = Math.round(spotPrice * 100) / 100;
   
   return useQuery<GreeksMap>({

@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { generateCsrfToken, setCsrfCookie } from "./csrf";
 import { WebSocket } from "ws";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
@@ -107,6 +108,18 @@ declare module 'http' {
   }
 }
 app.use(cookieParser());
+
+// Prime the CSRF double-submit cookie for every visitor (including anonymous
+// agent sessions) so state-changing routes guarded by validateCsrf — auth,
+// agent connect/tool calls, strategy runs, notifications, AI — can always be
+// satisfied by the SPA reading the cookie and echoing it as a header.
+app.use((req, res, next) => {
+  if (!req.cookies?.csrf_token) {
+    setCsrfCookie(res, generateCsrfToken());
+  }
+  next();
+});
+
 app.use(express.json({
   limit: "1mb",
   verify: (req, _res, buf) => {
@@ -253,6 +266,12 @@ function isCrawler(userAgent: string | undefined): boolean {
       log(`SEO injection failed for ${req.path}: ${err}`);
       next();
     }
+  });
+
+  // Unmatched /api/* paths must return a JSON 404, not fall through to the
+  // SPA catch-all (which answered 200 HTML to scanners probing e.g. /api/.env).
+  app.use("/api", (_req, res) => {
+    res.status(404).json({ error: "Not found" });
   });
 
   // importantly only setup vite in development and after

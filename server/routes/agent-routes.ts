@@ -2,6 +2,7 @@ import type { Express, Request, Response } from "express";
 import { randomUUID } from "crypto";
 import { z } from "zod";
 import { robinhoodMcp, ROBINHOOD_MCP_URL } from "../robinhood-mcp";
+import { validateCsrf } from "../csrf";
 import { marketDataService } from "../market-data";
 import { strategyAnalyzer } from "../strategy-analyzer";
 import { getPortfolioForSession } from "../portfolio";
@@ -89,8 +90,10 @@ export function registerAgentRoutes(app: Express): void {
     res.json(robinhoodMcp.getStatus(sid));
   });
 
-  // Begin connecting / authorizing the agent against the Robinhood Trading MCP
-  app.post("/api/agent/connect", async (req, res) => {
+  // Begin connecting / authorizing the agent against the Robinhood Trading MCP.
+  // All state-changing agent routes validate CSRF (double-submit cookie+header):
+  // they ride on cookies, and tools/call in particular can reach place_order.
+  app.post("/api/agent/connect", validateCsrf, async (req, res) => {
     const sid = getSessionId(req, res);
     const parsed = ConnectSchema.safeParse(req.body);
     if (!parsed.success) {
@@ -108,7 +111,10 @@ export function registerAgentRoutes(app: Express): void {
     }
   });
 
-  // OAuth redirect target — Robinhood sends the user back here after authorizing
+  // OAuth redirect target — Robinhood sends the user back here after authorizing.
+  // Deliberately NOT CSRF-protected: it is a top-level GET redirect from the
+  // authorization server (no custom header possible) and consumes a single-use
+  // `state` that finishAuth validates against the pending session.
   app.get("/api/agent/callback", async (req, res) => {
     const code = typeof req.query.code === "string" ? req.query.code : undefined;
     const state = typeof req.query.state === "string" ? req.query.state : undefined;
@@ -131,8 +137,8 @@ export function registerAgentRoutes(app: Express): void {
   // List tools exposed by the connected MCP server
   app.get("/api/agent/tools", async (req, res) => {
     const sid = getSessionId(req, res);
-    await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
     try {
+      await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
       const tools = await robinhoodMcp.listTools(sid);
       res.json({ tools });
     } catch (err: any) {
@@ -141,14 +147,14 @@ export function registerAgentRoutes(app: Express): void {
   });
 
   // Invoke an MCP tool (e.g. get_quote, get_holdings, place_order)
-  app.post("/api/agent/tools/call", async (req, res) => {
+  app.post("/api/agent/tools/call", validateCsrf, async (req, res) => {
     const sid = getSessionId(req, res);
     const parsed = CallToolSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid tool call payload", details: parsed.error.flatten() });
     }
-    await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
     try {
+      await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
       const result = await robinhoodMcp.callTool(sid, parsed.data.name, parsed.data.arguments);
       res.json({ result });
     } catch (err: any) {
@@ -159,7 +165,7 @@ export function registerAgentRoutes(app: Express): void {
   // Analyze a multi-leg options strategy for the spread confirmation preview.
   // Uses the live underlying quote (or a client-supplied price) plus per-leg
   // premiums to compute max profit/loss, breakevens, and probability of profit.
-  app.post("/api/agent/strategy/analyze", async (req, res) => {
+  app.post("/api/agent/strategy/analyze", validateCsrf, async (req, res) => {
     const parsed = StrategyAnalyzeSchema.safeParse(req.body);
     if (!parsed.success) {
       return res.status(400).json({ error: "Invalid strategy payload", details: parsed.error.flatten() });
@@ -188,16 +194,24 @@ export function registerAgentRoutes(app: Express): void {
   });
 
   // Disconnect the agent
-  app.post("/api/agent/disconnect", async (req, res) => {
+  app.post("/api/agent/disconnect", validateCsrf, async (req, res) => {
     const sid = getSessionId(req, res);
-    await robinhoodMcp.disconnect(sid);
-    res.json({ status: "disconnected" });
+    try {
+      await robinhoodMcp.disconnect(sid);
+      res.json({ status: "disconnected" });
+    } catch (err: any) {
+      res.status(500).json({ error: err?.message ?? "Disconnect failed" });
+    }
   });
 
   // Portfolio view — real holdings when connected, empty portfolio otherwise
   app.get("/api/agent/portfolio", async (req, res) => {
     const sid = getSessionId(req, res);
-    await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
-    res.json(await getPortfolioForSession(sid));
+    try {
+      await robinhoodMcp.ensureRestored(sid, buildRedirectUrl());
+      res.json(await getPortfolioForSession(sid));
+    } catch (err: any) {
+      res.status(502).json({ error: err?.message ?? "Portfolio unavailable" });
+    }
   });
 }

@@ -708,10 +708,15 @@ export class MemStorage implements IStorage {
       userConversations = userConversations.slice(0, limit);
     }
     
-    return Promise.all(userConversations.map(async conv => ({
+    // Single pass over messages instead of one full scan per conversation.
+    const counts = new Map<string, number>();
+    for (const m of Array.from(this.messagesMap.values())) {
+      counts.set(m.conversationId, (counts.get(m.conversationId) ?? 0) + 1);
+    }
+    return userConversations.map(conv => ({
       ...conv,
-      messageCount: await this.getMessageCountForConversation(conv.id),
-    })));
+      messageCount: counts.get(conv.id) ?? 0,
+    }));
   }
 
   async createMessage(insertMessage: InsertMessage): Promise<Message> {

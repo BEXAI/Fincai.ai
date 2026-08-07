@@ -100,7 +100,11 @@ export function StrategyRunnerPanel({ initialTemplateId }: Props) {
 
   const { data: runs = [] } = useQuery<StrategyRun[]>({
     queryKey: ["/api/strategy-runs"],
-    refetchInterval: 5000,
+    // Poll fast only while a run is live; idle panels back off to 30s.
+    refetchInterval: (query) => {
+      const data = query.state.data;
+      return data?.some((r) => ACTIVE_STATUSES.includes(r.status)) ? 5000 : 30000;
+    },
   });
 
   function applyTemplate(id: string) {

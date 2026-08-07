@@ -8,7 +8,7 @@ import { API_BASE_URL } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, LayoutDashboard, TrendingUp, LineChart, BookOpen, Bell, Cpu, MessageSquare, Target } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -191,6 +191,7 @@ export default function ImmersiveChat({
             <SheetTitle className="text-xl font-bold bg-gradient-to-r from-primary to-amber-400 bg-clip-text text-transparent">
               fincai.ai
             </SheetTitle>
+            <SheetDescription className="sr-only">Main navigation menu</SheetDescription>
           </SheetHeader>
           <nav className="flex flex-col p-2" data-testid="slide-menu-nav">
             {/* Flagship: the trading agent */}
